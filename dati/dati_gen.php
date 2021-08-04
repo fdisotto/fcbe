@@ -5,67 +5,68 @@
 #
 # PARAMETRI VISUALIZZAZIONE ED ESTETICA
 
-$titolo_sito = 'FantacalcioBazar Evolution';
-$admin_nome = 'Presidente';
-$email_mittente = 'fantacalcio@localhost.com';
-$admin_user = 'admin';
-$admin_pass = 'password';
-$iscrizione_online = 'SI';
-$iscrizione_immediata_utenti = 'NO';
-$mostra_voti_in_login = 'SI';
-$trasferiti_ok = 'NO';
-$mostra_giornate_in_login = 'NO';
-$mostra_giornate_in_mercato = 'NO';
-$mostra_immagini_in_login = 'NO';
-$dir_immagini = 'immagini/galleria';
-$larghezza_immagine = '300';
-$larghezza_immagine_casuale = '150';
-$file_voti_fonte = 'Gazzetta dello Sport';
-$statistiche = 'SI';
-$menu_lato = 'SI';
-$foto_calciatori = 'SI';
-$foto_path = 'immagini/foto/';
-$consenti_logo = 'SI';
-$vedi_campetto = 'SI';
-$riduci = '100';
-$riduci1 = '80';
-$orientamento_campetto = '1';
+$titolo_sito						= 'FantacalcioBazar Evolution';
+$admin_nome 						= 'Presidente';
+$email_mittente 					= 'fantacalcio@localhost.com';
+$admin_user 						= 'admin';
+$admin_pass 						= 'password';
+$iscrizione_online				= 'SI';
+$iscrizione_immediata_utenti		=	'NO';
+$mostra_voti_in_login 			= 'SI';
+$trasferiti_ok       			= 'NO';
+$mostra_giornate_in_login 		= 'NO';
+$mostra_giornate_in_mercato 		= 'NO';
+$mostra_immagini_in_login 		= 'NO';
+$dir_immagini 					= 'immagini/galleria';
+$larghezza_immagine 				= '300';
+$larghezza_immagine_casuale 		= '150';
+$file_voti_fonte					= 'Gazzetta dello Sport';
+$statistiche 					= 'SI';
+$menu_lato 						= 'SI';
+$foto_calciatori 				= 'SI';
+$foto_path 						= 'immagini/foto/';
+$consenti_logo					=	'SI';
+$vedi_campetto					=	'SI';
+$riduci							=	'100';
+$riduci1							=	'80';
+$orientamento_campetto			=	'1';
 
-$sfondo_tab = '#FFFFFF';
-$sfondo_tab1 = '#EEEEEE';
-$sfondo_tab2 = '#CC0000';
-$sfondo_tab3 = '#BF3E18';
-$bgtabtitolari = '#FCE0E0';
-$bgtabpanchinari = '#FBC8C8';
-$colore_riga_alt = '#DDDDDD';
-$carattere_tipo = 'Tahoma';
-$carattere_size = '11px';
-$carattere_colore = '#990000';
-$carattere_colore_chiaro = '#FFFFFF';
+$sfondo_tab						=	'#FFFFFF';
+$sfondo_tab1						=	'#EEEEEE';
+$sfondo_tab2						=	'#CC0000';
+$sfondo_tab3						=	'#BF3E18';
+$bgtabtitolari					=	'#FCE0E0';
+$bgtabpanchinari					=	'#FBC8C8';
+$colore_riga_alt					=	'#DDDDDD';
+$carattere_tipo					=	'Tahoma';
+$carattere_size					=	'11px';
+$carattere_colore				=	'#990000';
+$carattere_colore_chiaro			=	'#FFFFFF';
 
-$percorso_cartella_dati = './dati';
-$percorso_cartella_scontri = './dati/scontri';
-$percorso_cartella_voti = './dati';
-$uploaddir = 'dati/2021';
-$manutenzione = 'NO';
-$attiva_log = 'SI';
-$attiva_rss = 'SI';
-$url_rss = 'http://www.gazzetta.it/rss/Calcio.xml                                                        ';
-$attiva_multi = 'SI';
+$percorso_cartella_dati 			=	'./dati';
+$percorso_cartella_scontri 		=	'./dati/scontri';
+$percorso_cartella_voti 			=	'./dati';
+$uploaddir 						=	'dati/2021';
+$manutenzione 					=	'NO';
+$attiva_log 						=	'SI';
+$attiva_rss 						= 'SI';
+$url_rss							= 'http://www.gazzetta.it/rss/Calcio.xml                                                         ';
+$attiva_multi 					= 'SI';
 
-$attiva_shoutbox = 'NO';
-$usa_cms = 'SI';
-$vedi_notizie = '2';
-$temp1 = '';
-$temp2 = '';
-$temp3 = '';
-$temp4 = '';
-$temp5 = '';
-$temp6 = '';
-$temp7 = '';
-$temp8 = '';
-$temp9 = '';
-$temp0 = '';
+$attiva_shoutbox 				= 'NO';
+$usa_cms 						= 'SI';
+$vedi_notizie 					= '2';
+$temp1	= '';
+$temp2	= '';
+$temp3	= '';
+$temp4	= '';
+$temp5	= '';
+$temp6	= '';
+$temp7	= '';
+$temp8	= '';
+$temp9	= '';
+$temp0	= '';
+
 
 
 # PARAMETRI NON CONFIGURABILI DA FORM
@@ -95,17 +96,17 @@ $num_colonna_valore_calciatori = 28;
 # essere anche una URL (http://...). Se il file contiene anche 01,02,... in
 # corripondeza alla giornata utilizzare anche la 2�,3�,4� e 5� variabile.
 $prima_parte_pos_file_voti = 'dati/2021/MCC';
-$cartella_remota = '2021';
-$abilita_stat = 'MIRROR';
-$risparmia_risorse = 'NO';
+$cartella_remota ='2021';
+$abilita_stat ='AUTO';
+$risparmia_risorse ='NO';
 $num_giornata_file_voti = 'SI';
 $num_giornata_file_voti_doppio = 'SI';
 $seconda_parte_pos_file_voti = '.txt';
 
 # Dati non configurabili da form
 
-$sito_principale = 'http://fcbe.sssr.it/dati/';
-$sito_mirror = 'http://fantadownload.altervista.org/mirrorFCBE/dati/';
+$sito_principale='http://fcbe.sssr.it/dati/';
+$sito_mirror='http://fantadownload.altervista.org/mirrorFCBE/dati/';
 
 # Composizione del file con i dati delle statistiche (dati/file);
 $ncs_codice = 1;

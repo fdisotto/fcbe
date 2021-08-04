@@ -17,4 +17,5 @@ jobs:
           script: |
             cd /app/fcbe.fdisotto.com
             git pull
+            git describe --long --dirty --abbrev=10 --tags > version.txt
             echo "Deploy Success!!!"
