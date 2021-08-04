@@ -1,0 +1,6 @@
+.idea/
+dati/*.log
+dati/chiusura_giornata.txt
+dati/data_chigio.txt
+dati/log.txt
+dati/cache/
