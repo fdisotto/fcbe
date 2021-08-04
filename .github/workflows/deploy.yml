@@ -15,6 +15,6 @@ jobs:
           username: ${{secrets.SSH_USERNAME}}
 
           script: |
-            cd /app
-            git clone https://github.com/fdisotto/fcbe.git
+            cd /app/fcbe.fdisotto.com
+            git pull
             echo "Deploy Success!!!"

@@ -18,6 +18,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
 error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 if (stristr($_SERVER['SCRIPT_NAME'], "controlla_pass.php")) {
     header("Location: ./index.php");
