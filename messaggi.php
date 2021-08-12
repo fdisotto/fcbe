@@ -190,7 +190,7 @@ if ($_SESSION['valido'] == "SI") {
 				<td class='testa' colspan='2' align='left'><?php echo $post[0]; ?></td>
 				</tr>
 				<tr>
-				<td bgcolor='<? echo $sfondo_tab1 ; ?>' valign='top' width='150'>
+				<td bgcolor='<?php echo $sfondo_tab1 ; ?>' valign='top' width='150'>
 				<?php echo"<table summary='' width='100%' style='padding: 5px'><tr><td align='right'><font size='+6' color='#666666'>".date("d", $post[3])."</font></td><td>".date("m-Y", $post[3])."<br />".date("H:i", $post[3])."</td></tr><tr><td colspan='2' align='center'>Utente: <b>".$post[1]."</b><br />".$post[5]."</td></tr></table>";
 				?>
 				</td>
