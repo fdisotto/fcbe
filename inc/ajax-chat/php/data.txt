@@ -1,4 +1,4 @@
-a:10:{s:4:"time";a:1:{s:5:"admin";i:1628781068;}s:4:"away";a:1:{s:5:"admin";b:0;}s:4:"gndr";a:1:{s:5:"admin";s:4:"none";}s:4:"stat";a:1:{s:5:"admin";s:4:"none";}s:4:"room";a:1:{s:5:"admin";s:8:"Generale";}s:4:"user";a:1:{s:5:"admin";d:1628781073.440162;}s:4:"pass";a:1:{s:5:"admin";s:32:"467caa921be95e7cb13cdbadd9f0fc2b";}s:4:"data";a:39:{i:0;s:29:"+
+a:10:{s:4:"time";a:1:{s:5:"admin";i:1628781150;}s:4:"away";a:1:{s:5:"admin";b:0;}s:4:"gndr";a:1:{s:5:"admin";s:4:"none";}s:4:"stat";a:1:{s:5:"admin";s:4:"none";}s:4:"room";a:1:{s:5:"admin";s:8:"Generale";}s:4:"user";a:1:{s:5:"admin";d:1628781153.322429;}s:4:"pass";a:1:{s:5:"admin";s:32:"2ef5800727f7aa965353c99f9ea1d2e9";}s:4:"data";a:42:{i:0;s:29:"+
 Generale
 Anto
 none
@@ -114,4 +114,12 @@ none
 none
 admin
 .
-%%pirate%%";}}s:4:"kick";a:0:{}s:4:"mute";a:0:{}}
+%%pirate%%";}i:39;s:11:"s
+admin
+-";i:40;s:18:"-
+Generale
+admin";i:41;s:30:"+
+Generale
+admin
+none
+none";}s:4:"kick";a:0:{}s:4:"mute";a:0:{}}

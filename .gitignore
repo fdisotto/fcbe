@@ -3,4 +3,8 @@ dati/*.log
 dati/chiusura_giornata.txt
 dati/data_chigio.txt
 dati/log.txt
+dati/log1.txt
+dati/utenti_*.php
+dati/tornei.php
 dati/cache/
+inc/ajax-chat/php/data.txt
