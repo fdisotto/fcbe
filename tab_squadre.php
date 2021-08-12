@@ -83,18 +83,18 @@ $num_calciatori = count($calciatori);
 
 
 for ($num1 = 0 ; $num1 < $num_cer_squ ; $num1++) {
-	
+
 #######################################
 #Controllo componenti squadra
 
-	
-	
+
+
 	$dati_calciatore = explode($separatore_campi_file_calciatori, $cerca_squadra[$num1]);
 	$numero = $dati_calciatore[($num_colonna_numcalciatore_file_calciatori-1)];
 	$numero = trim($numero);
 	$nome = stripslashes($dati_calciatore[($num_colonna_nome_file_calciatori-1)]);
 	$nome = trim($nome);
-	$nome = ereg_replace("\"","",$nome);
+	$nome = preg_replace("/\"/","",$nome);
 	$ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 	$ruolo = trim($ruolo);
 	$valore = $dati_calciatore[($num_colonna_valore_calciatori-1)];
@@ -105,7 +105,7 @@ for ($num1 = 0 ; $num1 < $num_cer_squ ; $num1++) {
 	$ultfantavoto = trim($ultfantavoto);
 	$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 	$xsquadra = trim($xsquadra);
-	$xsquadra = ereg_replace("\"","",$xsquadra);
+	$xsquadra = preg_replace("/\"/","",$xsquadra);
 
 	$attivo = $dati_calciatore[($ncs_attivo-1)];
 	$attivo = trim($attivo);
@@ -119,7 +119,7 @@ for ($num1 = 0 ; $num1 < $num_cer_squ ; $num1++) {
 
 	#####################
 	if ($vedi_squadra == $xsquadra and $attivo == "1") {
-		
+
 		$sx="on";
 		for ($num2 = 0 ; $num2 < $num_calciatori ; $num2++) {
 			$dati_calciatore = explode(",", $calciatori[$num2]);
@@ -132,7 +132,7 @@ for ($num1 = 0 ; $num1 < $num_cer_squ ; $num1++) {
 		if ($ruolo == "C") $color="white";
 		if ($ruolo == "A") $color=$colore_riga_alt;
 		# if ($ruolo == "F") $color="white";
-		
+
 		$table_layout .= "<tr bgcolor = '$color'>
 		<td align='center'><a href='stat_calciatore.php?num_calciatore=$numero&amp;ruolo_guarda=$ruolo_guarda&amp;escludi_controllo=$escludi_controllo' class='user'>$numero</a></td>
 		<td align=left>$nome</td>
@@ -159,10 +159,10 @@ tabella_squadre();
 	<tr><td style="width: 50%; padding: 10px; text-align: justify; vertical-align: top">
 		<br /><br /><br />
 <?php
-$grab1 = file("http://www.gazzetta.it/Calcio/Squadre/".ucfirst(strtolower($vedi_squadra)));
+$grab1 = file("http://www.gazzetta.it/calcio/squadre/".strtolower($vedi_squadra) . '/');
 
 for ($nn=1900; $nn<=2200; $nn++) {
-	if (strstr($grab1[$nn],"sede-data bg1")) {
+	if (isset($grab1[$nn]) && strstr($grab1[$nn],"sede-data bg1")) {
 		$lintit=$nn+2;
 		$lingn=$nn+3;
 		if (strlen(strip_tags($grab1[$lingn])) > 50) {$gn = utf8_encode(html_entity_decode($grab1[$lingn]));$tit = utf8_encode(html_entity_decode($grab1[$lintit]));}
@@ -192,15 +192,15 @@ echo "<object id='probabili_formazioni' width='620' height='250' data='http://ww
 echo "<b>Modulo ".$modulo[0]."<br /><br />Probabile formazione:</b>".$acapo;
 
 foreach($titolari as $val) {
-	$val1 = eregi_replace("<calciatore>","<br />", $val);
-	$val1 = eregi_replace("</calciatore>","", $val1);
+	$val1 = preg_replace("/<calciatore>/","<br />", $val);
+	$val1 = preg_replace("/<\/calciatore>/","", $val1);
 	echo $val1.$acapo;
 }
 
 echo "<div style='padding: 5px; float:left'><b><u>Trattative:</u></b>".$acapo;
 foreach($trattative as $val) {
-	$val1 = eregi_replace("<calciatore>","<br />", $val);
-	$val1 = eregi_replace("</calciatore>","", $val1);
+	$val1 = preg_replace("/<calciatore>/","<br />", $val);
+	$val1 = preg_replace("/<\/calciatore>/","", $val1);
 	echo $val1.$acapo;
 }
 
@@ -208,15 +208,15 @@ foreach($trattative as $val) {
 
 echo "<div style='clear:both;'>&nbsp;</div><div style='width: 100%'><img src='$file2' border='0' alt='Maglia sociale' align='right' /><div style='padding: 10px; float:left'><b>Acquisti:</b>".$acapo;
 foreach($acquisti as $val) {
-	$val1 = eregi_replace("<calciatore>","<br />", $val);
-	$val1 = eregi_replace("</calciatore>","", $val1);
+	$val1 = preg_replace("/<calciatore>/","<br />", $val);
+	$val1 = preg_replace("/<\/calciatore>/","", $val1);
 	echo $val1.$acapo;
 }
 
 echo "</div><div style='padding: 10px; float:left'><b>Cessioni:</b>".$acapo;
 foreach($cessioni as $val) {
-	$val1 = eregi_replace("<calciatore>","<br />", $val);
-	$val1 = eregi_replace("</calciatore>","", $val1);
+	$val1 = preg_replace("/<calciatore>/","<br />", $val);
+	$val1 = preg_replace("/<\/calciatore>/","", $val1);
 	echo $val1.$acapo;
 }
 

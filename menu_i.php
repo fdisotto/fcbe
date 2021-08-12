@@ -150,7 +150,7 @@ if ($mostra_giornate_in_login == "SI") {
 
     for ($num1 = 1; $num1 < $num_tornei; $num1++) {
         @list($tid, $tdenom, $tpart, $tserie) = explode(",", trim($tornei[$num1]));
-        $tdenom = ereg_replace("\"", "", $tdenom);
+        $tdenom = preg_replace("/\"/", "", $tdenom);
 
         if ($torneo_completo != "SI") $vedi_tornei_attivi .= "<option value='$tid'>$tdenom</option>";
 

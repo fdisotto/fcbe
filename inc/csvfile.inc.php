@@ -506,7 +506,7 @@ class csvfile
         $entrylist[$pos + 1] = $newline;
 
         $this->open("w");
-        fwrite($this->handle, ereg_replace("\r", "", implode("", $entrylist)));
+        fwrite($this->handle, preg_replace("/\r/", "", implode("", $entrylist)));
 
         $this->close();
     }
@@ -528,7 +528,7 @@ class csvfile
             unset($entrylist[$pos + 1]);
 
             $this->open("w");
-            fwrite($this->handle, ereg_replace("\r", "", implode("", $entrylist)));
+            fwrite($this->handle, preg_replace("/\r/", "", implode("", $entrylist)));
 
             $this->close();
         }
@@ -568,7 +568,7 @@ class csvfile
             $entrylist[0] = $captionline;
             $pos++;
 
-            // Datei bis zur Einfügeposition zeilenweise einlesen
+            // Datei bis zur Einfï¿½geposition zeilenweise einlesen
             $i = 1;
             while ($i < $pos) {
                 $entrylist[$i] = fgets($this->handle, 61440);
@@ -584,7 +584,7 @@ class csvfile
             $this->close();
 
             $this->open("w");
-            fwrite($this->handle, ereg_replace("\r", "", implode("", $entrylist)));
+            fwrite($this->handle, preg_replace("/\r/", "", implode("", $entrylist)));
             $this->close();
         }
     }

@@ -78,7 +78,7 @@ $table_layout = "<table summary='Dati squadra' cellpadding='3px' align='center' 
 <td class='testa'>&nbsp;</td>
 <td class='testa'>V</td>
 <td class='testa'>FV</td>
-<td class='testa'>€</td>
+<td class='testa'>ï¿½</td>
 <td class='testa'>&nbsp;</td></tr>";
 
 for ($num1 = 0 ; $num1 < $num_cer_squ ; $num1++) {
@@ -88,7 +88,7 @@ for ($num1 = 0 ; $num1 < $num_cer_squ ; $num1++) {
 	$numero = trim($numero);
 	$nome = stripslashes($dati_calciatore[($num_colonna_nome_file_calciatori-1)]);
 	$nome = trim($nome);
-	$nome = ereg_replace("\"","",$nome);
+	$nome = preg_replace("/\"/","",$nome);
 	$ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 	$ruolo = trim($ruolo);
 	$valore = $dati_calciatore[($num_colonna_valore_calciatori-1)];
@@ -99,7 +99,7 @@ for ($num1 = 0 ; $num1 < $num_cer_squ ; $num1++) {
 	$ultfantavoto = trim($ultfantavoto);
 	$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 	$xsquadra = trim($xsquadra);
-	$xsquadra = ereg_replace("\"","",$xsquadra);
+	$xsquadra = preg_replace("/\"/","",$xsquadra);
 
 	$attivo = $dati_calciatore[($ncs_attivo-1)];
 	$attivo = trim($attivo);
@@ -179,15 +179,15 @@ echo "<object id='probabili_formazioni' width='620' height='250' data='http://ww
 echo "<b>Modulo ".$modulo[0]."<br /><br />Probabile formazione:</b>".$acapo;
 
 foreach($titolari as $val) {
-	$val1 = eregi_replace("<calciatore>","<br />", $val);
-	$val1 = eregi_replace("</calciatore>","", $val1);
+	$val1 = preg_replace("/<calciatore>/","<br />", $val);
+	$val1 = preg_replace("/<\/calciatore>/","", $val1);
 	echo $val1.$acapo;
 }
 
 echo "<div style='padding: 5px; float:left'><b><u>Trattative:</u></b>".$acapo;
 foreach($trattative as $val) {
-	$val1 = eregi_replace("<calciatore>","<br />", $val);
-	$val1 = eregi_replace("</calciatore>","", $val1);
+	$val1 = preg_replace("/<calciatore>/","<br />", $val);
+	$val1 = preg_replace("/<\/calciatore>/","", $val1);
 	echo $val1.$acapo;
 }
 
@@ -195,15 +195,15 @@ foreach($trattative as $val) {
 
 echo "<div style='clear:both;'>&nbsp;</div><div style='width: 100%'><img src='$file2' border='0' alt='Maglia sociale' align='right' /><div style='padding: 10px; float:left'><b>Acquisti:</b>".$acapo;
 foreach($acquisti as $val) {
-	$val1 = eregi_replace("<calciatore>","<br />", $val);
-	$val1 = eregi_replace("</calciatore>","", $val1);
+	$val1 = preg_replace("/<calciatore>/","<br />", $val);
+	$val1 = preg_replace("/<\/calciatore>/","", $val1);
 	echo $val1.$acapo;
 }
 
 echo "</div><div style='padding: 10px; float:left'><b>Cessioni:</b>".$acapo;
 foreach($cessioni as $val) {
-	$val1 = eregi_replace("<calciatore>","<br />", $val);
-	$val1 = eregi_replace("</calciatore>","", $val1);
+	$val1 = preg_replace("/<calciatore>/","<br />", $val);
+	$val1 = preg_replace("/<\/calciatore>/","", $val1);
 	echo $val1.$acapo;
 }
 

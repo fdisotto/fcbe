@@ -60,9 +60,9 @@ for ($num1 = 1; $num1 < 40 ; $num1++) {
 					$stat_codice = $dati_voto[($ncs_codice -1)];
 					$stat_giornata = $dati_voto[($ncs_giornata -1)];
 					$stat_nome = $dati_voto[($ncs_nome -1)];
-					$stat_nome = ereg_replace("\"","",$stat_nome);
+					$stat_nome = preg_replace("/\"/","",$stat_nome);
 					$stat_squadra = $dati_voto[($ncs_squadra -1)];
-					$stat_squadra = ereg_replace("\"","",$stat_squadra);
+					$stat_squadra = preg_replace("/\"/","",$stat_squadra);
 					$stat_attivo = $dati_voto[($ncs_attivo -1)];
 					$stat_ruolo = $dati_voto[($ncs_ruolo -1)];
 					$stat_presenza = $dati_voto[($ncs_presenza -1)]; $totpresenze = $totpresenze + $stat_presenza;
@@ -115,11 +115,11 @@ for ($num1 = 0 ; $num1 < $num_calciatori ; $num1++) {
 	if ($num_calciatore == $numero) {
 		$nome = stripslashes($dati_calciatore[($num_colonna_nome_file_calciatori-1)]);
 		$nome = trim($nome);
-		$nome = ereg_replace("\"","",$nome);
+		$nome = preg_replace("/\"/","",$nome);
 		if ($num_colonna_squadra_file_calciatori != 0) {
 			$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 			$xsquadra = trim($xsquadra);
-			$xsquadra = ereg_replace("\"","",$xsquadra);
+			$xsquadra = preg_replace("/\"/","",$xsquadra);
 		} # fine if ($num_colonna_squadra_file_calciatori != 0)
 		$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 		$s_ruolo = trim($s_ruolo);
@@ -177,7 +177,7 @@ if ($statistiche == "SI" and $stato_mercato != "I") {
 	if ($foto_calciatori == "SI"){
 		if (@is_file("$foto_path$num_calciatore.png")) $tabstat3 .= "<tr bgcolor='$sfondo_tab'><td colspan='2' align='center'><br/><p><img src='$foto_path$num_calciatore.png' alt='$num_calciatore' class='shadow' /></p></td></tr>";
 				else if (@is_file("$foto_path$num_calciatore.jpg")) $tabstat3 .= "<tr bgcolor='$sfondo_tab'><td colspan='2' align='center'><br/><p><img src='$foto_path$num_calciatore.jpg' alt='$num_calciatore' class='shadow' /></p></td></tr>";
-						else if (@is_file("$foto_path$num_calciatore.gif")) $tabstat3 .= "<tr bgcolor='$sfondo_tab'><td colspan='2' align='center'><br/><p><img src='$foto_path$num_calciatore.gif' alt='$num_calciatore' class='shadow' /></p></td></tr>";						
+						else if (@is_file("$foto_path$num_calciatore.gif")) $tabstat3 .= "<tr bgcolor='$sfondo_tab'><td colspan='2' align='center'><br/><p><img src='$foto_path$num_calciatore.gif' alt='$num_calciatore' class='shadow' /></p></td></tr>";
 								else $tabstat3 .= "<tr bgcolor='white'><td colspan='2' align='center'><br/><p><img src='immagini/nofoto.jpg' alt'Nessuna foto' class='shadow' /></p></td></tr>";
 
 	}

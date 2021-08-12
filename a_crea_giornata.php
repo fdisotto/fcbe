@@ -246,7 +246,7 @@ if ($debug == 1) echo "$num1 / $num_tornei<br/>";
 					$scontri_diretti .= "#@& fine scontri #@&\r\n";
 					if ($giornata_in_corso == "SI" or !$ultima_giornata or $ultima_giornata == 0) $finito_scontri = "SI";
 					else {
-						$verifica_num = ereg_replace("[0-9]","",$ultima_giornata);
+						$verifica_num = preg_replace("/[0-9]/","",$ultima_giornata);
 						if ($verifica_num != "") $finito_scontri = "SI";
 						elseif ($num_giornata_campionato%$ultima_giornata == 0) $num_giornata_campionato = $ultima_giornata;
 						else $num_giornata_campionato = $num_giornata_campionato - (floor($num_giornata_campionato/$ultima_giornata)*$ultima_giornata);
@@ -333,7 +333,7 @@ if ($debug == 1) echo "$num1 / $num_tornei<br/>";
 	else $prossima_settimana  = mktime (0,0,0,$mc,$gc+7,$ac);
 
 	$prossima_chiusura = date ("Ymd",$prossima_settimana)."$orac$minc";
-	
+
 	$file_dati = fopen($percorso_cartella_dati."/data_chigio.txt","wb+");
 	flock($file_dati,LOCK_EX);
 	fwrite($file_dati, $prossima_chiusura);
@@ -346,11 +346,11 @@ if ($debug == 1) echo "$num1 / $num_tornei<br/>";
 	$gc = substr($data_chigio[0],6,2);
 	$orac = substr($data_chigio[0],8,2); if (!$orac) $orac = "14";
 	$minc = substr($data_chigio[0],10,2); if (!$minc) $minc = "00";
-	
+
 	echo "<br/><font class='evidenziato'>E' stata impostata una chiusura operazioni per il <b>$gc.$mc.$ac</b> alle <b>$orac:$minc</b>.</font><br /></center>";
-		
+
 	unset($prossima_chiusura,$prossima_settimana);
-	
+
 	#######backup######
 	echo "<br/>";
 	include("./a_b2mail.php");

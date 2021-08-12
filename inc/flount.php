@@ -9,7 +9,7 @@ $ips = array(array());
 
 if (!file_exists($logfile)) @fopen($logfile,"wb+");
 
-$loggedips = file($logfile);
+$loggedips = file($logfile) ?: [];
 $visite = trim($loggedips[0]);
 
 for ($i=1; $i< count($loggedips); $i++){
@@ -32,4 +32,3 @@ else{
 	fclose($fp);
 	echo "<br />Visitatori: ".$visite;
 }
-?>

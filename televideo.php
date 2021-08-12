@@ -17,38 +17,38 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
-include("./controlla_pass.php");
-include("./header.php");
-if ($_SESSION['valido'] == "SI") {
-if ($_SESSION['permessi'] == 5) require ("./a_menu.php");
-else require ("./menu.php");
 
-if (!$_GET['telev']) $telev = "200"; else $telev = $_GET['telev'];
-if (!$_GET['sottop']) $sottop = "";
-if ($_POST['invio'] == "Precedente") $telev = $telev-1;
-if ($_POST['invio'] == "Successiva") $telev = $telev+1;
+require_once "./dati/dati_gen.php";
+require_once "./inc/funzioni.php";
+require_once "./header.php";
 
-if ($sottop == "")
-$lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . ".png";
-else
-$lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . "." . $sottop . ".png";
+if ( !isset($_GET[ 'telev' ]) || ! $_GET[ 'telev' ] )
+    $telev = "200"; else $telev = $_GET[ 'telev' ];
+if ( !isset($_GET[ 'sottop' ]) || ! $_GET[ 'sottop' ] )
+    $sottop = "";
+if ( isset($_POST[ 'invio' ]) && $_POST[ 'invio' ] == "Precedente" )
+    $telev = $telev - 1;
+if ( isset($_POST[ 'invio' ]) && $_POST[ 'invio' ] == "Successiva" )
+    $telev = $telev + 1;
 
-if (!@fopen($lnkimage, "r")){
-$errore = "URL: $lnkimage non trovata";
-if ($sottop == "") {
-$lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . ".png";
-$sottop = "";
+if ( $sottop == "" )
+    $lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . ".png"; else
+    $lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . "." . $sottop . ".png";
+
+if ( ! @fopen( $lnkimage, "r" ) ) {
+    $errore = "URL: $lnkimage non trovata";
+    if ( $sottop == "" ) {
+        $lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . ".png";
+        $sottop = "";
+    } elseif ( $sottop != "" ) {
+        $sottop = "2";
+        $lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . "." . $sottop . ".png";
+    } else
+        $lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-100.png";
 }
-elseif ($sottop != "") {
-$sottop = "2";
-$lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . "." . $sottop . ".png";
-}
-else
-$lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-100.png";
-}
 
-$tp = $telev -1;
-$ts = $telev +1;
+$tp = $telev - 1;
+$ts = $telev + 1;
 /*
 echo "<form method='post' action='televideo.php'>
 <input type='hidden' name='telev' value='".$_GET['telev']."' />
@@ -66,7 +66,7 @@ Sottopagina <input type='text' name='sottop' size=2 maxlength=2 value='$sottop' 
 Se non appare la pagina televideo pu&ograve; significare <br/>che la pagina non esiste <br/>o che occorre cambiare il numero di sottopagina.";
 */
 #if ($errore) echo "<hr>$errore";
-echo"<table align='center' cellpadding='5' cellspacing='10' width='100%'>
+echo "<table align='center' cellpadding='5' cellspacing='10' width='100%'>
 <tr><td bgcolor='black' align='center' valign='middle'>
 <img SRC='$lnkimage' hspace='5' vspace='5' alt='Televideo RAI' /></td>
 <td align='center' valign='middle'>
@@ -95,7 +95,5 @@ echo"<table align='center' cellpadding='5' cellspacing='10' width='100%'>
 <br/>
 <a href='televideo.php?telev=200'>Indice</a> <br />
 </td></tr></table></form>";
-} # fine if ($_SESSION['valido'] == "SI"
-else header("location: logout.php?logout=2"); 
-include("./footer.php");
-?>
+
+require_once "./footer.php";

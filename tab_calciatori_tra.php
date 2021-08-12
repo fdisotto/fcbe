@@ -91,7 +91,7 @@ if ($_SESSION['valido'] == "SI" or $escludi_controllo == "SI") {
 		$numgio = $dati_calciatore[1];
 		$nome = stripslashes($dati_calciatore[($num_colonna_nome_file_calciatori-1)]);
 		$nome = trim($nome);
-		$nome = ereg_replace("\"","",$nome);
+		$nome = preg_replace("/\"/","",$nome);
 		$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 		$s_ruolo = trim($s_ruolo);
 		$ruolo = $s_ruolo;
@@ -99,7 +99,7 @@ if ($_SESSION['valido'] == "SI" or $escludi_controllo == "SI") {
 		$valutazione = trim($valutazione);
 		$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 		$xsquadra = trim($xsquadra);
-		$xsquadra = ereg_replace("\"","",$xsquadra);
+		$xsquadra = preg_replace("/\"/","",$xsquadra);
 		$attivo = $dati_calciatore[($ncs_attivo-1)];
 		$attivo = trim($attivo);
 
@@ -152,10 +152,10 @@ if ($_SESSION['valido'] == "SI" or $escludi_controllo == "SI") {
                         $proprietario = "<font color='red' size='-2'>". $_SESSION['utente']." </font>";
 						if ($propr_c != $_SESSION['utente'] AND (double)substr($tempo_off_mer,0,12) <= (double)substr($data_busta_precedente,0,12) ) {
 							$proprietario = "<font color='red' size='-2'>$proprietario_merc</font>";
-							$azione = "<a >Venduto</a>"; 
+							$azione = "<a >Venduto</a>";
 						}
                     }
-                    
+
 				}
 			} # fine for $num2
 
@@ -174,13 +174,13 @@ elseif ($propr_c != $_SESSION['utente'] AND ($diff == 0 OR $diff == $diff_giri))
                          $azione = "<a href=\"scambia.php?num_calciatore=$numero&amp;altro_utente=$proprietario_merc\" class=\"user\">scambia</a>";
                          $proprietario = "<font color='red' size='-2'>$propr_c</font>";
                     }
-                    
+
 				elseif ($propr_c != $_SESSION['utente'] AND !isset($azione)){
                  $azione = "<a href=\"busta_offerta.php?num_calciatore=$numero&valutazione=$valutazione&xsquadra_ok=$xsquadra_ok&mercato_libero=$mercato_libero\" class=user>offri</a>";
                  $proprietario = "<font color='navy' size='1'>Svincolato</font>";
-                }      
+                }
               //  elseif ($propr_c != $_SESSION['utente']) $azione = "<a href=\"busta_offerta.php?num_calciatore=$numero&valutazione=$valutazione&xsquadra_ok=$xsquadra_ok&mercato_libero=$mercato_libero\" class=user>offri</a>";
-                 
+
 
                 //elseif (isset($dati_calciatore_merc[4])) $azione = "Venduto";
 			} #fine if ($stato_mercato=B)

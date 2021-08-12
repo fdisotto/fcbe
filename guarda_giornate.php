@@ -122,7 +122,7 @@ $num2 = 0;
 $file = file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
 $linee = count($file);
 for($num1 = 1; $num1 < $linee; $num1++){
-@list($outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+@list($outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittï¿½, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 $nome_posizione[$num1] = $outente;
 
 if ($osquadra) {
@@ -144,7 +144,7 @@ $formazione = "formazione_$outente";
 $formazione = $$formazione;
 $num_linee_formazione = count($formazione);
 for ($num2 = 0 ; $num2 < $num_linee_formazione; $num2++) {
-# $formazione[$num2] = ereg_replace(" ","_",$formazione[$num2]);
+# $formazione[$num2] = preg_replace("/ /","_",$formazione[$num2]);
 $tab_formazioni .= $formazione[$num2]."<br/>";
 } # fine for $num2
 $tab_formazioni .= "</td>";
@@ -265,7 +265,7 @@ $file = file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
 $linee = count($file);
 
 for($num1 = 1; $num1 < $linee; $num1++){
-@list($outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+@list($outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittï¿½, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 $totpunti = 0;
 $soprannome_squadra = $osquadra;
 

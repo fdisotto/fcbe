@@ -105,7 +105,7 @@ if ($_SESSION['valido'] == "SI") {
 
 				if ($gia_offerti_utente[$calciatore_scambio_utente] == "SI") {
 					$scambiare = "NO";
-					echo "Hai offerto più volte lo stesso calciatore.<br />";
+					echo "Hai offerto piï¿½ volte lo stesso calciatore.<br />";
 				} # fine if ($gia_offerti_utente[$calciatore_scambio_utente] == "SI")
 
 				if ($calciatore_scambio_utente != "") {
@@ -118,7 +118,7 @@ if ($_SESSION['valido'] == "SI") {
 				$calciatore_scambio_altro = "calciatore_scambio_altro$num1";
 				$calciatore_scambio_altro = $$calciatore_scambio_altro;
 				########################
-				
+
 				if ($calciatori_altro[$calciatore_scambio_altro] != "SI" and $calciatore_scambio_altro != "") {
 					$scambiare = "NO";
 					echo "Hai richiesto un calciatore non posseduto da ".$altro_utente."!<br />";
@@ -126,7 +126,7 @@ if ($_SESSION['valido'] == "SI") {
 
 				if ($gia_offerti_altro[$calciatore_scambio_altro] == "SI") {
 					$scambiare = "NO";
-					echo "Hai richiesto più volte lo stesso calciatore.<br />";
+					echo "Hai richiesto piï¿½ volte lo stesso calciatore.<br />";
 				} # fine if ($gia_offerti_altro[$calciatore_scambio_altro] == "SI")
 
 				if ($calciatore_scambio_altro != "") {
@@ -150,7 +150,7 @@ if ($_SESSION['valido'] == "SI") {
 			$num_calciatori_dopo = $num_calciatori_posseduti + $num_calciatori_richiesti - $num_calciatori_offerti;
 			if ($num_calciatori_dopo > $max_calciatori) {
 				$scambiare = "NO";
-				echo "Dopo lo scambio avresti più di $max_calciatori calciatori.<br />";
+				echo "Dopo lo scambio avresti piï¿½ di $max_calciatori calciatori.<br />";
 			} # fine if ($num_calciatori_dopo > $max_calciatori)
 
 			if ($_SESSION['utente'] == $altro_utente) {
@@ -158,8 +158,8 @@ if ($_SESSION['valido'] == "SI") {
 				echo "Hai una doppia personalit&agrave;?.<br />";
 			} # fine if ($_SESSION['utente'] == $altro_utente)
 
-			$verifica_num = ereg_replace("[0-9]","",$soldi_scambio_utente);
-			$verifica_num_altro = ereg_replace("[0-9]","",$soldi_scambio_altro);
+			$verifica_num = preg_replace("/[0-9]/","",$soldi_scambio_utente);
+			$verifica_num_altro = preg_replace("/[0-9]/","",$soldi_scambio_altro);
 
 			if ($verifica_num != "" or $verifica_num_altro != "") {
 				$scambiare = "NO";
@@ -175,7 +175,7 @@ if ($_SESSION['valido'] == "SI") {
 
 			if ($soldi_scambio_utente > $soldi_spendibili) {
 				$scambiare = "NO";
-				echo "Hai offerto più crediti di quelli da te posseduti.<br />";
+				echo "Hai offerto piï¿½ crediti di quelli da te posseduti.<br />";
 			} # fine if ($soldi_scambio_utente > $soldi_spendibili)
 
 			for($num1 = 1 ; $num1 < $linee; $num1++) {
@@ -190,7 +190,7 @@ if ($_SESSION['valido'] == "SI") {
 
 			if ($soldi_scambio_altro > $soldi_spendibili_altro) {
 				$scambiare = "NO";
-				echo "Hai richiesto a ".$altro_utente." più crediti di quelli disponibili.<br />";
+				echo "Hai richiesto a ".$altro_utente." piï¿½ crediti di quelli disponibili.<br />";
 			} # fine if ($soldi_scambio_utente > $soldi_spendibili_altro)
 
 			if ($scambiare != "NO") {
@@ -198,7 +198,7 @@ if ($_SESSION['valido'] == "SI") {
 				$num_scambi_proposti = count($scambi_proposti);
 				$num_offerte_utente = 0;
 				$id_scambio = 0;
-				
+
 				for ($num1 = 0 ; $num1 < $num_scambi_proposti ; $num1++) {
 					$dati_scambio = explode(",", $scambi_proposti[$num1]);
 					if ($num1 == 0 and $dati_scambio[0]) $id_scambio = $dati_scambio[0];
@@ -242,7 +242,7 @@ if ($_SESSION['valido'] == "SI") {
 					$scadenza_teorica = date("YmdHi",mktime($ora_attuale+$aspetta_ore,$minuto_attuale+$aspetta_minuti,0,$mese_attuale,$giorno_attuale+$aspetta_giorni,$anno_attuale));
 					$data_chigio = @file("dati/data_chigio.txt");
 					$data_cg = $data_chigio[0];
-					
+
 
 					if (strlen($data_cg) <> 12) unset($data_cg);
 
@@ -309,12 +309,12 @@ if ($_SESSION['valido'] == "SI") {
 				} # fine for $num2
 				echo "</select>";
 			} # fine for $num1
-			
+
 			if ($scambio_con_soldi == "SI") {
 				echo "<br /><br /> + <input type='text' name='soldi_scambio_utente' size='8' />
 				Fanta-Euro.</td>";
 			} # fine if ($scambio_con_soldi == "SI")
-			
+
 			//-----------------parte invio mail-------------------------------------
 			$filei = file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
 			$linee = count($filei);
@@ -354,7 +354,7 @@ if ($_SESSION['valido'] == "SI") {
 				Fanta-Euro.</td></tr></table>";
 			} # fine if ($scambio_con_soldi == "SI")
 			else echo "</td></tr></table>";
-			
+
 			echo " <br /><br /><br /><center>
 			<input type='submit' name='offri_scambio' value='Offri lo scambio' />
 			</center></form><br /><br /><p align='justify' class='evidenziato' style='PADDING-LEFT: 30px; PADDING-RIGHT: 30px; PADDING-TOP: 30px; PADDING-BOTTOM: 30px;' >Attenzione: la procedura consente di scambiare 2 o 3 giocatori per un numero diverso (1 o 2); le parti interessate ad uno scambio di questo tipo dovranno necessariamente ristabilire la quota stabilita di <b>$max_calciatori</b> calciatori in mercato. <br /><br />Chi, a seguito di una operazione di mercato sbilanciata, si trovasse ad aver meno calciatori di quelli necessari dovr&agrave; essere in possesso di crediti sufficienti per successivi acquisti, <b>altrimenti non potr&agrave; effettuare modifiche nella squadra</b>. Dovr&agrave; cos&igrave; vendere uno o pi&ugrave; calciatori e con il ricavato ristabilire il numero necessario.<br /><br />Chi si troverasse nella situazione di avere pi&ugrave; di <b>$max_calciatori</b> calciatori non potr&agrave; effettuare lo scambio prima di aver ceduto il numero necessario di calciatori.<br /><br /><b>Eventuali differenze economiche derivanti dallo scambio resteranno nel bilancio del giocatore.<br />Verificate attentamente la convenienza di uno scambio, anche economica, in quanto una differenza passiva rimarr&agrave; a vostro carico.</b></p>";

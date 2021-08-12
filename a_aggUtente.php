@@ -1,7 +1,7 @@
 <?php
 ##################################################################################
 #    FANTACALCIOBAZAR EVOLUTION
-#    Copyright (C) 2003-2009 by Antonello Onida 
+#    Copyright (C) 2003-2009 by Antonello Onida
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -163,15 +163,15 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
 		$icambi = 0;
 		$ireg = $_POST['ireg'];
 
-		if (!eregi("^[a-z0-9][_\.a-z0-9-]+@([a-z0-9][0-9a-z-]+\.)+([a-z]{2,4})",$_POST['iemail'])) $err[] = "&nbsp;&nbsp;&nbsp;- email non corretta;";
-		
+		if (!preg_match("/^[a-z0-9][_\.a-z0-9-]+@([a-z0-9][0-9a-z-]+\.)+([a-z]{2,4})/",$_POST['iemail'])) $err[] = "&nbsp;&nbsp;&nbsp;- email non corretta;";
+
 		if (!preg_match("/[a-z']$/i",$_POST['inome'])) $err[] = "&nbsp;&nbsp;&nbsp;- Nome non corretto; consentiti caratteri non numerici non accentati (usare l'apostrofo) e nessuno spazio;";
-	
+
 		if (!preg_match("/[a-z' ]$/i",$_POST['icognome'])) $err[] = "&nbsp;&nbsp;&nbsp;- Nome non corretto; consentiti caratteri non numerici non accentati (usare l'apostrofo);";
-		
+
 		if (!preg_match("/^[a-z0-9]{4,12}$/i",$_POST['iutente'])) $err[] = "&nbsp;&nbsp;&nbsp;- Username non corretto; consentiti da 4 a 12 caratteri normali, non accentati e nessuno spazio;";
-		
-		if (!eregi("^[a-zA-Z0-9]{4,12}",$_POST['ipass']))	$err[] = "&nbsp;&nbsp;&nbsp;- password non corretta; consentiti da 4 a 12 caratteri normali;";
+
+		if (!preg_match("/^[a-zA-Z0-9]{4,12}/",$_POST['ipass']))	$err[] = "&nbsp;&nbsp;&nbsp;- password non corretta; consentiti da 4 a 12 caratteri normali;";
 
 		if ($ipass!==$ipass2) $err[]="&nbsp;&nbsp;&nbsp;- le password non coincidono;";
 

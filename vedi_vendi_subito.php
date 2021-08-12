@@ -22,11 +22,11 @@ include("./header.php");
 
 if ($_SESSION['valido'] == "SI") {
 	require ("./menu.php");
-	
+
 	$chiusura_giornata = intval(@file($percorso_cartella_dati."/chiusura_giornata.txt"));
-	
+
 	if ($chiusura_giornata != 1) {
-	
+
 	echo "<table width='100%' cellspacing=2 cellpadding=5 align='center' bgcolor='$sfondo_tab'>";
 	if ($stato_mercato == "I") echo "<caption>Svincolo calciatore</caption><tr><td align=center>";
 	else echo "<caption>Vendita calciatore</caption><tr><td align=center>";
@@ -119,7 +119,7 @@ if ($_SESSION['valido'] == "SI") {
 
 				$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 				$nome = togli_acapo($nome);
-				$nome = ereg_replace("\"","",$nome);
+				$nome = preg_replace("/\"/","",$nome);
 				$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 				$s_ruolo = togli_acapo($s_ruolo);
 				$ruolo = $s_ruolo;
@@ -128,7 +128,7 @@ if ($_SESSION['valido'] == "SI") {
 
 				$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 				$xsquadra = togli_acapo($xsquadra);
-				$xsquadra = ereg_replace("\"","",$xsquadra);
+				$xsquadra = preg_replace("/\"/","",$xsquadra);
 				if ($considera_fantasisti_come != "P" and $considera_fantasisti_come != "D" and $considera_fantasisti_come != "C" and $considera_fantasisti_come != "A") $considera_fantasisti_come = "F";
 				if ($s_ruolo == $simbolo_fantasista_file_calciatori) $ruolo = $considera_fantasisti_come;
 				if ($s_ruolo == $simbolo_portiere_file_calciatori) $ruolo = "P";
@@ -146,7 +146,7 @@ if ($_SESSION['valido'] == "SI") {
 		} # fine for $num1
 
 		echo "</table>";
-		
+
 		if ($mercato_libero == "SI" OR $stato_mercato == "I" OR $stato_mercato == "R") $percentuale_vendita = 100;
 
 		if ($vendi_costo == "NO") {

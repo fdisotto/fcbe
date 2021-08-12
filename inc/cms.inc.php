@@ -147,9 +147,9 @@ $conta_trovato = 0;
 $elenco = "<div class='slogan_piccolo'>";
 
 foreach($dati_notizie as $chiave => $valore) {
-	if (eregi($word, $valore["ptesto"])) {
+	if (preg_match("/$word/", $valore["ptesto"])) {
 		$conta_trovato++;
-		#$valore["ptesto"] = eregi_replace($word, "<font class='evidenziato'>\\1 $word</font>", $valore["ptesto"]);
+		#$valore["ptesto"] = preg_replace("/$word/", "<font class='evidenziato'>\\1 $word</font>", $valore["ptesto"]);
 		$elenco .= "|&nbsp;&nbsp;&nbsp;<a href='index.php?notiziaid=$conta_id&amp;evidenzia=$word'>".$valore["ptitolo"]."</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- del ".$valore["data_mod"]." di ".$valore["putente"]."<br/>";
 	}
 	$conta_id++;
@@ -208,8 +208,8 @@ function agg_pagina2() {
 		$new_entry = array();
 		$new_entry["data_mod"]	= $data_mod;
 		$new_entry["putente"]	= $_SESSION['utente'];
-		$new_entry["ptitolo"]	= ereg_replace("(\r\n|\n|\r)", "", $ptitolo);
-		$new_entry["ptesto"]	= ereg_replace("(\r\n|\n|\r)", "<br />", $ptesto);
+		$new_entry["ptitolo"]	= preg_replace("/(\r\n|\n|\r)/", "", $ptitolo);
+		$new_entry["ptesto"]	= preg_replace("/(\r\n|\n|\r)/", "<br />", $ptesto);
 		$new_entry["priorita"]	= $priorita;
 		$new_entry["ptodo1"]	= 0;
 		$new_entry["ptodo2"]	= 0;
@@ -450,8 +450,8 @@ function modifica_pagina() {
 	$dati_pagine = array();
 	$dati_pagine["data_mod"]	= $data_mod;
 	$dati_pagine["putente"]	= $putente;
-	$dati_pagine["ptitolo"]	= ereg_replace("(\r\n|\n|\r)", "", $ptitolo);
-	$dati_pagine["ptesto"]	= ereg_replace("(\r\n|\n|\r)", "<br/>", $ptesto);
+	$dati_pagine["ptitolo"]	= preg_replace("/(\r\n|\n|\r)/", "", $ptitolo);
+	$dati_pagine["ptesto"]	= preg_replace("/(\r\n|\n|\r)/", "<br/>", $ptesto);
 	$dati_pagine["priorita"]	= $priorita;
 	$dati_pagine["ptodo1"]	= 0;
 	$dati_pagine["ptodo2"]	= 0;
@@ -476,7 +476,7 @@ function modifica_pagina() {
 		$dati_pagine = array();
 		$lista_pagine->get_entry($id-1, $dati_pagine);
 		$ptesto = html_entity_decode($dati_pagine["ptesto"]);
-		$ptesto = ereg_replace("(<br/>|<br />|<br>)", "\r\n", $ptesto);
+		$ptesto = preg_replace("/(<br/>|<br />|<br>)/", "\r\n", $ptesto);
 
 		$V_dati_pagine["data_mod"]	= $dati_pagine["data_mod"];
 		$V_dati_pagine["putente"]	= $dati_pagine["putente"];
@@ -530,7 +530,7 @@ function modifica_pagina() {
 		<input type='hidden' name='conferma' value='SI' />
 		<input type='submit' name='aggiungi' value='modifica pagina' />
 		</form>";
-	
+
 	}
 }
 
@@ -609,9 +609,9 @@ function agg_categoria2() {
 		$new_entry = array();
 		$new_entry["data_mod"]	= $data_mod;
 		$new_entry["putente"]	= $_SESSION['utente'];
-		$new_entry["ptitolo"]	= ereg_replace("(\r\n|\n|\r)", "", $ptitolo);
-		$new_entry["ptesto"]	= ereg_replace("(\r\n|\n|\r)", "", $ptesto);
-		$new_entry["pbox"]		= ereg_replace("(\r\n|\n|\r)", "", $pbox);
+		$new_entry["ptitolo"]	= preg_replace("/(\r\n|\n|\r)/", "", $ptitolo);
+		$new_entry["ptesto"]	= preg_replace("/(\r\n|\n|\r)/", "", $ptesto);
+		$new_entry["pbox"]		= preg_replace("/(\r\n|\n|\r)/", "", $pbox);
 		$new_entry["pimmagine"]	= $pimmagine;
 		$new_entry["ptodo1"]	= 0;
 		$new_entry["ptodo2"]	= 0;
@@ -719,16 +719,16 @@ function link_categorie() {
 
 	$dati_categorie = array();
 	$lista_categorie->get_entrylist(0,100, $dati_categorie);
-	if ($dati_categorie) { 
+	if ($dati_categorie) {
 		uasort ($dati_categorie, "cmp");
 		echo "<ul>".$acapo;
 			foreach($dati_categorie as $chiave => $valore) {
-			$ntitolo = ereg_replace(" ", "%20", $valore["ptitolo"]);
+			$ntitolo = preg_replace("/ /", "%20", $valore["ptitolo"]);
 			echo "<li><a href='index.php?categoria=$ntitolo'>".$valore["ptitolo"]."</a></li>".$acapo;
 		}
 		echo "</ul>".$acapo;
 	}
-}	
+}
 
 
 function elimina_categoria() {
@@ -785,7 +785,7 @@ function categoria($categoria) {
 			$data_vis = $valore["data_mod"];
 
 			if ($_SESSION["permessi"] >= 4) $adm_opz = "<a href='a_sito.php?q=9&amp;id=".$cc."'><b>M</b></a> - <a href='a_sito.php?q=10&amp;id=".$cc."'><b>X</b></a>";
-			
+
 			echo link_notizie($categoria)."<br /><br /><p class='date'> |&nbsp;".mostra_data($data_vis)."&nbsp;&nbsp;|&nbsp;".$valore["putente"]."&nbsp;&nbsp;&nbsp;".$adm_opz."</p>";
 			$trovato = "SI";
 			break;
@@ -818,9 +818,9 @@ function modifica_categoria() {
 	$dati_categorie = array();
 	$dati_categorie["data_mod"]	= $data_mod;
 	$dati_categorie["putente"]	= $putente;
-	$dati_categorie["ptitolo"]	= ereg_replace("(\r\n|\n|\r)", "", $ptitolo);
-	$dati_categorie["ptesto"]	= ereg_replace("(\r\n|\n|\r)", "", $ptesto);
-	$dati_categorie["pbox"]		= ereg_replace("(\r\n|\n|\r)", "", $pbox);
+	$dati_categorie["ptitolo"]	= preg_replace("/(\r\n|\n|\r)/", "", $ptitolo);
+	$dati_categorie["ptesto"]	= preg_replace("/(\r\n|\n|\r)/", "", $ptesto);
+	$dati_categorie["pbox"]		= preg_replace("/(\r\n|\n|\r)/", "", $pbox);
 	$dati_categorie["pimmagine"]	= $pimmagine;
 	$dati_categorie["ptodo1"]	= 0;
 	$dati_categorie["ptodo2"]	= 0;
@@ -977,7 +977,7 @@ function agg_notizia() {
 	<b>pubblica pagina:</b> <small>SI include l'articolo nella lista notizie</small>&nbsp;&nbsp;&nbsp;
 	SI&nbsp;<input type='radio' name='pattivo' value='SI' checked />&nbsp;oppure&nbsp;NO&nbsp;<input type='radio' name='pattivo' value='NO' />
 	<br /><br />";
-/*	
+/*
 	echo "<b>Data evento:</b> <small>eventuale nel formato gg-mm-aaaa</small><br/>
 	<input type='text' name='pdataeventog' size='2' maxlength='2' />&nbsp;-&nbsp;
 	<input type='text' name='pdataeventom' size='2' maxlength='2' />&nbsp;-&nbsp;
@@ -998,7 +998,7 @@ function agg_notizia() {
 	<input type='hidden' name='MAX_FILE_SIZE' value='1024000' />
 	<input name='puploadfile' type='file' DISABLED />
 	<br />";
-*/	
+*/
 	echo "<input type='submit' name='submit' value='aggiungi notizia' />
 	</form>
 	</div>
@@ -1037,16 +1037,16 @@ echo "	if($ptitolo AND $pabstract AND $pcategoria) {";
 		$new_entry = array();
 		$new_entry["data_mod"]		= $data_mod;
 		$new_entry["putente"]		= $_SESSION['utente'];
-		$new_entry["ptitolo"]		= ereg_replace("(\r\n|\n|\r)", "", $ptitolo);
-		$new_entry["ptitolo"]		= ereg_replace("\"", "", $ptitolo);
+		$new_entry["ptitolo"]		= preg_replace("/(\r\n|\n|\r)/", "", $ptitolo);
+		$new_entry["ptitolo"]		= preg_replace("/\"/", "", $ptitolo);
 		$new_entry["pcategoria"]		= $pcategoria;
 		$new_entry["psottocategoria"]	= $psottocategoria;
-		$new_entry["pabstract"]		= ereg_replace("(\r\n|\n|\r)", "", $pabstract);
-		$new_entry["ptesto"]		= ereg_replace("(\r\n|\n|\r)", "", $ptesto);
-		$new_entry["pbox"]			= ereg_replace("(\r\n|\n|\r)", "", $pbox);
+		$new_entry["pabstract"]		= preg_replace("/(\r\n|\n|\r)/", "", $pabstract);
+		$new_entry["ptesto"]		= preg_replace("/(\r\n|\n|\r)/", "", $ptesto);
+		$new_entry["pbox"]			= preg_replace("/(\r\n|\n|\r)/", "", $pbox);
 		$new_entry["pdataevento"]	= $pdataevento;
-		$new_entry["ptitoloevento"]	= ereg_replace("(\r\n|\n|\r)", "", $ptitoloevento);
-		$new_entry["pdescrevento"]	= ereg_replace("(\r\n|\n|\r)", "", $pdescrevento);
+		$new_entry["ptitoloevento"]	= preg_replace("/(\r\n|\n|\r)/", "", $ptitoloevento);
+		$new_entry["pdescrevento"]	= preg_replace("/(\r\n|\n|\r)/", "", $pdescrevento);
 		$new_entry["pimmagine"]		= $pimmagine;
 		$new_entry["puploadfile"]	= $puploadfile;
 		$new_entry["pattivo"]		= $pattivo;
@@ -1105,9 +1105,9 @@ function gestione_notizie() {
 	$odd_sign = 1;
 	echo"<h2>Gestione notizie</h2>
 	Sono registrate <b>$num_news</b> notizie.<br/><br/>";
-	
+
 	if (isset($messaggio)) echo "<h3>$messaggio</h3><br/>";
-	
+
 	do {
 		if (!$news_list->eol() AND ($_SESSION["permessi"] >= 4 OR $_SESSION["utente"] == $news_data["putente"])) {
 			echo "<a href='a_sito.php?q=14&amp;id=".$pos_count."'>
@@ -1215,7 +1215,7 @@ function notizie() {
 				$news_field = "<div class='articolo_s'><h2><a href='".$PHP_SELF."?notiziaid=".$pos_count."'>".$news_data["ptitolo"]."</a></h2><br/>".$acapo;
 
 				$vedi_news_data = html_entity_decode($news_data["pabstract"]);
-				
+
 				if (strlen($news_data["ptesto"]) <> 0) $news_continua = "&nbsp;|&nbsp;<a href='".$PHP_SELF."?notiziaid=".$pos_count."'>continua lettura!</a>&nbsp;";
 
 				$news_field .= "<p align='justify'>$vedi_news_data &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>".$acapo;
@@ -1327,10 +1327,10 @@ function notizia($notiziaid, $evidenzia) {
 		if ($_SESSION["permessi"] >= 4 OR $_SESSION["utente"] == $dati_notizie["putente"]) $adm_opz = "<a href='a_sito.php?q=14&amp;id=".$notiziaid."'><b>M</b></a> - <a href='a_sito.php?q=15&amp;id=".$notiziaid."'><b>X</b></a>";
 
 		if ($evidenzia) {
-			$dati_notizie["pabstract"] = eregi_replace("$evidenzia", "<font class='evidenziato'>".strtoupper("$evidenzia")."</font>",$dati_notizie["pabstract"]);	
-			$dati_notizie["ptesto"] = eregi_replace("$evidenzia", "<font class='evidenziato'>".strtoupper("$evidenzia")."</font>",$dati_notizie["ptesto"]);
+			$dati_notizie["pabstract"] = preg_replace("/$evidenzia/", "<font class='evidenziato'>".strtoupper("$evidenzia")."</font>",$dati_notizie["pabstract"]);
+			$dati_notizie["ptesto"] = preg_replace("/$evidenzia/", "<font class='evidenziato'>".strtoupper("$evidenzia")."</font>",$dati_notizie["ptesto"]);
 		}
-		
+
 		$data_vis = $dati_notizie["data_mod"];
 		if (strlen($dati_notizie["pbox"]) >0) $vedi_box = "<div class='slogan_piccolo'>".html_entity_decode($dati_notizie["pbox"])."</div><br/><br/>";
 
@@ -1382,6 +1382,8 @@ function link_notizie($categoria) {
 function ultime_notizie($status) {
 	global $n_ultime_notizie, $news_per_pagina, $archivio_dati, $notizie_file;
 
+	$a = '';
+
 	if ( $archivio_dati == "csvfile" ) {
 		require_once ( "./inc/csvfile.inc.php" );
 		$lista_notizie			= new csvfile;
@@ -1404,7 +1406,7 @@ function ultime_notizie($status) {
 	}
 	if ($altri_link) $a = "<b><u>Ultime notizie</u></b>".$altri_link;
 	# else $a = "$n_ultime_notizie, $news_per_pagina";
-	
+
 	return $a;
 }
 
@@ -1435,18 +1437,18 @@ function modifica_notizia() {
 	$pdescrevento = htmlentities(trim($pdescrevento), ENT_QUOTES);
 	// $pdataevento = trim(stripslashes($pdataevento));
 	$pdataevento = htmlentities(trim($pdataevento), ENT_QUOTES);
-	
+
 	$dati_notizie = array();
 	$dati_notizie["data_mod"]		= $data_mod;
 	$dati_notizie["putente"]			= $putente;
-	$dati_notizie["ptitolo"]			= ereg_replace("(\r\n|\n|\r)", "", $ptitolo);
+	$dati_notizie["ptitolo"]			= preg_replace("/(\r\n|\n|\r)/", "", $ptitolo);
 	$dati_notizie["pcategoria"]		= $pcategoria;
-	$dati_notizie["pabstract"]		= ereg_replace("(\r\n|\n|\r)", "", $pabstract);
-	$dati_notizie["ptesto"]			= ereg_replace("(\r\n|\n|\r)", "", $ptesto);
-	$dati_notizie["pbox"]			= ereg_replace("(\r\n|\n|\r)", "", $pbox);
+	$dati_notizie["pabstract"]		= preg_replace("/(\r\n|\n|\r)/", "", $pabstract);
+	$dati_notizie["ptesto"]			= preg_replace("/(\r\n|\n|\r)/", "", $ptesto);
+	$dati_notizie["pbox"]			= preg_replace("/(\r\n|\n|\r)/", "", $pbox);
 	$dati_notizie["pdataevento"]		= $pdataevento;
-	$dati_notizie["ptitoloevento"]	= ereg_replace("(\r\n|\n|\r)", "", $ptitoloevento);
-	$dati_notizie["pdescrevento"]		= ereg_replace("(\r\n|\n|\r)", "", $pdescrevento);
+	$dati_notizie["ptitoloevento"]	= preg_replace("/(\r\n|\n|\r)/", "", $ptitoloevento);
+	$dati_notizie["pdescrevento"]		= preg_replace("/(\r\n|\n|\r)/", "", $pdescrevento);
 	$dati_notizie["pimmagine"]		= $pimmagine;
 	$dati_notizie["puploadfile"]		= $puploadfile;
 	$dati_notizie["pattivo"]			= $pattivo;
@@ -1551,7 +1553,7 @@ function modifica_notizia() {
 		<br />
 		<textarea id='pagetext2' name='pbox' rows='7' cols='120'>".html_entity_decode($V_dati_notizie["pbox"])."</textarea>
 		<br />";
-/*		
+/*
 		echo "<b>Data evento:</b> <small>eventuale nel formato gg/mm/aaaa</small>
 		<br />
 		<input type='text' name='pdataevento' size='10' maxlength='10' value='".$V_dati_notizie["pdataevento"]."' disabled />
@@ -1563,7 +1565,7 @@ function modifica_notizia() {
 		<br />
 		<textarea id='pagetext3' name='pdescrevento' rows='3' cols='120' disabled >".html_entity_decode($V_dati_notizie["pdescrevento"])."</textarea>
 		<br />";
-*/		
+*/
 		echo"
 		<b>allega immagine:</b> <small>deve essere gi&agrave; presente nella cartella immagini</small><br/>
 		<br />

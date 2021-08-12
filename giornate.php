@@ -27,7 +27,7 @@ if ($_SESSION['valido'] == "SI") {
 		if ($chiusura_giornata >= 1) {
 		if (!$_GET['nome_squadra']) $nome_squadra = "tutti";
 		else $nome_squadra = $_GET['nome_squadra'];
-		
+
 		$file = file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
 		$linee = count($file);
 
@@ -153,41 +153,41 @@ if ($_SESSION['valido'] == "SI") {
 					$numero_panchinaro = $panchinari[$num2];
 					$num_in_panchina = $num2 + 1;
 					if ($linea_comprato_P[$numero_panchinaro]) {
-						$linea_comprato_P[$numero_panchinaro] = ereg_replace("value='panchinaro'","value='panchinaro' checked",$linea_comprato_P[$numero_panchinaro]);
-						$linea_comprato_P[$numero_panchinaro] = ereg_replace("option value='$num_in_panchina'","option value='$num_in_panchina' selected",$linea_comprato_P[$numero_panchinaro]);
-						$linea_comprato_P[$numero_panchinaro] = ereg_replace("<tr bgcolor='$colore'><td>&nbsp;</td>","<tr bgcolor='$colore'><td align='center'>$num_pos</td>",$linea_comprato_P[$numero_panchinaro]);
+						$linea_comprato_P[$numero_panchinaro] = preg_replace("/value='panchinaro'/","value='panchinaro' checked",$linea_comprato_P[$numero_panchinaro]);
+						$linea_comprato_P[$numero_panchinaro] = preg_replace("/option value='$num_in_panchina'/","option value='$num_in_panchina' selected",$linea_comprato_P[$numero_panchinaro]);
+						$linea_comprato_P[$numero_panchinaro] = preg_replace("/<tr bgcolor='$colore'><td>&nbsp;</td>/","<tr bgcolor='$colore'><td align='center'>$num_pos</td>",$linea_comprato_P[$numero_panchinaro]);
 						$num_pos++;
 						$tab_panchinari .= $linea_comprato_P[$numero_panchinaro];
 						$inserito[$numero_panchinaro] = "SI";
 					} # fine if ($linea_comprato_P[$numero_panchinaro])
 					if ($linea_comprato_D[$numero_panchinaro]) {
-						$linea_comprato_D[$numero_panchinaro] = ereg_replace("value='panchinaro'","value='panchinaro' checked",$linea_comprato_D[$numero_panchinaro]);
-						$linea_comprato_D[$numero_panchinaro] = ereg_replace("option value='$num_in_panchina'","option value='$num_in_panchina' selected",$linea_comprato_D[$numero_panchinaro]);
-						$linea_comprato_D[$numero_panchinaro] = ereg_replace("<tr bgcolor='$colore'><td>&nbsp;</td>","<tr bgcolor='$colore'><td align='center'>$num_pos</td>",$linea_comprato_D[$numero_panchinaro]);
+						$linea_comprato_D[$numero_panchinaro] = preg_replace("/value='panchinaro'/","value='panchinaro' checked",$linea_comprato_D[$numero_panchinaro]);
+						$linea_comprato_D[$numero_panchinaro] = preg_replace("/option value='$num_in_panchina'/","option value='$num_in_panchina' selected",$linea_comprato_D[$numero_panchinaro]);
+						$linea_comprato_D[$numero_panchinaro] = preg_replace("/<tr bgcolor='$colore'><td>&nbsp;</td>/","<tr bgcolor='$colore'><td align='center'>$num_pos</td>",$linea_comprato_D[$numero_panchinaro]);
 						$num_pos++;
 						$tab_panchinari .= $linea_comprato_D[$numero_panchinaro];
 						$inserito[$numero_panchinaro] = "SI";
 					} # fine if ($linea_comprato_D[$numero_panchinaro])
 					if ($linea_comprato_C[$numero_panchinaro]) {
-						$linea_comprato_C[$numero_panchinaro] = ereg_replace("value='panchinaro'","value='panchinaro' checked",$linea_comprato_C[$numero_panchinaro]);
-						$linea_comprato_C[$numero_panchinaro] = ereg_replace("option value='$num_in_panchina'","option value='$num_in_panchina' selected",$linea_comprato_C[$numero_panchinaro]);
-						$linea_comprato_C[$numero_panchinaro] = ereg_replace("<tr bgcolor='$colore'><td>&nbsp;</td>","<tr bgcolor='$colore'><td align='center'>$num_pos</td>",$linea_comprato_C[$numero_panchinaro]);
+						$linea_comprato_C[$numero_panchinaro] = preg_replace("/value='panchinaro'/","value='panchinaro' checked",$linea_comprato_C[$numero_panchinaro]);
+						$linea_comprato_C[$numero_panchinaro] = preg_replace("/option value='$num_in_panchina'/","option value='$num_in_panchina' selected",$linea_comprato_C[$numero_panchinaro]);
+						$linea_comprato_C[$numero_panchinaro] = preg_replace("/<tr bgcolor='$colore'><td>&nbsp;</td>/","<tr bgcolor='$colore'><td align='center'>$num_pos</td>",$linea_comprato_C[$numero_panchinaro]);
 						$num_pos++;
 						$tab_panchinari .= $linea_comprato_C[$numero_panchinaro];
 						$inserito[$numero_panchinaro] = "SI";
 					} # fine if ($linea_comprato_C[$numero_panchinaro])
 					if ($linea_comprato_F[$numero_panchinaro]) {
-						$linea_comprato_F[$numero_panchinaro] = ereg_replace("value='panchinaro'","value='panchinaro' checked",$linea_comprato_F[$numero_panchinaro]);
-						$linea_comprato_F[$numero_panchinaro] = ereg_replace("option value='$num_in_panchina'","option value='$num_in_panchina' selected",$linea_comprato_F[$numero_panchinaro]);
-						$linea_comprato_F[$numero_panchinaro] = ereg_replace("<tr bgcolor='$colore'><td>&nbsp;</td>","<tr bgcolor='$colore'><td align='center'>$num_pos</td>",$linea_comprato_F[$numero_panchinaro]);
+						$linea_comprato_F[$numero_panchinaro] = preg_replace("/value='panchinaro'/","value='panchinaro' checked",$linea_comprato_F[$numero_panchinaro]);
+						$linea_comprato_F[$numero_panchinaro] = preg_replace("/option value='$num_in_panchina'/","option value='$num_in_panchina' selected",$linea_comprato_F[$numero_panchinaro]);
+						$linea_comprato_F[$numero_panchinaro] = preg_replace("/<tr bgcolor='$colore'><td>&nbsp;</td>/","<tr bgcolor='$colore'><td align='center'>$num_pos</td>",$linea_comprato_F[$numero_panchinaro]);
 						$num_pos++;
 						$tab_panchinari .= $linea_comprato_F[$numero_panchinaro];
 						$inserito[$numero_panchinaro] = "SI";
 					} # fine if ($linea_comprato_F[$numero_panchinaro])
 					if ($linea_comprato_A[$numero_panchinaro]) {
-						$linea_comprato_A[$numero_panchinaro] = ereg_replace("value='panchinaro'","value='panchinaro' checked",$linea_comprato_A[$numero_panchinaro]);
-						$linea_comprato_A[$numero_panchinaro] = ereg_replace("option value='$num_in_panchina'","option value='$num_in_panchina' selected",$linea_comprato_A[$numero_panchinaro]);
-						$linea_comprato_A[$numero_panchinaro] = ereg_replace("<tr bgcolor='$colore'><td>&nbsp;</td>","<tr bgcolor='$colore'><td align='center'>$num_pos</td>",$linea_comprato_A[$numero_panchinaro]);
+						$linea_comprato_A[$numero_panchinaro] = preg_replace("/value='panchinaro'/","value='panchinaro' checked",$linea_comprato_A[$numero_panchinaro]);
+						$linea_comprato_A[$numero_panchinaro] = preg_replace("/option value='$num_in_panchina'/","option value='$num_in_panchina' selected",$linea_comprato_A[$numero_panchinaro]);
+						$linea_comprato_A[$numero_panchinaro] = preg_replace("/<tr bgcolor='$colore'><td>&nbsp;</td>/","<tr bgcolor='$colore'><td align='center'>$num_pos</td>",$linea_comprato_A[$numero_panchinaro]);
 						$num_pos++;
 						$tab_panchinari .= $linea_comprato_A[$numero_panchinaro];
 						$inserito[$numero_panchinaro] = "SI";
@@ -208,27 +208,27 @@ if ($_SESSION['valido'] == "SI") {
 					$numero_fuori = $lista_calciatori[$num2];
 					if ($inserito[$numero_fuori] != "SI") {
 						if ($linea_comprato_P[$numero_fuori]) {
-							$linea_comprato_P[$numero_fuori] = ereg_replace("value='fuori'","value='fuori' checked",$linea_comprato_P[$numero_fuori]);
+							$linea_comprato_P[$numero_fuori] = preg_replace("/<tr bgcolor='$colore'><td>&nbsp;</td>/","value='fuori' checked",$linea_comprato_P[$numero_fuori]);
 							$tab_fuori_P .= $linea_comprato_P[$numero_fuori];
 							$inserito[$numero_fuori] = "SI";
 						} # fine if ($linea_comprato_P[$numero_fuori])
 						if ($linea_comprato_D[$numero_fuori]) {
-							$linea_comprato_D[$numero_fuori] = ereg_replace("value='fuori'","value='fuori' checked",$linea_comprato_D[$numero_fuori]);
+							$linea_comprato_D[$numero_fuori] = preg_replace("/<tr bgcolor='$colore'><td>&nbsp;</td>/","value='fuori' checked",$linea_comprato_D[$numero_fuori]);
 							$tab_fuori_D .= $linea_comprato_D[$numero_fuori];
 							$inserito[$numero_fuori] = "SI";
 						} # fine if ($linea_comprato_D[$numero_fuori])
 						if ($linea_comprato_C[$numero_fuori]) {
-							$linea_comprato_C[$numero_fuori] = ereg_replace("value='fuori'","value='fuori' checked",$linea_comprato_C[$numero_fuori]);
+							$linea_comprato_C[$numero_fuori] = preg_replace("/<tr bgcolor='$colore'><td>&nbsp;</td>/","value='fuori' checked",$linea_comprato_C[$numero_fuori]);
 							$tab_fuori_C .= $linea_comprato_C[$numero_fuori];
 							$inserito[$numero_fuori] = "SI";
 						} # fine if ($linea_comprato_C[$numero_fuori])
 						if ($linea_comprato_F[$numero_fuori]) {
-							$linea_comprato_F[$numero_fuori] = ereg_replace("value='fuori'","value='fuori' checked",$linea_comprato_F[$numero_fuori]);
+							$linea_comprato_F[$numero_fuori] = preg_replace("/<tr bgcolor='$colore'><td>&nbsp;</td>/","value='fuori' checked",$linea_comprato_F[$numero_fuori]);
 							$tab_fuori_F .= $linea_comprato_F[$numero_fuori];
 							$inserito[$numero_fuori] = "SI";
 						} # fine if ($linea_comprato_F[$numero_fuori])
 						if ($linea_comprato_A[$numero_fuori]) {
-							$linea_comprato_A[$numero_fuori] = ereg_replace("value='fuori'","value='fuori' checked",$linea_comprato_A[$numero_fuori]);
+							$linea_comprato_A[$numero_fuori] = preg_replace("/<tr bgcolor='$colore'><td>&nbsp;</td>/","value='fuori' checked",$linea_comprato_A[$numero_fuori]);
 							$tab_fuori_A .= $linea_comprato_A[$numero_fuori];
 							$inserito[$numero_fuori] = "SI";
 						} # fine if ($linea_comprato_A[$numero_fuori])
@@ -249,8 +249,8 @@ if ($_SESSION['valido'] == "SI") {
 						if ($stato_mercato != "I" AND strpos($nome,$nome_squadra) !== false) $messmerc .= "$nome<br/>";
 					} # fine for $num3
 
-					$messmerc = ereg_replace("Radio mercato: ","",$messmerc);
-					$messmerc = ereg_replace("$nome_squadra ha","",$messmerc);
+					$messmerc = preg_replace("/Radio mercato: /","",$messmerc);
+					$messmerc = preg_replace("/$nome_squadra ha/","",$messmerc);
 				}
 				########################
 				# Layout pagina
@@ -285,7 +285,7 @@ if ($_SESSION['valido'] == "SI") {
 		} # fine for $num1
 	} else echo "<h2>Giornata APERTA.<br/></h2><h3>Non &egrave; possibile visualizzare queste informazioni</h3><br/><br/>
 					<input type=\"button\" value=\"Indietro\" onclick=\"history.back(1)\">";
-	
+
 	}
 	#######################
 	elseif ($opzione == 3){
@@ -578,7 +578,7 @@ if ($_SESSION['valido'] == "SI") {
 		$tab_formazioni</table>".$acapo;
 	}
 
-		
+
 } # fine if ($_SESSION["utente"]
 else header("Location: ./logout.php");
 include("./footer.php");

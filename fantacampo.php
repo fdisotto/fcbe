@@ -177,7 +177,7 @@ for ($num1 = 0 ; $num1 <= $num_titolari; $num1++) {
 
 			$mnome = trim($mnome);
 
-			$mnome = ereg_replace("\"","",$mnome);
+			$mnome = preg_replace("/\"/","",$mnome);
 
 			if (ereg("[a-z]",$mnome,$array));
 
@@ -200,7 +200,7 @@ for ($num1 = 0 ; $num1 <= $num_titolari; $num1++) {
 			$mruolo = trim($mruolo);
 
 			$msquadra = $maglia_calciatore[($num_colonna_squadra_file_calciatori-1)];
-			$msquadra = ereg_replace("\"","",$msquadra);
+			$msquadra = preg_replace("/\"/","",$msquadra);
 			$msquadra = trim($msquadra);
 			$msquadra = str_replace(' ','_',$msquadra);
 			$msquadra = str_replace("'","_",$msquadra);
@@ -465,7 +465,7 @@ if (isset($test)) {
 	pagina: $pagina<br />
 	nome_squadra: $nome_squadra<br />
 	test: $test<br />";
-	
+
 	if (file_exists("./immagini/campo_r.jpg")) echo "Esiste il file ./immagini/campo_r.jpg<br /><img src='./immagini/campo_r.jpg' /><br />";
 	else echo "Non esiste il file ./immagini/campo_r.jpg<br />";
 	if (file_exists("./immagini/campo.jpg")) echo "Esiste il file ./immagini/campo.jpg<br /><img src='./immagini/campo.jpg' /><br />";

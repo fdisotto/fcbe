@@ -106,7 +106,7 @@ $numero = trim($numero);
 $num_calciatore = $numero;
 $nome = $dati_calciatore[1];
 $nome = trim($nome);
-$nome = ereg_replace("\"","",$nome);
+$nome = preg_replace("/\"/","",$nome);
 $s_ruolo = $dati_calciatore[2];
 $s_ruolo = trim($s_ruolo);
 $ruolo = $s_ruolo;
@@ -114,7 +114,7 @@ $valore = $dati_calciatore[3];
 $valore = trim($valore);
 $xsquadra = $dati_calciatore[4];
 $xsquadra = trim($xsquadra);
-$xsquadra = ereg_replace("\"","",$xsquadra);
+$xsquadra = preg_replace("/\"/","",$xsquadra);
 
 if ($considera_fantasisti_come != "P" and $considera_fantasisti_come != "D" and $considera_fantasisti_come != "C" and $considera_fantasisti_come != "A") $considera_fantasisti_come = "F";
 if ($s_ruolo == $simbolo_fantasista_file_calciatori) $ruolo = $considera_fantasisti_come;
@@ -135,7 +135,7 @@ for ($num1 = $inizio_range; $num1 <= $fine_range; $num1++) {
 	   	$dati_voto = explode($separatore_campi_file_voti, $voti[$num2]);
 		$num_calciatore_voto = $dati_voto[($num_colonna_numcalciatore_file_voti-1)];
         	$num_calciatore_voto = ($num_calciatore_voto);
-        
+
     		if ($num_calciatore == $num_calciatore_voto) {
 	                $voto_tot = $dati_voto[($num_colonna_vototot_file_voti-1)];
 	                $voto_tot = ($voto_tot);
@@ -153,9 +153,9 @@ for ($num1 = $inizio_range; $num1 <= $fine_range; $num1++) {
 					$stat_codice = $dati_voto[($ncs_codice -1)];
 					$stat_giornata = $dati_voto[($ncs_giornata -1)];
 					$stat_nome = $dati_voto[($ncs_nome -1)];
-					$stat_nome = ereg_replace("\"","",$stat_nome);
+					$stat_nome = preg_replace("/\"/","",$stat_nome);
 					$stat_squadra = $dati_voto[($ncs_squadra -1)];
-					$stat_squadra = ereg_replace("\"","",$stat_squadra);
+					$stat_squadra = preg_replace("/\"/","",$stat_squadra);
 					$stat_attivo = $dati_voto[($ncs_attivo -1)];
 					$stat_ruolo = $dati_voto[($ncs_ruolo -1)];
 					$stat_presenza = $dati_voto[($ncs_presenza -1)]; $totpresenze = $totpresenze + $stat_presenza;
@@ -180,7 +180,7 @@ for ($num1 = $inizio_range; $num1 <= $fine_range; $num1++) {
 					$stat_valore = $dati_voto[($ncs_valore -1)];
 					$tot_golsegnati = $tot_golsegnati + $stat_golsegnati;
 					$tot_golsubiti = $tot_golsubiti + $stat_golsubiti;
-                        }  # Fine if ($statistiche == "SI") 
+                        }  # Fine if ($statistiche == "SI")
 
 	               break;
 	         		} # fine if ($num_calciatore == $num_calciatore_voto)
@@ -207,11 +207,11 @@ $numero = ($numero);
 if ($num_calciatore == $numero) {
 $nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 $nome = ($nome);
-$nome = ereg_replace("\"","",$nome);
+$nome = preg_replace("/\"/","",$nome);
 if ($num_colonna_squadra_file_calciatori != 0) {
 $xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 $xsquadra = ($xsquadra);
-$xsquadra = ereg_replace("\"","",$xsquadra);
+$xsquadra = preg_replace("/\"/","",$xsquadra);
 } # fine if ($num_colonna_squadra_file_calciatori != 0)
 $s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 $s_ruolo = ($s_ruolo);
@@ -229,7 +229,7 @@ break;
 
 if ($statistiche == "SI") {
 if ($stat_attivo == 0) $mess = "<b><font color=red>Non disponibile</font></b>";
-else $mess = "In attività";
+else $mess = "In attivitï¿½";
 
 if ($stat_ruolo == 0) $st_ruolo = "Portiere" ;
 if ($stat_ruolo == 1) $st_ruolo = "Difensore";

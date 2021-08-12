@@ -57,7 +57,7 @@ include("./header.php");
 		} # fine if ($num_calciatore == $numero and $_SESSION['utente'] == $proprietario)
 
 		##############################################
-		# Verifica se il giocatore &egrave; in comproprietà #
+		# Verifica se il giocatore &egrave; in comproprietï¿½ #
 		##############################################
 
 		if ($num_calciatore == $numero and $duplicato != "SI" and $proprietario != $_SESSION['utente']) {
@@ -98,7 +98,7 @@ include("./header.php");
 		$trovato = "SI";
 		$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 		$nome = togli_acapo($nome);
-		$nome = ereg_replace("\"","",$nome);
+		$nome = preg_replace("/\"/","",$nome);
 		$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 		$s_ruolo = trim($s_ruolo);
 		$ruolo = $s_ruolo;
@@ -106,7 +106,7 @@ include("./header.php");
 		$valore = trim($valore);
 		$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 		$xsquadra = togli_acapo($xsquadra);
-		$xsquadra = ereg_replace("\"","",$xsquadra);
+		$xsquadra = preg_replace("/\"/","",$xsquadra);
 
 		if ($considera_fantasisti_come != "P" and $considera_fantasisti_come != "D" and $considera_fantasisti_come != "C" and $considera_fantasisti_come != "A") $considera_fantasisti_come = "F";
 		if ($s_ruolo == $simbolo_fantasista_file_calciatori) $ruolo = $considera_fantasisti_come;

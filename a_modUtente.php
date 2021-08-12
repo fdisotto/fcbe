@@ -38,7 +38,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 	else $id = $_SESSION['uid'];
 
 	if($id){
-		
+
 		if($_GET['go']){
 
 			if ($_SESSION['permessi'] == 5) $id_torneo = $_GET['id_torneo'];
@@ -55,7 +55,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 				$ofile = @file($percorso_file);
 				@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg, $otitolari, $opanchina, $onome, $ocognome, $ocassa, $otemp4, $otemp5, $otemp6, $otemp7, $otemp8, $otemp9, $otemp0) = explode("<del>", $ofile[$id]);
 
-				
+
 				if ($_SESSION['permessi'] < 4) {
 					if ($outente != $_SESSION['utente'])  {
 						echo "<center><h3>Impossibile modificare questo utente</h3></td></tr></table>";
@@ -63,7 +63,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 						exit;
 					}
 				}
-				
+
 				if($_POST["ipass"]) $Npass = md5(strip_tags($_POST["ipass"]));
 				else $Npass = $opass;
 
@@ -77,15 +77,15 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 
 				if($_POST["isquadra"]) $Nsquadra = strip_tags($_POST["isquadra"]);
 				else $Nsquadra = $osquadra;
-				
+
 				if($_POST["inome"]) $Nnome = strip_tags($_POST["inome"]);
 				else $Nnome = $onome;
-				
+
 				if($_POST["icognome"]) $Ncognome = strip_tags($_POST["icognome"]);
 				else $Ncognome = $ocognome;
 
 				if($_POST["icassa"])  $Ncassa = strip_tags($_POST["icassa"]);
-				else $Ncassa = $ocassa;				
+				else $Ncassa = $ocassa;
 
 				if($_POST["itorneo"]) $Ntorneo = strip_tags($_POST["itorneo"]);
 				else $Ntorneo = $otorneo;
@@ -94,10 +94,10 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 				else $Nserie = $oserie;
 
 				$Ncitta = strip_tags(trim($_POST["icitta"]));
-		
+
 				if($_POST["icrediti"] or $_POST["icrediti"] == "0") $Ncrediti = $_POST["icrediti"];
 				else $Ncrediti = "$ocrediti";
-		
+
 				if($_POST["ivariazioni"] or $_POST["ivariazioni"] == "0") $Nvariazioni = $_POST["ivariazioni"];
 				else $Nvariazioni = "$ovariazioni";
 
@@ -107,10 +107,10 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 				if($_POST["ilogo"]) $Nlogo = strip_tags($_POST["ilogo"]);
 				else $Nlogo = $ologo;
 
-				if (!eregi("^[a-z0-9][_\.a-z0-9-]+@([a-z0-9][0-9a-z-]+\.)+([a-z]{2,4})",$_POST['iemail']))
+				if (!preg_match("/^[a-z0-9][_\.a-z0-9-]+@([a-z0-9][0-9a-z-]+\.)+([a-z]{2,4})/",$_POST['iemail']))
 				$err[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- email non corretta";
 
-				if (($_POST["ipass"]!="")&&(!eregi("^[a-zA-Z0-9]{4,10}",$_POST["ipass"])))
+				if (($_POST["ipass"]!="")&&(!preg_match("/^[a-zA-Z0-9]{4,10}/",$_POST["ipass"])))
 				$err[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- password non corretta";
 
 				if ($ipass!==$ipass2)
@@ -122,7 +122,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 
 				if(!empty($err)){
 					$tr=implode("</td></tr><tr><td>",$err);
-					
+
 					echo "
 					<table summary='Modifica utente' width='100%' cellpadding = '3' align = 'center' bgcolor='$sfondo_tab'>
 					<caption>Modifica utente</caption>
@@ -134,7 +134,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 					unset($err,$tr);
 					}else{ // nn ci sono errori
 						$stringa = "$outente<del>$Npass<del>$Npermessi<del>$Nemail<del>$Nurl<del>$Nsquadra<del>$Ntorneo<del>$Nserie<del>$Ncitta<del>$Ncrediti<del>$Nvariazioni<del>$Ncambi<del>$oreg<del>$otitolari<del>$opanchina<del>$Nnome<del>$Ncognome<del>$Ncassa<del>$otemp4<del>$otemp5<del>$otemp6<del>$otemp7<del>$otemp8<del>$otemp9<del>$otemp0";
-						
+
 						$ofile[$id] = $stringa;
 						$nuovo_file = implode("",$ofile);
 
@@ -186,7 +186,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 
 				for ($num1 = 1 ; $num1 < $num_tornei; $num1++) {
 					@list($tid, $tdenom, $tpart, $tserie) = explode(",", $tornei[$num1]);
-					$tdenom = ereg_replace("'","",$tdenom);
+					$tdenom = preg_replace("/'/","",$tdenom);
 
 					if ($itorneo == $tid) $vedi_tornei_attivi .= "<option value='$tid' selected>$tdenom</option>";
 					else $vedi_tornei_attivi .= "<option value='$tid'>$tdenom</option>";
@@ -198,8 +198,8 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 				$vedi_serie = "<select name='iserie' DISABLED>";
 				$vedi_serie .= "<option value='$tid' selected>$iserie</option>";
 				$vedi_serie .= "</select>";
-				
-				
+
+
 				?>
 				<form method = "post" action = "<?php print($_SERVER['PHP_SELF']. '?cambia='.$id.'&amp;id_torneo='.$id_torneo.'&amp;go=1'); ?>">
 					<table summary="Modifica utente" width="100%" bgcolor= "<?php echo "$sfondo_tab"; ?>" cellpadding = "5" align = "center">
@@ -270,7 +270,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 0) {
 							<input type = "text" name = "iurl" value = "<?php if ($iurl) echo "$iurl";?>" /></td>
 						</tr>
 						<?php
-						
+
 						if ($consenti_logo == "SI" AND $_SESSION['permessi'] <= 4) {
 							echo "<tr align='left'>
 							<td width = '30%' valign = 'bottom'>Logo squadra<br/></td>

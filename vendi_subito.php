@@ -70,7 +70,7 @@ $frase1 = "Il mercato &egrave; <b>chiuso</b> in questo momento.<br/>";
 } # fine if ($stato_mercato == "C")
 
 if ($trovato == "NO") {
-echo "Il calciatore non é stato trovato.<br/>$frase";
+echo "Il calciatore non ï¿½ stato trovato.<br/>$frase";
 } # fine if ($trovato == "NO")
 
 else {
@@ -117,7 +117,7 @@ if ($numero_cerca == $num_calciatore) {
 
 $nome_cerca = $dati_cerca_calciatore[($num_colonna_nome_file_calciatori-1)];
 $nome_cerca = togli_acapo($nome_cerca);
-$nome_cerca = ereg_replace("\"","",$nome_cerca);
+$nome_cerca = preg_replace("/\"/","",$nome_cerca);
 $s_ruolo_cerca = $dati_cerca_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 $s_ruolo_cerca = togli_acapo($s_ruolo_cerca);
 $ruolo_cerca = $s_ruolo_cerca;
@@ -126,7 +126,7 @@ $valore_cerca = intval($valore_cerca);
 
 $xsquadra_cerca = $dati_cerca_calciatore[($num_colonna_squadra_file_calciatori-1)];
 $xsquadra_cerca = togli_acapo($xsquadra_cerca);
-$xsquadra_cerca = ereg_replace("\"","",$xsquadra_cerca);
+$xsquadra_cerca = preg_replace("/\"/","",$xsquadra_cerca);
 
 if ($considera_fantasisti_come != "P" and $considera_fantasisti_come != "D" and $considera_fantasisti_come != "C" and $considera_fantasisti_come != "A") $considera_fantasisti_come = "F";
 if ($s_ruolo_cerca == $simbolo_fantasista_file_calciatori) $ruolo_cerca = $considera_fantasisti_come;

@@ -73,7 +73,7 @@ $num_calciatori = count($calciatori);
 	if ($$nome_schierato == "panchinaro") {
 	$num_in_panchina = "panchinaro$numero";
 	$num_in_panchina = $$num_in_panchina;
-	$verifica_num = ereg_replace("[0-9]","",$num_in_panchina);
+	$verifica_num = preg_replace("/[0-9]/","",$num_in_panchina);
 
 	if ($verifica_num != "" or $num_in_panchina > $max_in_panchina) {
 	$inserire = "NO";
@@ -105,11 +105,11 @@ if ($num_titolari_F != 0) $schema = $num_titolari_P.$num_titolari_D.$num_titolar
 $schema_trovato = "NO";
 if ($num_titolari > 11) {
 $inserire = "NO";
-$frase .= "Hai schierato più di 11 calciatori!<br />";
+$frase .= "Hai schierato piï¿½ di 11 calciatori!<br />";
 } # fine if ($num_titolari > 11)
 if ($num_panchinari > $max_in_panchina) {
 $inserire = "NO";
-$frase .= "Hai schierato più di $max_in_panchina calciatori in panchina!<br />";
+$frase .= "Hai schierato piï¿½ di $max_in_panchina calciatori in panchina!<br />";
 } # fine if ($num_panchinari > $max_in_panchina)
 if ($num_titolari == 11) {
 $num_schemi = count($schemi);
@@ -179,7 +179,7 @@ flock($file_squadra,LOCK_UN);
 fclose($file_squadra);
 if ($reset_form) echo "Formazione Resettata";
 	else echo"$lista_titolari - $lista_panchinari";
-	
+
 echo "<meta http-equiv='refresh' content='0; url=squadra.php'><center><h5>Modifiche effettuate</h5>";
 } # fine if ($inserire != "NO")
 else {

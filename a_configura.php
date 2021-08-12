@@ -1,7 +1,7 @@
 <?php
 ##################################################################################
 #    FANTACALCIOBAZAR EVOLUTION
-#    Copyright (C) 2003-2009 by Antonello Onida 
+#    Copyright (C) 2003-2009 by Antonello Onida
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -127,7 +127,8 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] == 5) {
 
         $n_contenuto_dati .= "# Dati non configurabili da form\n\n";
         $n_contenuto_dati .= "\$sito_principale='http://fcbe.sssr.it/dati/';\n";
-        $n_contenuto_dati .= "\$sito_mirror='http://fantadownload.altervista.org/mirrorFCBE/dati/';\n\n";
+        $n_contenuto_dati .= "\$sito_mirror='http://fantadownload.altervista.org/mirrorFCBE/dati/';\n";
+        $n_contenuto_dati .= "\$sito_mirror_custom='https://fcbemirror.fdisotto.com/dati/';\n\n";
         $n_contenuto_dati .= "# Composizione del file con i dati delle statistiche (dati/file);\n";
         $n_contenuto_dati .= "\$ncs_codice = 1;\n";
         $n_contenuto_dati .= "\$ncs_giornata = 2;\n";

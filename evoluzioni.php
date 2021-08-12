@@ -81,7 +81,7 @@ for($n=0; $n <= $ug; $n++) {
 			$sc[$d[0]][$d[1]]['casa'] = $d[26];
 			$sc[$d[0]][$d[1]]['val'] = $d[27];
 		}
-	} 
+	}
 }
 
 echo "<script type='text/javascript' src='./inc/js/ordina_tabella.js'></script>";
@@ -100,8 +100,8 @@ if ($_GET['q1'] == "nome"){
 	if($totale['voto'] AND $totale['presenza']) $mv = round(($totale['voto']/$totale['presenza']),2);
 	if($totale['voto'] AND $totale['presenza']) $mfv = round(($totale['fv']/$totale['presenza']),2);
 	$sost = $totale['presenza'] - $totale['tit'];
-	$n = ereg_replace("\"","",$sc[$_GET['q2']][$ug]['nome']);
-	$s = ereg_replace("\"","",$sc[$_GET['q2']][$ug]['squadra']);
+	$n = preg_replace("/\"/","",$sc[$_GET['q2']][$ug]['nome']);
+	$s = preg_replace("/\"/","",$sc[$_GET['q2']][$ug]['squadra']);
 
 	if ($sc[$_GET['q2']][$ug]['ruolo'] == 0) $r = "Portiere";
 	elseif ($sc[$_GET['q2']][$ug]['ruolo'] == 1) $r = "Difensore";
@@ -167,7 +167,7 @@ if ($_GET['q1'] == "nome"){
 	<th>sv</th>
 	<th>cas</th>
 	</tr>";
-	
+
 	for($n=1; $n <= $ug; $n++) {
 		if ($n % 2) $colore="#FFFFFF"; else $colore="$colore_riga_alt";
 
@@ -222,8 +222,8 @@ elseif ($_GET['q1'] == "squadra"){
 
 	foreach ($sc as $a => $b){
 		$bb = key($b);
-		$n = trim(ereg_replace("\"","",$b[$bb]['nome']));
-		$s = trim(ereg_replace("\"","",$b[$bb]['squadra']));
+		$n = trim(preg_replace("/\"/","",$b[$bb]['nome']));
+		$s = trim(preg_replace("/\"/","",$b[$bb]['squadra']));
 		$rn = trim($b[$bb]['ruolo']);
 		if ($rn == 0) $r = "Portiere";
 		elseif ($rn == 1) $r = "Difensore";
@@ -274,8 +274,8 @@ elseif ($_GET['q1'] == "squadra"){
 
 		foreach ($sc as $a => $b){
 			$bb = key($b);
-			$n = trim(ereg_replace("\"","",$b[$bb]['nome']));
-			$s = trim(ereg_replace("\"","",$b[$bb]['squadra']));
+			$n = trim(preg_replace("/\"/","",$b[$bb]['nome']));
+			$s = trim(preg_replace("/\"/","",$b[$bb]['squadra']));
 			$rn = trim($b[$bb]['ruolo']);
 			if ($rn == 0) $r = "Portiere";
 			elseif ($rn == 1) $r = "Difensore";
@@ -311,8 +311,8 @@ elseif ($_GET['q1'] == "squadra"){
 
 		foreach ($sc as $a => $b){
 			$bb = key($b);
-			$n = trim(ereg_replace("\"","",$b[$bb]['nome']));
-			$s = trim(ereg_replace("\"","",$b[$bb]['squadra']));
+			$n = trim(preg_replace("/\"/","",$b[$bb]['nome']));
+			$s = trim(preg_replace("/\"/","",$b[$bb]['squadra']));
 			$rn = trim($b[$bb]['ruolo']);
 			if ($rn == 0) $r = "Portiere";
 			elseif ($rn == 1) $r = "Difensore";

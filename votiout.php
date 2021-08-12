@@ -42,7 +42,7 @@ $naviga .=  "<a href='".$PHP_SELF."?ruolo_guarda=P&amp;squadra_guarda=$squadra_g
 <a href='".$PHP_SELF."?squadra_guarda=tutte&amp;ruolo_guarda=$ruolo_guarda&amp;anno_guarda=2002'>2002</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Leggenda colori: <span style='background-color:yellow'>6 politico</span> - <span style='background-color:lightgreen'>Senza voto</span> - <span style='background-color:lightblue'>Presenza < > Entrato</span>
 <br />
-Giornate giocate:&nbsp;"; 
+Giornate giocate:&nbsp;";
 
 		for($num1 = 1; $num1 < 40 ; $num1++) {
 			if (strlen($num1) == 1) $num1 = "0".$num1;
@@ -71,7 +71,7 @@ if ($calciatori) {
 	<th style='font-size:9px; text-align:center'>Squadra</th>
 	<th style='font-size:9px; text-align:center'>Voto</th>
 	<th style='font-size:9px; text-align:center'>Voto FC</th>
-	<th style='font-size:9px; text-align:center'>€</th>
+	<th style='font-size:9px; text-align:center'>ï¿½</th>
 	<th style='font-size:9px; text-align:center'>Att</th>
 	<th style='font-size:9px; text-align:center'>Pres</th>
 	<th style='font-size:9px; text-align:center'>-25</th>
@@ -101,13 +101,13 @@ if ($calciatori) {
 		$num = $dc[$ncs_codice-1];
 		$gio = $dc[$ncs_giornata-1];
 		$nome = $dc[($ncs_nome-1)];
-		$nome = ereg_replace("\"","",$nome);
+		$nome = preg_replace("/\"/","",$nome);
 		$ruolo = $dc[($ncs_ruolo-1)];
 		$val = $dc[($ncs_valore-1)];
 		$v = round($dc[($ncs_voto-1)],1);
 		$vfc = round($dc[($ncs_votofc-1)],1);
 		$sq = $dc[($ncs_squadra-1)];
-		$sq = ereg_replace("\"","",$sq);
+		$sq = preg_replace("/\"/","",$sq);
 		$att = $dc[($ncs_attivo-1)];
 		$pres = $dc[($ncs_presenza-1)];
 		$min25 = $dc[($ncs_mininf25-1)];
@@ -128,11 +128,11 @@ if ($calciatori) {
 		$rsba = $dc[($ncs_rigoresbagliato-1)];
 		$auto = $dc[($ncs_autogol-1)];
 
-		if (round($vfc,1) == 6 AND round($v,1) == 0 AND INTVAL($pres) == 1 AND INTVAL($entr) == 0) $colpol = "yellow";  
+		if (round($vfc,1) == 6 AND round($v,1) == 0 AND INTVAL($pres) == 1 AND INTVAL($entr) == 0) $colpol = "yellow";
 		else $colpol = "";
-		if (round($vfc,1) == 0 AND round($v,1) >= 0 AND INTVAL($pres) == 1 AND INTVAL($entr) == 1) $colsv = "lightgreen";  
+		if (round($vfc,1) == 0 AND round($v,1) >= 0 AND INTVAL($pres) == 1 AND INTVAL($entr) == 1) $colsv = "lightgreen";
 		else $colsv = "";
-		if (INTVAL($pres) != INTVAL($entr)) $coldif = "lightblue";  
+		if (INTVAL($pres) != INTVAL($entr)) $coldif = "lightblue";
 		else $coldif = "";
 
 		if ($considera_fantasisti_come != "P" and $considera_fantasisti_come != "D" and $considera_fantasisti_come != "C" and $considera_fantasisti_come != "A") $considera_fantasisti_come = "F";
@@ -143,9 +143,9 @@ if ($calciatori) {
 		if ($ruolo == $simbolo_attaccante_file_calciatori) $ruolo = "A";
 
 		if (($ruolo == $ruolo_guarda OR $ruolo_guarda == "tutti") AND ($sq == $squadra_guarda OR $squadra_guarda == "tutte")) {
-			
-			if ($ruolo == "P") $colore = "#dddddd"; else $colore = "#ffffff"; 
-			
+
+			if ($ruolo == "P") $colore = "#dddddd"; else $colore = "#ffffff";
+
 			$tabella .= "<tr align='center'>
 			<td bgcolor='$coldif'>$num - $gio</td>
 			<td style='text-align:left'><b>$ruolo</b> - $nome</td>

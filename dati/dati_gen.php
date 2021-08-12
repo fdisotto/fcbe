@@ -11,7 +11,7 @@ $email_mittente 					= 'fantacalcio@localhost.com';
 $admin_user 						= 'admin';
 $admin_pass 						= 'password';
 $iscrizione_online				= 'SI';
-$iscrizione_immediata_utenti		=	'NO';
+$iscrizione_immediata_utenti		=	'SI';
 $mostra_voti_in_login 			= 'SI';
 $trasferiti_ok       			= 'NO';
 $mostra_giornate_in_login 		= 'NO';
@@ -50,7 +50,7 @@ $uploaddir 						=	'dati/2021';
 $manutenzione 					=	'NO';
 $attiva_log 						=	'SI';
 $attiva_rss 						= 'SI';
-$url_rss							= 'http://www.gazzetta.it/rss/Calcio.xml                                                         ';
+$url_rss							= 'https://www.gazzetta.it/rss/serie-a.xml   ';
 $attiva_multi 					= 'SI';
 
 $attiva_shoutbox 				= 'NO';
@@ -107,6 +107,7 @@ $seconda_parte_pos_file_voti = '.txt';
 
 $sito_principale='http://fcbe.sssr.it/dati/';
 $sito_mirror='http://fantadownload.altervista.org/mirrorFCBE/dati/';
+$sito_mirror_custom='https://fcbemirror.fdisotto.com/dati/';
 
 # Composizione del file con i dati delle statistiche (dati/file);
 $ncs_codice = 1;

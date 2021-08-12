@@ -54,7 +54,7 @@ for ($num1 = 0 ; $num1 < $num_calciatori ; $num1++) {
 	$numero = trim($numero);
 	$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 	$nome = trim($nome);
-	$nome = ereg_replace("\"","",$nome);
+	$nome = preg_replace("/\"/","",$nome);
 	$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 	$s_ruolo = trim($s_ruolo);
 	$ruolo = $s_ruolo;
@@ -67,7 +67,7 @@ for ($num1 = 0 ; $num1 < $num_calciatori ; $num1++) {
 
 	$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 	$xsquadra = trim($xsquadra);
-	$xsquadra = ereg_replace("\"","",$xsquadra);
+	$xsquadra = preg_replace("/\"/","",$xsquadra);
 	if ($considera_fantasisti_come != "P" and $considera_fantasisti_come != "D" and $considera_fantasisti_come != "C" and $considera_fantasisti_come != "A") $considera_fantasisti_come = "F";
 	if ($s_ruolo == $simbolo_fantasista_file_calciatori) $ruolo = $considera_fantasisti_come;
 	if ($s_ruolo == $simbolo_portiere_file_calciatori) $ruolo = "P";

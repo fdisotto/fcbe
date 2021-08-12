@@ -1,7 +1,7 @@
 <?PHP
 ##################################################################################
 #    FANTACALCIOBAZAR EVOLUTION
-#    Copyright (C) 2003-2009 by Antonello Onida 
+#    Copyright (C) 2003-2009 by Antonello Onida
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ include("./header.php");
 
 if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
 require ("a_menu.php");
-$path = ereg_replace ("a_upload.php",$uploaddir."/",$_SERVER["SCRIPT_FILENAME"]);
+$path = preg_replace ("/a_upload.php/",$uploaddir."/",$_SERVER["SCRIPT_FILENAME"]);
 
 	if (!is_writable($uploaddir)) echo "La cartella $uploaddir non &egrave; scrivibile!<br /> Impostare CHMOD 775.<br />";
 	if (!is_readable($uploaddir)) echo "La cartella $uploaddir non &egrave; leggibile!<br /> Impostare CHMOD 775.<br />";
@@ -32,7 +32,7 @@ $path = ereg_replace ("a_upload.php",$uploaddir."/",$_SERVER["SCRIPT_FILENAME"])
 	}
 
 	switch ($funz) {
-	    case uno:
+	    case 'uno':
 	        echo "<table width='100%' align='center' class='border' cellpadding='10' bgcolor='$sfondo_tab'>
 	        <caption>Funzione upload file voti</caption>
 	        <tr valign ='top'><td align='center'><br/><br/>Tramite questa funzione viene caricato il file <br/>nella cartella <b>$path</b>.<br/><br/>";
@@ -42,7 +42,7 @@ $path = ereg_replace ("a_upload.php",$uploaddir."/",$_SERVER["SCRIPT_FILENAME"])
 	        echo "<input type='hidden' name='funz' value='due' />";
 	        echo "<br/><br/><input type='submit' value='UPLOAD' /><br/><br/></td></tr></table>";
 	        break;
-	    case due:
+	    case 'due':
 	        if($_FILES['filevoti']) {
 				echo "<table width='100%' align='center' class='border' cellpadding='10' bgcolor='$sfondo_tab'>
 				<caption>Funzione upload file voti</caption><tr><td align='left'><pre>";
@@ -59,6 +59,6 @@ $path = ereg_replace ("a_upload.php",$uploaddir."/",$_SERVER["SCRIPT_FILENAME"])
 	        	else echo "Il campo file &egrave; vuoto; ritenta!";
 	}
 } # fine if ($_SESSION == "SI")
-else header("location: logout.php?logout=2"); 
+else header("location: logout.php?logout=2");
 include("./footer.php");
 ?>

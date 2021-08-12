@@ -28,7 +28,7 @@ if ($_SESSION['valido'] == "SI") {
 	$filei = file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
 	$ultima_giornata = ultima_giornata_giocata();
 
-	
+
 	if ($stato_mercato != "I" AND intval($ultima_giornata) > 0) {
 		$cerca_valutazione = file("$percorso_cartella_voti/voti$ultima_giornata.txt");
 		$calciatori = file("$percorso_cartella_dati/calciatori.txt");
@@ -66,7 +66,7 @@ if ($_SESSION['valido'] == "SI") {
 		$dati_calciatore = explode(",", $calciatorim[$num1]);
 		$numero = $dati_calciatore[0];
 		$proprietario = $dati_calciatore[4];
-				
+
 		if ($proprietario == $_SESSION['utente']) {
 			$soldi_spesi = $soldi_spesi + $dati_calciatore[3];
 			$num_calciatori_posseduti++;
@@ -121,7 +121,7 @@ if ($_SESSION['valido'] == "SI") {
 				$trovato = "SI";
 				$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 				$nome = togli_acapo($nome);
-				$nome = ereg_replace("\"","",$nome);
+				$nome = preg_replace("/\"/","",$nome);
 				$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 				$s_ruolo = togli_acapo($s_ruolo);
 				$ruolo = $s_ruolo;
@@ -155,7 +155,7 @@ if ($_SESSION['valido'] == "SI") {
 		echo "<center>Il mercato &egrave; <b>chiuso</b> in questo momento.</center><br />";
 	} # fine if ($stato_mercato == "C")
 
-	$verifica_num = ereg_replace("[0-9]","",$valore_offerta);
+	$verifica_num = preg_replace("/[0-9]/","",$valore_offerta);
 
 	if ($verifica_num != "" or $valore_offerta == "" or $valore_offerta == 0) {
 		$inserire = "NO";
@@ -193,7 +193,7 @@ if ($_SESSION['valido'] == "SI") {
 		} # fine if ($sostituire == "NO")
 
 		$file_mercato = fopen("$percorso_cartella_dati/mercato_".$_SESSION['torneo']."_".$_SESSION['serie'].".txt","wb+");
-		
+
 		for ($num1 = 0 ; $num1 < $num_calciatori ; $num1++) {
 
 			if ($posizione == $num1) {
@@ -223,16 +223,16 @@ if ($_SESSION['valido'] == "SI") {
 				if ($_SESSION['otreset'] == "SI") $scadenza_gen=$scadenza.$secondo_attuale;
 				else if ($vecchia_scadenza!="") $scadenza_gen=rtrim($vecchia_scadenza);
 						else $scadenza_gen=$scadenza.$secondo_attuale;
-						
+
 				$linea = "$num_calciatore,$nome,$ruolo,$valore_offerta,".$_SESSION['utente'].",$scadenza_gen";
 				if ($proprietario_vero != $_SESSION['utente']) $vecchio_proprietario = $proprietario_vero;
 
 				#######################
-				
+
 				if ($vecchio_proprietario) {
 					$vecchio_costo = $costo;
 					$linea .= ",$vecchio_proprietario,$vecchio_costo";
-/*					
+/*
 					if ($vecchio_proprietario == $_SESSION['utente']) {
 						if ($vecchio_proprietario != $proprietario_vero) { $aggiungi_surplus = $vecchio_costo - $costo; }
 						else { $aggiungi_surplus = 0; }
@@ -258,7 +258,7 @@ if ($_SESSION['valido'] == "SI") {
 					}
 */
 				} # fine if ($vecchio_proprietario)
-							
+
 				flock($file_mercato,LOCK_EX);
 				fwrite($file_mercato,$linea."\n");
 				flock($file_mercato,LOCK_UN);
@@ -291,7 +291,7 @@ if ($_SESSION['valido'] == "SI") {
 			else $mexemail .= "(Il giocatore era svincolato)";
 
 			if (isset ($vecchio_costo_mail))	$mexemail .= "Vecchio costo: $vecchio_costo_mail \r\n";
-			
+
 			$mexemail .= "\r\n\r\n Ricevi questa email perche' sei iscritto al fantacalcio $titolo_sito --- $url_sito \r\n ";
 			$intestazioni  = "MIME-Version: 1.0\r\n";
 			$intestazioni .= "Content-type: text/html; charset=iso-8859-1\r\n";

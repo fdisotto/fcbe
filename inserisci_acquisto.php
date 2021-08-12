@@ -56,7 +56,7 @@ if ($_SESSION['valido'] == "SI") {
 			$trovato = "SI";
 			$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 			$nome = togli_acapo($nome);
-			$nome = ereg_replace("\"","",$nome);
+			$nome = preg_replace("/\"/","",$nome);
 			$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 			$s_ruolo = togli_acapo($s_ruolo);
 			$ruolo = $s_ruolo;
@@ -70,7 +70,7 @@ if ($_SESSION['valido'] == "SI") {
 			$valore = togli_acapo($valore);
 			$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 			$xsquadra = togli_acapo($xsquadra);
-			$xsquadra = ereg_replace("\"","",$xsquadra);
+			$xsquadra = preg_replace("/\"/","",$xsquadra);
 		} # fine if ($num_calciatore == $numero)
 	} # fine for $num1
 

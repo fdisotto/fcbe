@@ -147,7 +147,7 @@ if ($_SESSION['valido'] == "SI") {
 					<td align='center' width='70'><?php echo count($topic)-1; ?></td>
 					<td align='center' width='150'><?php echo $topicdate; ?><br /><?php echo $topicinfo[1]; ?></td>
 					<td align='center' width='150'><?php echo date("d-m-Y, H:i", $lastpostinfo[3]); ?><br /><?php echo $lastpostinfo[1]; ?></td>
-					<?php 
+					<?php
 					if ($_SESSION['permessi'] >= 4 and $_SESSION['valido'] == "SI"){
 						?>
 					<td align='center' width='150'><a href="messaggi.php?b=<?php echo substr($file, 0, strlen($file)-4); ?>" class='user'><?php echo "Cancella"; ?></a><br />
@@ -165,7 +165,7 @@ if ($_SESSION['valido'] == "SI") {
 		echo "<tr bgcolor='$sfondo_tab3' class='user1'>
 		<td colspan='2' align='left'>$pages</td>
 		<td colspan='2' align='right'><a href='messaggi.php' class='user1'>Indice messaggi</a> - <a href='messaggi.php?a=newtopic' class='user1'>Nuovo messaggio</a></td>";
-		
+
 			if ($_SESSION['permessi'] >= 4 and $_SESSION['valido'] == "SI"){
 			echo "<td>&nbsp;</td>";
 		}
@@ -360,7 +360,7 @@ if ($_SESSION['valido'] == "SI") {
 	non scrivere termini offensivi;<br />
 	Il titolo dei messaggi deve essere breve e conciso, indicativo del tema trattato (deprecati: attenzione, chiedo aiuto, etc; consigliati: inserire un cambio, schierare un calciatore, etc)!<br /><br /><br />";
 
-	$path = ereg_replace ("messaggi.php","$percorso_cartella_dati/messaggi",$_SERVER["SCRIPT_FILENAME"]);
+	$path = preg_replace ("/messaggi.php/","$percorso_cartella_dati/messaggi",$_SERVER["SCRIPT_FILENAME"]);
 	$messxpagina = "20";
 	$argxpagina = "15";
 	$utentixpagina = "15";

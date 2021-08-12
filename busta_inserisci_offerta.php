@@ -114,7 +114,7 @@ if ($stato_mercato != "B") {
 
                 if ($nuovo_costo) { $costo_mostra = $nuovo_costo; }
                 else { $costo_mostra = $costo; }
-    
+
         if ($stato_mercato !="B") {
                 if ($costo_mostra >= $valore_offerta) {
                 $inserire = "NO";
@@ -138,7 +138,7 @@ if ($stato_mercato != "B") {
             $trovato = "SI";
             $nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
             $nome = togli_acapo($nome);
-            $nome = ereg_replace("\"","",$nome);
+            $nome = preg_replace("/\"/","",$nome);
             $s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
             $s_ruolo = togli_acapo($s_ruolo);
             $ruolo = $s_ruolo;
@@ -172,7 +172,7 @@ if ($stato_mercato != "B") {
         echo "<center>Il mercato &egrave; <b>chiuso</b> in questo momento.</center><br>";
         } # fine if ($stato_mercato == "C")
 
-    $verifica_num = ereg_replace("[0-9]","",$valore_offerta);
+    $verifica_num = preg_replace("/[0-9]/","",$valore_offerta);
 
         if ($verifica_num != "" or $valore_offerta == "" or $valore_offerta == 0) {
         $inserire = "NO";
@@ -181,7 +181,7 @@ if ($stato_mercato != "B") {
 
     $num_calciatori_comprabili = $max_calciatori - $num_calciatori_posseduti;
 
-    @list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$_SESSION['uid']]);
+    @list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittï¿½, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$_SESSION['uid']]);
     $surplus = (int) $ocrediti;
     $variazioni = (int) $ovariazioni;
 
@@ -216,7 +216,7 @@ if ($stato_mercato != "B") {
     $ora_attuale = date("H");
     $minuto_attuale = date("i");
     $secondo_attuale = date("s");
-    
+
         if ($stato_mercato == "B") $scadenza = date("YmdHis");
         else $scadenza= "0";
 

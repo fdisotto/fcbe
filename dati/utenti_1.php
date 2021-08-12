@@ -1,0 +1,2 @@
+<?php die('ACCESSO VIETATO');?> // password = 5f4dcc3b5aa765d61d8327deb882cf99  --> md5(password)
+pippo<del>0c88028bf3aa6a6a143ed846f2be1ea4<del>0<del>pippo@gmail.com<del>http://<del>pipoleto<del>1<del>0<del><del>500<del>0<del>0<del><br /><del>0<del>0<del><del><del>0<del>0<del>0<del>0<del>0<del>0<del>0<del>0

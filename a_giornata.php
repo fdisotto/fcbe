@@ -34,7 +34,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
 		$voti_file = @file($posizione_file);
 
 		if (@is_file($percorso_cartella_voti."/voti".$giornata.".txt")) {
-			echo "<center><h4>File già esistente, non copiato.</h4></center>";
+			echo "<center><h4>File giï¿½ esistente, non copiato.</h4></center>";
 			$copiare = "NO";
 		} # fine if (@is_file("$percorso_cartella_dati/voti$giornata.txt"))
 
@@ -79,15 +79,15 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
 
 	for ($num = 1 ; $num < $num_tornei; $num++) {
 		unset($otid, $otdenom, $otpart, $otserie, $otmercato_libero, $ottipo_calcolo, $otgiornate_totali, $otritardo_torneo, $otcrediti_iniziali, $otnumcalciatori, $otcomposizione_squadra, $temp1, $temp2, $temp3, $temp4, $otstato, $otmodificatore_difesa, $otschemi, $otmax_in_panchina, $otpanchina_fissa, $otmax_entrate_dalla_panchina, $otsostituisci_per_ruolo, $otsostituisci_per_schema,  $otsostituisci_fantasisti_come_centrocampisti, $otnumero_cambi_max, $otrip_cambi_numero, $otrip_cambi_giornate, $otrip_cambi_durata, $otaspetta_giorni, $otaspetta_ore, $otaspetta_minuti, $otnum_calciatori_scambiabili, $otscambio_con_soldi, $otvendi_costo, $otpercentuale_vendita, $otsoglia_voti_primo_gol, $otincremento_voti_gol_successivi, $otvoti_bonus_in_casa, $otpunti_partita_vinta, $otpunti_partita_pareggiata, $otpunti_partita_persa, $otdifferenza_punti_a_parita_gol, $otdifferenza_punti_zero_a_zero, $otmin_num_titolari_in_formazione, $otpunti_pareggio, $otpunti_pos, $tipo_campionato, $campionato, $voti_esistenti, $dati_mod, $mod, $formazione, $punteggi, $modificatore);
-		unset($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg);
+		unset($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittï¿½, $ocrediti, $ovariazioni, $ocambi, $oreg);
 
 		@list($otid, $otdenom, $otpart, $otserie, $otmercato_libero, $ottipo_calcolo, $otgiornate_totali, $otritardo_torneo, $otcrediti_iniziali, $otnumcalciatori, $otcomposizione_squadra, $temp1, $temp2, $temp3, $temp4, $otstato, $otmodificatore_difesa, $otschemi, $otmax_in_panchina, $otpanchina_fissa, $otmax_entrate_dalla_panchina, $otsostituisci_per_ruolo, $otsostituisci_per_schema,  $otsostituisci_fantasisti_come_centrocampisti, $otnumero_cambi_max, $otrip_cambi_numero, $otrip_cambi_giornate, $otrip_cambi_durata, $otaspetta_giorni, $otaspetta_ore, $otaspetta_minuti, $otnum_calciatori_scambiabili, $otscambio_con_soldi, $otvendi_costo, $otpercentuale_vendita, $otsoglia_voti_primo_gol, $otincremento_voti_gol_successivi, $otvoti_bonus_in_casa, $otpunti_partita_vinta, $otpunti_partita_pareggiata, $otpunti_partita_persa, $otdifferenza_punti_a_parita_gol, $otdifferenza_punti_zero_a_zero, $otmin_num_titolari_in_formazione, $otpunti_pareggio, $otpunti_pos, $otreset_scadenza) = explode(",", $tornei[$num]);
 
-		$mercato_libero = $otmercato_libero; 					# Gestione giocatori in multiproprietà - SI O NO (NO esegue l'asta)
+		$mercato_libero = $otmercato_libero; 					# Gestione giocatori in multiproprietï¿½ - SI O NO (NO esegue l'asta)
 		$range_campionato = "1-$otgiornate_totali";
 		$campionato[$range_campionato] = $ottipo_calcolo;
 		#$campionato["7-8"] = "N";
-		$diff_num_giornata_file = $otritardo_torneo;      		# differenza tra il n° della giornata del file e quello del torneo di fantacalciobazar
+		$diff_num_giornata_file = $otritardo_torneo;      		# differenza tra il nï¿½ della giornata del file e quello del torneo di fantacalciobazar
 		$stato_mercato = $otstato; 							# Valore importantissimo per il corretto funzionamento.
 		$soldi_iniziali = $otcrediti_iniziali;					# Soldi iniziali di ogni giocatore
 		$max_calciatori = $otnumcalciatori; 					# Numero massimo di calciatori che si possono possedere
@@ -107,10 +107,10 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
 		$aspetta_giorni = $otaspetta_giorni;
 		$aspetta_ore = $otaspetta_ore;
 		$aspetta_minuti = $otaspetta_minuti;
-		$num_calciatori_scambiabili = $otnum_calciatori_scambiabili; 	# Numero di calciatori inseribili in una offerta di scambio (0 per disabilitare gli scambi) e possibilità di inserire anche soldi nello scambio. Questa variabile si usa solo nella modalità $mercato_libero = "NO"
+		$num_calciatori_scambiabili = $otnum_calciatori_scambiabili; 	# Numero di calciatori inseribili in una offerta di scambio (0 per disabilitare gli scambi) e possibilitï¿½ di inserire anche soldi nello scambio. Questa variabile si usa solo nella modalitï¿½ $mercato_libero = "NO"
 		$scambio_con_soldi = $otscambio_con_soldi;				# impostare a "SI" o "NO" (le maiuscole contano!)
 		$vendi_costo = $otvendi_costo;
-		$percentuale_vendita = $otpercentuale_vendita; 			# Percentuale del costo pagato a cui si può rivendere subito il calciatore
+		$percentuale_vendita = $otpercentuale_vendita; 			# Percentuale del costo pagato a cui si puï¿½ rivendere subito il calciatore
 
 		# Dati per i campionati a scontri diretti. Servono solo se si &egrave; impostato un campionato a "S".
 		$soglia_voti_primo_gol = $otsoglia_voti_primo_gol;
@@ -119,22 +119,22 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
 		$punti_partita_vinta = $otpunti_partita_vinta;
 		$punti_partita_pareggiata = $otpunti_partita_pareggiata;
 		$punti_partita_persa = $otpunti_partita_persa;
-		$differenza_punti_a_parita_gol = $otdifferenza_punti_a_parita_gol; 			#	a parità di gol se una delle due squadre ha uno scarto di punti maggiore o uguale a quello impostato prende un ulteriore gol, impostare a zero per disabilitare
+		$differenza_punti_a_parita_gol = $otdifferenza_punti_a_parita_gol; 			#	a paritï¿½ di gol se una delle due squadre ha uno scarto di punti maggiore o uguale a quello impostato prende un ulteriore gol, impostare a zero per disabilitare
 		$differenza_punti_zero_a_zero = $otdifferenza_punti_zero_a_zero; 			#	come sopra ma scatta solo sullo 0-0, impostare a zero per disabilitare
 
-		# Numero minimo di calciatori che devono essere titolari in formazione per ottenere punti (sono compresi anche quelli che non giocano). Non impostare a più di 11.
+		# Numero minimo di calciatori che devono essere titolari in formazione per ottenere punti (sono compresi anche quelli che non giocano). Non impostare a piï¿½ di 11.
 		$min_num_titolari_in_formazione = $otmin_num_titolari_in_formazione;
 
-		$punti_pareggio = $otpunti_pareggio;			# impostare a "M" per la media, "A" per i punti della posizione più alta o "B" per quelli della più bassa
+		$punti_pareggio = $otpunti_pareggio;			# impostare a "M" per la media, "A" per i punti della posizione piï¿½ alta o "B" per quelli della piï¿½ bassa
 		$punti_posizione = array();
 		$punti_posizione = explode ("-",$otpunti_pos);	# punti assegnati al primo di giornata
 
 		#################################################################################################
 
-		
+
 		$giornata = INTVAL($num_giornata);
 		$tgiornata = INTVAL($giornata) - INTVAL($otritardo_torneo);
-		
+
 			if (strlen($giornata) == 1) $giornata = "0".$giornata;
 			if (strlen($tgiornata) == 1) $tgiornata = "0".$tgiornata;
 
@@ -208,7 +208,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
 		$linee = count($fileu);
 
 		for($num1 = 1 ; $num1 < $linee; $num1++) {
-			@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $fileu[$num1]);
+			@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittï¿½, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $fileu[$num1]);
 
 			if ($opermessi >= 0 AND $otorneo == $otid AND $oserie == $otserie) {
 
@@ -224,7 +224,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
 				$num_linee_formazione = count($formazione);
 
 				for ($num2 = 0 ; $num2 < $num_linee_formazione; $num2++) {
-					#$formazione[$num2] = ereg_replace(" ","_",$formazione[$num2]);
+					#$formazione[$num2] = preg_replace("/ /","_",$formazione[$num2]);
 					$tab_formazioni .= $formazione[$num2]."<br/>";
 				} # fine for $num2
 
@@ -237,7 +237,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
 		$tab_formazioni .= "</tr>";
 
 		echo "<table summary='Calcoli' bgcolor=$sfondo_tab width='100%'>
-		<caption>$otdenom: giornata n° $num_giornata ($mercato_libero $ottipo_calcolo $tgiornata $otid)</caption>$tab_formazioni</table>";
+		<caption>$otdenom: giornata nï¿½ $num_giornata ($mercato_libero $ottipo_calcolo $tgiornata $otid)</caption>$tab_formazioni</table>";
 		if (!is_file($percorso_cartella_dati."/giornata".$tgiornata."_".$otid."_".$otserie)) {
 			$voti_esistenti = "NO";
 			echo "File giornata non creato (".$percorso_cartella_dati."/giornata".$tgiornata."_".$otid."_".$otserie."), prego verificare le condizioni per confermare lo status attuale!";
@@ -344,7 +344,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
 
 				echo "</td><td valign='top'><b><u>Classifica alla giornata $num_giornata_campionato</u></b><br/>";
 				for($num1 = 1 ; $num1 < $linee; $num1++) {
-					@list($ooutente, $oopass, $oopermessi, $ooemail, $oourl, $oosquadra, $ootorneo, $ooserie, $oocittà, $oocrediti, $oovariazioni, $oocambi, $ooreg) = explode("<del>", $fileu[$num1]);
+					@list($ooutente, $oopass, $oopermessi, $ooemail, $oourl, $oosquadra, $ootorneo, $ooserie, $oocittï¿½, $oocrediti, $oovariazioni, $oocambi, $ooreg) = explode("<del>", $fileu[$num1]);
 					if($oopermessi >= 0) echo $ooutente.": ".$punti[$ooutente]."<br/>";
 				} # fine for $num1
 

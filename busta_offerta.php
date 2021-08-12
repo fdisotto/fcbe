@@ -115,7 +115,7 @@ if ($_SESSION['valido'] == "SI") {
 					else {
 						$tempo_restante="";
 						$giorni=floor($sec_restanti/86400);
-						$secondi_resto=$sec_restanti-($giorni*86400); 
+						$secondi_resto=$sec_restanti-($giorni*86400);
 						$ore=floor($secondi_resto/3600);
 						$secondi_resto=$sec_restanti-($giorni*86400)-($ore*3600);
 						$minuti= floor($secondi_resto/60);
@@ -168,7 +168,7 @@ if ($_SESSION['valido'] == "SI") {
 						$trovato = "SI";
 						$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 						$nome = togli_acapo($nome);
-						$nome = ereg_replace("\"","",$nome);
+						$nome = preg_replace("/\"/","",$nome);
 						$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 						$s_ruolo = togli_acapo($s_ruolo);
 						$ruolo = $s_ruolo;
@@ -234,8 +234,8 @@ if ($_SESSION['valido'] == "SI") {
 					$xsquadra = $dati_calciatore[3];
 					$xsquadra = togli_acapo($xsquadra);
 					$costo = $dati_calciatore[27];
-					$nome = ereg_replace("\"","",$nome);
-					$xsquadra = ereg_replace("\"","",$xsquadra);
+					$nome = preg_replace("/\"/","",$nome);
+					$xsquadra = preg_replace("/\"/","",$xsquadra);
 
 					if ($considera_fantasisti_come != "P" and $considera_fantasisti_come != "D" and $considera_fantasisti_come != "C" and $considera_fantasisti_come != "A") $considera_fantasisti_come = "F";
 					if ($ruolo == $simbolo_fantasista_file_calciatori) $ruolo = $considera_fantasisti_come;
@@ -270,7 +270,7 @@ if ($_SESSION['valido'] == "SI") {
 						$trovato = "SI";
 						$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 						$nome = togli_acapo($nome);
-						$nome = ereg_replace("\"","",$nome);
+						$nome = preg_replace("/\"/","",$nome);
 						$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 						$s_ruolo = togli_acapo($s_ruolo);
 						$ruolo = $s_ruolo;

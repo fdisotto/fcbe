@@ -9,4 +9,6 @@ services:
     ports:
       - 80:80
     volumes:
-    - ./:/app
+      - ./:/app
+    dns:
+      - 8.8.8.8

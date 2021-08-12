@@ -1,5 +1,5 @@
 <?php
-/************************************************************ GENERAL INFO ***\  
+/************************************************************ GENERAL INFO ***\
 | DirPHP version 1.0                                                          |
 | Created by Stuart Montgomery as a simple solution for                       |
 | easy directory printing and uploading.                                      |
@@ -58,7 +58,7 @@ class DirPHP {
 			$this->dir = opendir($use_dir);
 			$this->use_dir = $use_dir;
 		}
-		
+
 		array_pop($dirtree = explode("/",$use_dir));
 		$num_levels = count($dirtree) - 1;
 		unset($dirtree[$num_levels]);
@@ -69,7 +69,7 @@ class DirPHP {
 		}
 		if ($this->parent_dir == "?dir=") $this->parent_dir = "";
 	} // End of DirPHP function (class constructor)
-	
+
 	function handle_events() {
 		// Authenticate user, if needed
 		if ($this->security['authentication_on'] == 1 && $this->authenticate() == FALSE) {
@@ -79,17 +79,17 @@ class DirPHP {
 			$this->display_footer();
 			exit;
 		}
-		
+
 		// Log out
-		if (isset($_GET['logout'])) 
+		if (isset($_GET['logout']))
 			$this->authenticate(1);
-		
+
 		// Handle multiple variable occurances, if applicable
-		if (isset($_GET['phpfile']) && isset($_GET['del'])) 
+		if (isset($_GET['phpfile']) && isset($_GET['del']))
 			unset($_GET['del']);
-		if (isset($_FILES['file'], $_GET['del']) || isset($_FILES['file'], $_GET['phpfile']) || isset($_FILES['file'],$_GET['dir'])) 
+		if (isset($_FILES['file'], $_GET['del']) || isset($_FILES['file'], $_GET['phpfile']) || isset($_FILES['file'],$_GET['dir']))
 			die("<p class=\"error_msg\">Operazioni simultanee non consentite!");
-		
+
 		// Handle normal events
 		$this->display_header($this->settings['logo']);
 		if (isset($_GET['del'])) {
@@ -126,7 +126,7 @@ class DirPHP {
 		}
 		$this->display_footer();
 	} // End of handle_events function
-	
+
 	function authenticate($logout = 0) {
 		// Process logout
 		if ($logout == 1) {
@@ -136,15 +136,15 @@ class DirPHP {
 		}
 		// Authenticate user or set cookie if needed
 		foreach($this->security['allowed_ips'] as $ip) {
-			if ($_SERVER['REMOTE_ADDR'] == $ip) 
+			if ($_SERVER['REMOTE_ADDR'] == $ip)
 				return TRUE;
-		} 
+		}
 		if (isset($_COOKIE['dirphp_auth']) && $_COOKIE['dirphp_auth'] == $this->security['hash']) {
 			return TRUE;
 		} elseif (isset($_GET['password'])) {
 			if (md5($_GET['password']) == $this->security['hash']) {
 				$query = "";
-				if ($_GET['query'] != "" && !eregi("password=", $_GET['query']))
+				if ($_GET['query'] != "" && !preg_match("/password=/", $_GET['query']))
 					$query .= "?" . $_GET['query'];
 				setcookie("dirphp_auth", $this->security['hash'], time()+3600);
 				header("Location: " . $_SERVER['PHP_SELF'] . $query);
@@ -155,7 +155,7 @@ class DirPHP {
 			return FALSE;
 		}
 	} // End of authenticate function
-	
+
 	function display_header($logo) {
 		$self_path = parse_url("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
 		$echo_path = str_replace("/", " / ", $self_path['host'] . $self_path['path']);
@@ -182,11 +182,11 @@ class DirPHP {
 		$header .= "\n";
 		echo $header;
 	} // End of display_header function
-	
+
 	function display_footer() {
 		echo $this->settings['footer'];
 	}
-	
+
 	function find_use_dir() {
 		if (isset($_GET['dir'])) $use_dir = $_GET['dir'];
 		if (isset($_POST['dir'])) $use_dir = $_POST['dir'];
@@ -194,14 +194,14 @@ class DirPHP {
 		if (!isset($use_dir)) {
 			$use_dir = FALSE;
 		}
-		if ((@strstr($use_dir, "../") || eregi("^/", $use_dir))&& $this->settings['allow_higher_level_access'] == 0) {
+		if ((@strstr($use_dir, "../") || preg_match("/^\//", $use_dir))&& $this->settings['allow_higher_level_access'] == 0) {
 			$use_dir = str_replace("../", "", $use_dir);
-			$use_dir = eregi_replace("^/", "", $use_dir);
+			$use_dir = preg_replace("/^\//", "", $use_dir);
 			$this->msg = "Higher level directory access disallowed.";
 		}
 		return $use_dir;
 	} // End of find_use_dir function
-	
+
 	function load_defaults() {
 		$this->settings['upload_on'] = 1;
 		$this->settings['delete_on'] = 1;
@@ -216,12 +216,12 @@ class DirPHP {
 		$this->settings['allow_higher_level_access'] = 0;
 		$this->settings['logo'] = "";
 		$this->settings['upload_path'] = "./";
-		
+
 		// Security authentication settings
 		$this->security['authentication_on'] = 0;
 		$this->security['hash'] = md5("default");  // Should change this
 		$this->security['allowed_ips'] = array();
-		
+
 		$this->filetypes = array(   // CSS Definitions for filetypes -- ALL EXTENSIONS LOWER CASE
 			'.php' => 'php',
 			'.php3' => 'php',
@@ -241,7 +241,7 @@ class DirPHP {
 		);
 
 	} // End of load_defaults function
-	
+
 	function set($setting, $value = 2) {
 		if ($value == 2) {
 			if ($this->settings[$setting] == 0) {
@@ -257,7 +257,7 @@ class DirPHP {
 		echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
 		echo "<tr class=\"header\"><td class=\"file\" style=\"padding: 2px\">File</td><td width=\"90\" class=\"file-property\">Dimensioni</td><td width=\"78\" class=\"file-property\">Modifica</td><td width=\"84\" class=\"file-options\" style=\"border: 0px\">Opzioni</td></tr>\n";
 		//  Show parent directory link, if applicable
-		if ($this->use_dir != "") echo "<tr height=\"24\"><td colspan=\"3\" class=\"file\" align=\"center\"><a href=\"" .$_SERVER['PHP_SELF'] . $this->parent_dir . "\"><span class=\"dir-view\">^</span></a> <span class=\"error_msg\">" . $this->use_dir . "</span></td><td class=\"file-options\">&nbsp;</td></tr>"; 
+		if ($this->use_dir != "") echo "<tr height=\"24\"><td colspan=\"3\" class=\"file\" align=\"center\"><a href=\"" .$_SERVER['PHP_SELF'] . $this->parent_dir . "\"><span class=\"dir-view\">^</span></a> <span class=\"error_msg\">" . $this->use_dir . "</span></td><td class=\"file-options\">&nbsp;</td></tr>";
 		//  Show error message
 		$this->show_msg();
 		//  Begin directory read loop
@@ -271,8 +271,8 @@ class DirPHP {
 			// Check if it's a directory or not
 			if (is_dir($file)) {
 				$dir_files[$filename] = "<tr><td class=\"file\"><a href=\"" . $_SERVER['PHP_SELF'] . "?dir=" . $file . "/\"><span class=\"dir-view\" title=\"Naviga la cartella\">></span></a> <a href=\"" . $file . "\"><span class=\"directory\">" . $filename . "/</span></a></td><td class=\"file\">&nbsp;</td><td class=\"file\">&nbsp;</td><td class=\"file-options\" height=\"18\">" . $this->show_options($file) . "</td></tr>\n";
-			// Check if it's a php file			
-			} elseif (($this->settings['php_source_view'] == 1) && ( (substr($file, -4, 4) == ".php") || (substr($file, -5, 5) == ".php3") ) ) { 
+			// Check if it's a php file
+			} elseif (($this->settings['php_source_view'] == 1) && ( (substr($file, -4, 4) == ".php") || (substr($file, -5, 5) == ".php3") ) ) {
 				if ($this->use_dir != "") {
 					$non_dir_files[$filename] = "<tr><td class=\"file\"><a href=\"" . $_SERVER['PHP_SELF'] . "?phpfile=" . $file . "&dir=" . $this->use_dir . "\"><span class=\"php\">" . $filename . "</span></a></td><td class=\"file-property\">" . $fsize . "</td><td class=\"file-property\">" . $fmtime . "</td><td class=\"file-options\" height=\"18\">" . $this->show_options($file) . "</td></tr>\n";
 				} else {
@@ -281,7 +281,7 @@ class DirPHP {
 			// If not a directory or php file, parse the filename for filetype color-coding
 			} else {
 				$file_lower = strtolower($file);
-				foreach ($this->filetypes as $key => $value) {  // Loops thru entire $filetypes array 
+				foreach ($this->filetypes as $key => $value) {  // Loops thru entire $filetypes array
 					$keylen = strlen($key);
 					if (substr($file_lower, -$keylen, $keylen) == $key) {
 						$non_dir_files[$filename] = "<tr><td class=\"file\"><a href=\"" . $file . "\"><span class=\"" . $value . "\">" . $filename . "</span></a></td><td class=\"file-property\">" . $fsize . "</td><td class=\"file-property\">" . $fmtime . "</td><td class=\"file-options\">" . $this->show_options($file) . "</td></tr>\n";
@@ -303,7 +303,7 @@ class DirPHP {
 		echo "</table>\n";
 		closedir($this->dir);
 	} // End of display_dir function
-	
+
 	function upload_file($file) {  /*DONE*/
 		$upload_path = "" . $this->use_dir;
 		if ($this->is_protected($file['name']) || ($this->settings['allow_php_uploads'] == 0 && ( (substr($file['name'], -4, 4) == ".php") || (substr($file['name'], -5, 5) == ".php3") ) ) ) {
@@ -318,7 +318,7 @@ class DirPHP {
 			}
 		}
 	} // End of upload_file function
-	
+
 	function delete_file($file) {
 		if ($this->settings['delete_on'] == 0) {
 			$this->msg = "La cancellazione dei files non &egrave; consentita a momento.";
@@ -327,18 +327,18 @@ class DirPHP {
 		} elseif (@unlink($file)) {
 			$this->msg = "File '" . $file . "' cancellato <u>correttamente</u>.";
 		} elseif (is_dir($file) && @rmdir($file)) {
-			$this->msg = "Directory '" . $file . "' cancellata <u>correttamente</u>.";	
+			$this->msg = "Directory '" . $file . "' cancellata <u>correttamente</u>.";
 		} else {
-			if (is_file($file) || is_dir($file)) { 
-				$this->msg = "File '" . $file . "' non cancellato."; 
-			} else { 
-				$this->msg = "File da cencellare non esistente."; 
+			if (is_file($file) || is_dir($file)) {
+				$this->msg = "File '" . $file . "' non cancellato.";
+			} else {
+				$this->msg = "File da cencellare non esistente.";
 			}
 			return FALSE;
 		}
 	} // End of delete_file function
-	
-	function php_source($php_file) { 
+
+	function php_source($php_file) {
 		if ($this->settings['php_source_view'] == 0) {
 			$this->msg = "Visione del codice sorgente PHP non consentita.";
 			return FALSE;
@@ -356,7 +356,7 @@ class DirPHP {
 			return FALSE;
 		}
 	} // End of php_source function
-	
+
 	function edit_file($file, $change_file = 0, $newfile = 0) {
 		if ($change_file == 1) {
 			$fp = fopen($file, "w");
@@ -370,7 +370,7 @@ class DirPHP {
 
 				$contents = file_get_contents($file);
 				$contents = str_replace("&nbsp;", "&amp;nbsp;", $contents);  // <--- Check for non-breaking space characters and maintain them
-				
+
 				$ret .= $contents;
 				$ret .= "\n</textarea>\n";
 				$ret .= "<br /><br />Salva come: <br><input type=\"text\" name=\"filename\" value=\"" . $file . "\">";
@@ -384,7 +384,7 @@ class DirPHP {
 			return $ret;
 		}
 	} // End of edit_file function
-	
+
 	function rename_file($old, $new) {
 		if ($this->settings['rename_on'] == 0) {
 			$this->msg = "Rinomina non consentito.";
@@ -396,7 +396,7 @@ class DirPHP {
 			$this->msg = "Impossibile rinominare il file " . $old . ".";
 		}
 	} // End of rename_file function
-	
+
 	function show_options($file) {
 		$prot = 0;
 		if ($this->is_protected($file)) $prot = 1;
@@ -404,7 +404,7 @@ class DirPHP {
 		// Delete option
 		if ($prot == 0 && $this->settings['delete_on'] == 1) {
 			$ret = "<a href=\"" . $_SERVER['PHP_SELF'] . "?del=" . $file . "\" title=\"Cancela " . $file . "\"";
-			if ($this->settings['delete_confirm'] == 1) 
+			if ($this->settings['delete_confirm'] == 1)
 				$ret .= "onClick=\"javascript: return confirm('Cancella file " . $file . "?')\"";
 			$ret .= ">C</a> : ";
 		} else {
@@ -417,32 +417,32 @@ class DirPHP {
 		} else {
 			$ret .= "<span class=\"greyed-out\" title=\"Impossibile rinominare il file " . $file . "\">R</span>: ";
 		}
-		
+
 		// Edit option
 		if (!is_dir($file)) {
 			if ($prot == 0 && $this->settings['edit_on'] == 1) {
 				$ret .= "<a href=\"" . $_SERVER['PHP_SELF'] . "?edit=" . $file;
-				if ($this->use_dir != "") 
+				if ($this->use_dir != "")
 					$ret .= "&dir=" . $this->use_dir;
 				$ret .= "\" title=\"Edita " . $file . "\">E</a> : ";
 			} else {
 				$ret .= "<span class=\"greyed-out\" title=\"Impossibile eitare il file " . $file . "\">E</span>: ";
 			}
 		}
-		
+
 		// View option
 		$ret .= "<a href=\"" . $file . "\" title=\"Vedi " . $file . "\">V</a>";
 		return $ret;
 	} // End of show_options function
-	
+
 	function is_protected($file) { /*DONE*/
 		$file_protected = FALSE;
 		foreach ($this->protected_files as $value) {  // Evaluate file being uploaded for list of protected files
-			if ($file == $value) $file_protected = TRUE;		
+			if ($file == $value) $file_protected = TRUE;
 		}
 		return $file_protected;
 	} // End of is_protected function
-	
+
 	function file_property($property, $file) {
 		if ($property == "size") {   // File size property
 				$size = filesize($file);
@@ -462,7 +462,7 @@ class DirPHP {
 			return $modtime;
 		}
 	} // End of file_property function
-		
+
 	function bottom_bar($upload_form = "default", $delete = 0) {
 		if ($upload_form != "default") {
 			$this->upload_form = $upload_form;
@@ -487,9 +487,9 @@ class DirPHP {
 		}
 		echo $this->upload_form;
 	} // End of set_upload_form function
-	
+
 	function show_msg() {
-		if (isset($this->msg)) 
+		if (isset($this->msg))
 			echo "<tr><td colspan=\"3\" class=\"file\" align=\"center\"><span class=\"error_msg\">" . $this->msg . "</span></td></td><td class=\"file-options\">&nbsp;</td></tr>";
 	}
 

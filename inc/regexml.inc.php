@@ -1,5 +1,5 @@
 <?php
-	
+
 /*****************************************************
  *						     RegEXml	 				  *
  *							   by						  *
@@ -9,7 +9,7 @@
 
 
 class RegEXml {
-	
+
 	/**
 	 * Apre un File
 	 *
@@ -20,33 +20,33 @@ class RegEXml {
 	 * @param string $file Nome del File da Aprire
 	 * @return string Contenuto del File
 	 */
-	
+
 	function get_file($file)
 	{
 		// azzera la var
 		$string = "";
-		
+
 		// apre il file in lettura
 		$fd = @fopen($file, "r");
-		
+
 		// se  non si può aprire da errore
 		if($fd!="") {
 		#die("Impossibile Aprire il File");
 		while (!feof ($fd)) { // legge fino alla fine
 			// prende un chunk di 4096 bytes
 			$buffer = fgets($fd, 4096);
-			
+
 			// aggiunge il chunk alla stringa
 			$string.=$buffer;
 		}
-		
+
 		// chiude il file
 		fclose ($fd);
-		
+
 		// ritorna il valore
 		return $string;}
 	}
-	
+
 	/**
 	 * Restituisce un elemento XML
 	 *
@@ -61,18 +61,18 @@ class RegEXml {
 	function get_xml_tag($tag, $xml)
 	{
 		// se l'elemento non esiste, restituisce una stringa vuota
-		if (!eregi("(<$tag>|<$tag [^>]+>).*</$tag>", $xml)) {
+		if (!preg_match("/(<$tag>|<$tag [^>]+>).*<\/$tag>/", $xml)) {
 			return "";
 		}
-		
+
 		// in buff vengono tolti i tag di apertura e chiusura
-		$buff = ereg_replace(".*(<$tag>|<$tag [^>]+>)", "", $xml);
-		$buff = ereg_replace("</".$tag.">.*", "", $buff);
-		
+		$buff = preg_replace("/.*(<$tag>|<$tag [^>]+>)/", "", $xml);
+		$buff = preg_replace("/</".$tag.">.*/", "", $buff);
+
 		// restituisce la stringa
 		return $buff;
 	}
-	
+
 	/**
 	 * Restituisce l'array di un ramo di elementi XML
 	 *
@@ -88,28 +88,28 @@ class RegEXml {
 	{
 		// splitta per </tag>
 		$buff = explode("</".$tag.">", $xml);
-		
+
 		// elimina l'ultimo
 		array_splice ($buff, count($buff)-1);
-		
+
 		// svuota la var
 		$buffelement = "";
-		
+
 		// crea un nuovo array
 		$newbuff = array();
-		
+
 		// per ogni elemento in $buff
 		foreach($buff as $buffelement){
 			// mette i tag in newbuff
-			$newbuff[] = eregi_replace("^.*(\<$tag\>|\<$tag [^>]+\>)","",ltrim($buffelement));
+			$newbuff[] = preg_replace("/^.*(\<$tag\>|\<$tag [^>]+\>)/","",ltrim($buffelement));
 		}
-		
+
 		// restituisce l'array
 		return $newbuff;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Restituisce l'attributo di un Tag
 	 *
@@ -125,25 +125,25 @@ class RegEXml {
 	function get_tag_attrib($tag, $attrib, $xml)
 	{
 		// pattern che ottiene  < - TAG - PROP='VAL' - >
-		$diviso = eregi(".*(<)($tag) ([^>]+)(>)", $xml, $reqs);
-		
+		$diviso = preg_match("/.*(<)($tag) ([^>]+)(>)/", $xml, $reqs);
+
 		// ottiene solo la 3a parte
 		$attributi = trim($reqs[3]);
-		
+
 		// pattern che ottiene: TESTO - $attrib - VAL - TESTO
-		$attributo = eregi("(.*)($attrib=)(\"[^\"]+\"|'[^']+')(.*)",$attributi, $req);
-		
+		$attributo = preg_match("/(.*)($attrib=)(\"[^\"]+\"|'[^']+')(.*)/",$attributi, $req);
+
 		// prende solo la 2a e 3a parte trimmando
 		$attributo = trim($req[2].$req[3]);
-		
+
 		// splitta per " o '
-		$final = spliti("(\"|')",$attributo);
-		
+		$final = preg_split("/(\"|')/",$attributo);
+
 		// restituisce l'array 1
 		return $final[1];
 	}
-	
-	
+
+
 	/**
 	 * Restituisce un Array di Attributi
 	 *
@@ -158,27 +158,27 @@ class RegEXml {
 	function get_array_attrib($tag, $xml)
 	{
 		// pattern che ottiene tra <tag e >
-		$diviso = eregi(".*<$tag([^>|^/>]+)(/>|>)", $xml, $reqs);
-		
+		$diviso = preg_match("/.*<$tag([^>|^/>]+)(/>|>)/", $xml, $reqs);
+
 		// prende solo la prima occorrenza
 		$attributi = trim($reqs[1]);
-		
+
 		// pattern che ottiene un array con tutti i: PROP = "VAL"
 		$finale = preg_match_all("#([^=]+)=[\"|']([^\"|^']*)[\"|']#", $attributi, $arry);
-		
+
 		// conta il numero di elementi
 		$ca = count($arry[1]);
-		
+
 		// per ogni elemento trovato
 		for($i=0; $i<$ca; $i++)
 		{
 			// aggiunge all'array finale un array in coda formato da [PROP] => VAL
 			$array_finale[$arry[1][$i]] = $arry[2][$i];
 		}
-		
+
 		// restituisce il valore
 		return $array_finale;
 	}
-	
-}	
+
+}
 ?>

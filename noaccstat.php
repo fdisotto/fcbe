@@ -52,12 +52,12 @@ $somma_voti_giornale = $somma_voti_giornale + $voto_giornale;
 } # fine if ($voto_tot != 0 or $voto_giornale != 0)
 
 if ($statistiche == "SI") {
-$stat_codice = $dati_voto[($ncs_codice -1)];  
+$stat_codice = $dati_voto[($ncs_codice -1)];
 $stat_giornata = $dati_voto[($ncs_giornata -1)];
 $stat_nome = $dati_voto[($ncs_nome -1)];
-$stat_nome = ereg_replace("\"","",$stat_nome);
+$stat_nome = preg_replace("/\"/","",$stat_nome);
 $stat_squadra = $dati_voto[($ncs_squadra -1)];
-$stat_squadra = ereg_replace("\"","",$stat_squadra);
+$stat_squadra = preg_replace("/\"/","",$stat_squadra);
 $stat_attivo = $dati_voto[($ncs_attivo -1)];
 $stat_ruolo = $dati_voto[($ncs_ruolo -1)];
 $stat_presenza = $dati_voto[($ncs_presenza -1)]; $totpresenze = $totpresenze + $stat_presenza;
@@ -70,8 +70,8 @@ $stat_golsubiti = $dati_voto[($ncs_golsubiti -1)]; $totgolsub = $totgolsub + $st
 $stat_golvittoria = $dati_voto[($ncs_golvittoria -1)]; $totgolvit = $totgolvit + $stat_golvittoria;
 $stat_golpareggio = $dati_voto[($ncs_golpareggio -1)]; $totgolpar = $totgolpar + $stat_golpareggio;
 $stat_assist = $dati_voto[($ncs_assist -1)]; $totass = $totass + $stat_assist;
-$stat_ammonizione = $dati_voto[($ncs_ammonizione -1)]; $totamm = $totamm + $stat_ammonizione; 
-$stat_espulsione = $dati_voto[($ncs_espulsione -1)]; $totesp = $totesp + $stat_espulsione; 
+$stat_ammonizione = $dati_voto[($ncs_ammonizione -1)]; $totamm = $totamm + $stat_ammonizione;
+$stat_espulsione = $dati_voto[($ncs_espulsione -1)]; $totesp = $totesp + $stat_espulsione;
 $stat_rigoretirato = $dati_voto[($ncs_rigoretirato -1)]; $totrigt = $totrigt + $stat_rigoretirato;
 $stat_rigoresubito = $dati_voto[($ncs_rigoresubito -1)]; $totrigs = $totrigs + $stat_rigoresubito;
 $stat_rigoreparato = $dati_voto[($ncs_rigoreparato -1)]; $totrigp = $totrigp + $stat_rigoreparato;
@@ -108,11 +108,11 @@ $numero = togli_acapo($numero);
 if ($num_calciatore == $numero) {
 $nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 $nome = togli_acapo($nome);
-$nome = ereg_replace("\"","",$nome);
+$nome = preg_replace("/\"/","",$nome);
 if ($num_colonna_squadra_file_calciatori != 0) {
 $xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 $xsquadra = togli_acapo($xsquadra);
-$xsquadra = ereg_replace("\"","",$xsquadra);
+$xsquadra = preg_replace("/\"/","",$xsquadra);
 } # fine if ($num_colonna_squadra_file_calciatori != 0)
 $s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 $s_ruolo = togli_acapo($s_ruolo);
@@ -147,7 +147,7 @@ echo "<td align=\"center\">$partite_giocate</td>
 
 if ($statistiche == "SI") {
 if ($stat_attivo == 0) $mess = "<b><font color=red>Non disponibile</font></b>";
-else $mess = "In attività";
+else $mess = "In attivitï¿½";
 
 if ($stat_ruolo == 0) $st_ruolo = "Portiere";
 if ($stat_ruolo == 1) $st_ruolo = "Difensore";

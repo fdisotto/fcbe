@@ -94,7 +94,7 @@ if ($_SESSION['valido'] == "SI") {
 				if ($num_calciatore == $numero) {
 					$trovato = "SI";
 					$nome = $dati_calciatore[1];
-					$nome = ereg_replace("\"","",$nome);
+					$nome = preg_replace("/\"/","",$nome);
 					$ruolo = $dati_calciatore[2];
 					$costo = $dati_calciatore[3];
 					$proprietario_vero = $proprietario;
@@ -116,12 +116,12 @@ if ($_SESSION['valido'] == "SI") {
 					else {
 						$tempo_restante="";
 						$giorni=floor($sec_restanti/86400);
-						$secondi_resto=$sec_restanti-($giorni*86400); 
+						$secondi_resto=$sec_restanti-($giorni*86400);
 						$ore=floor($secondi_resto/3600);
 						$secondi_resto=$sec_restanti-($giorni*86400)-($ore*3600);
 						$minuti= floor($secondi_resto/60);
 						$secondi_resto = $sec_restanti-($giorni*86400)-($ore*3600)-$minuti*60;
-						
+
 						if ($giorni > 0) {
 							if ($giorni > 1) $tempo_restante .= $giorni." giorni";
 							else $tempo_restante .= $giorni." giorno";
@@ -152,8 +152,8 @@ if ($_SESSION['valido'] == "SI") {
 
 					$tempo=$anno_off.", ".$mese_off."-1, ".$giorno_off.", ".$ora_off.", ".$minuto_off.", ".$secondo_off; #formato 2012, 8-1, 02, 13, 14
 					countdown($numero,$tempo);
-					
-					
+
+
 					echo"<tr><td align='center'>$numero</td>
 					<td>$nome</td>
 					<td align='center'>$ruolo</td>
@@ -176,7 +176,7 @@ if ($_SESSION['valido'] == "SI") {
 						$trovato = "SI";
 						$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 						$nome = togli_acapo($nome);
-						$nome = ereg_replace("\"","",$nome);
+						$nome = preg_replace("/\"/","",$nome);
 						$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 						$s_ruolo = togli_acapo($s_ruolo);
 						$ruolo = $s_ruolo;
@@ -244,8 +244,8 @@ if ($_SESSION['valido'] == "SI") {
 					$xsquadra = $dati_calciatore[3];
 					$xsquadra = togli_acapo($xsquadra);
 					$costo = $dati_calciatore[27];
-					$nome = ereg_replace("\"","",$nome);
-					$xsquadra = ereg_replace("\"","",$xsquadra);
+					$nome = preg_replace("/\"/","",$nome);
+					$xsquadra = preg_replace("/\"/","",$xsquadra);
 
 					if ($considera_fantasisti_come != "P" and $considera_fantasisti_come != "D" and $considera_fantasisti_come != "C" and $considera_fantasisti_come != "A") $considera_fantasisti_come = "F";
 					if ($ruolo == $simbolo_fantasista_file_calciatori) $ruolo = $considera_fantasisti_come;
@@ -280,7 +280,7 @@ if ($_SESSION['valido'] == "SI") {
 						$trovato = "SI";
 						$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 						$nome = togli_acapo($nome);
-						$nome = ereg_replace("\"","",$nome);
+						$nome = preg_replace("/\"/","",$nome);
 						$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 						$s_ruolo = togli_acapo($s_ruolo);
 						$ruolo = $s_ruolo;
@@ -334,20 +334,20 @@ if ($_SESSION['valido'] == "SI") {
 			} # fine if ($proprietario == $_SESSION['utente'])
 		}
 		if ($max_calciatori != $num_calciatori_posseduti) {
-		
+
 		$schema_giocatori = "$np$nd$nc$nf$na";
 		$verifica_sg = "";
 		$num_giocons = count($composizione_squadra);
 		for ($num1 = 0 ; $num1 < $num_giocons ; $num1++) {
 			$verifica_sg .= "$composizione_squadra[$num1]<br />";
-			
+
 		} # fine for $num1
 
 		$error="";
-			
+
 		switch ($ruolos) {
 			case "P": {
-				if ($np >= substr($verifica_sg,0,1)) { 
+				if ($np >= substr($verifica_sg,0,1)) {
 					$error="<center><br/><br/><h4>Hai superato il limite massimo di acquisti per questo ruolo ($np)</center></h4>";
 					$offribile = "NO";}
 			break;	}
@@ -355,12 +355,12 @@ if ($_SESSION['valido'] == "SI") {
 				if ($nd >= substr($verifica_sg,1,1))  {
 					$error="<center><br/><br/><h4>Hai superato il limite massimo di acquisti per questo ruolo ($nd)</center></h4>";
 					$offribile = "NO";}
-			break;}	
+			break;}
             case "C":{
 				if ($nc >= substr($verifica_sg,2,1))  {
 					$error="<center><br/><br/><h4>Hai superato il limite massimo di acquisti per questo ruolo ($nc)</center></h4>";
 					$offribile = "NO";}
-			break;}	
+			break;}
 			case "F":{
 				if ($considera_fantasisti_come == "F") {
 					if ($nf >= substr($verifica_sg,3,1))  {
@@ -368,19 +368,19 @@ if ($_SESSION['valido'] == "SI") {
 						$offribile = "NO";}
 				}
 			break;}
-			case "A":	{		
+			case "A":	{
 				if ($na >= substr($verifica_sg,4,1))  {
 					$error="<center><br/><br/><h4>Hai superato il limite massimo di acquisti per questo ruolo ($na)</center></h4>";
 					$offribile = "NO";}
-			break;}		
+			break;}
         }
-			
+
 		echo $error;
 
-		}	
-		
+		}
+
 		$ifile = file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
-		@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $ifile[$_SESSION['uid']]);
+		@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittï¿½, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $ifile[$_SESSION['uid']]);
 
 		$surplus = $ocrediti;
 		$variazioni = $ovariazioni;
@@ -396,9 +396,9 @@ if ($_SESSION['valido'] == "SI") {
 		echo "<center><br/>FantaEuro ancora da spendere: <b>$soldi_spendibili</b> $frase_togliere.<br/>
 		Numero di calciatori ancora comperabili: <b>$num_calciatori_comprabili</b>.</center><br/>";
 
-		
+
 		$costo_mostra_min=$costo_mostra+1;
-		
+
 		if ($offribile == "SI" AND $stato_mercato == "I") {
 			echo "<center><br/><form method='post' action='inserisci_offerta.php'>
 			Fai una offerta per <b>$nome</b> di
@@ -449,13 +449,13 @@ if ($_SESSION['valido'] == "SI") {
 				<input type='submit' name='invia' value='Conferma acquisto' />
 				</form></center>";
 			}
-			else if ($tempo_restante < 1) echo "Il valore del calciatore <b>$nome</b> ($num_calciatore) che vorresti acquistare &eacute; di <b>$valore_offerta</b> FantaEuro.<br/>Tempo Scaduto, il giocatore &eacute; stato assegnato.";			
+			else if ($tempo_restante < 1) echo "Il valore del calciatore <b>$nome</b> ($num_calciatore) che vorresti acquistare &eacute; di <b>$valore_offerta</b> FantaEuro.<br/>Tempo Scaduto, il giocatore &eacute; stato assegnato.";
 				else echo "Il valore del calciatore <b>$nome</b> ($num_calciatore) che vorresti acquistare &eacute; di <b>$valore_offerta</b> FantaEuro.<br/>Non hai crediti sufficienti per acquistarlo.";
 
 		} # fine elseif
 
-		if ($soldi_spendibili <= 0) echo "<center><br/><br/><h4>Non hai piu' crediti !!!!</h4><br/></center>"; 
-		if($stato_mercato == "P") echo "<center><h4>Sei in ASTA PERENNE. Per fare delle offerte dovresti prima vendere un calciatore!</h4></center>"; 
+		if ($soldi_spendibili <= 0) echo "<center><br/><br/><h4>Non hai piu' crediti !!!!</h4><br/></center>";
+		if($stato_mercato == "P") echo "<center><h4>Sei in ASTA PERENNE. Per fare delle offerte dovresti prima vendere un calciatore!</h4></center>";
 
 		echo "</td></tr></table>";
 	} # fine if ($chiusura_giornata != 1)

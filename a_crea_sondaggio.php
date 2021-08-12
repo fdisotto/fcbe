@@ -33,9 +33,9 @@ $domanda = stripslashes($domanda);
 $domanda = str_replace("$","\\\$",$domanda);
 $domanda = str_replace("'","\\'",$domanda);
 if (!$tipo) $crea = "NO";
-ereg_replace("[0-9]","",$num_voti_segreti);
-if ((ereg_replace("[0-9]","",$num_voti_segreti) != "" or $num_voti_segreti == "" or $num_voti_segreti == 0) and $tipo == "votazione_segreta") $crea = "NO";
-if ((ereg_replace("[0-9]","",$num_voti_palesi) != "" or $num_voti_palesi == "" or $num_voti_palesi == 0) and $tipo == "votazione_palese") $crea = "NO";
+preg_replace("/[0-9]/","",$num_voti_segreti);
+if ((preg_replace("/[0-9]/","",$num_voti_segreti) != "" or $num_voti_segreti == "" or $num_voti_segreti == 0) and $tipo == "votazione_segreta") $crea = "NO";
+if ((preg_replace("/[0-9]/","",$num_voti_palesi) != "" or $num_voti_palesi == "" or $num_voti_palesi == 0) and $tipo == "votazione_palese") $crea = "NO";
 if ($crea != "NO") {
 if ($tipo == "votazione_segreta" or $tipo == "sondaggio_segreto")  $voto_palese = "NO";
 else $voto_palese = "SI";
@@ -52,16 +52,16 @@ $testo_file = "<?php
 ";
 	$tornei = @file($percorso_cartella_dati."/tornei.php");
 	$num_tornei = count($tornei);
-	
+
 		for ($num = 1 ; $num < $num_tornei; $num++) {
 		unset($otid, $otdenom, $otpart, $otserie, $otmercato_libero, $ottipo_calcolo, $otgiornate_totali, $otritardo_torneo, $otcrediti_iniziali, $otnumcalciatori, $otcomposizione_squadra, $temp1, $temp2, $temp3, $temp4, $otstato, $otmodificatore_difesa, $otschemi, $otmax_in_panchina, $otpanchina_fissa, $otmax_entrate_dalla_panchina, $otsostituisci_per_ruolo, $otsostituisci_per_schema,  $otsostituisci_fantasisti_come_centrocampisti, $otnumero_cambi_max, $otrip_cambi_numero, $otrip_cambi_giornate, $otrip_cambi_durata, $otaspetta_giorni, $otaspetta_ore, $otaspetta_minuti, $otnum_calciatori_scambiabili, $otscambio_con_soldi, $otvendi_costo, $otpercentuale_vendita, $otsoglia_voti_primo_gol, $otincremento_voti_gol_successivi, $otvoti_bonus_in_casa, $otpunti_partita_vinta, $otpunti_partita_pareggiata, $otpunti_partita_persa, $otdifferenza_punti_a_parita_gol, $otdifferenza_punti_zero_a_zero, $otmin_num_titolari_in_formazione, $otpunti_pareggio, $otpunti_pos, $otreset_scadenza);
 		@list($otid, $otdenom, $otpart, $otserie, $otmercato_libero, $ottipo_calcolo, $otgiornate_totali, $otritardo_torneo, $otcrediti_iniziali, $otnumcalciatori, $otcomposizione_squadra, $temp1, $temp2, $temp3, $temp4, $otstato, $otmodificatore_difesa, $otschemi, $otmax_in_panchina, $otpanchina_fissa, $otmax_entrate_dalla_panchina, $otsostituisci_per_ruolo, $otsostituisci_per_schema,  $otsostituisci_fantasisti_come_centrocampisti, $otnumero_cambi_max, $otrip_cambi_numero, $otrip_cambi_giornate, $otrip_cambi_durata, $otaspetta_giorni, $otaspetta_ore, $otaspetta_minuti, $otnum_calciatori_scambiabili, $otscambio_con_soldi, $otvendi_costo, $otpercentuale_vendita, $otsoglia_voti_primo_gol, $otincremento_voti_gol_successivi, $otvoti_bonus_in_casa, $otpunti_partita_vinta, $otpunti_partita_pareggiata, $otpunti_partita_persa, $otdifferenza_punti_a_parita_gol, $otdifferenza_punti_zero_a_zero, $otmin_num_titolari_in_formazione, $otpunti_pareggio, $otpunti_pos, $otreset_scadenza) = explode(",", $tornei[$num]);
-	
+
 		$file = file("./dati/utenti_".$otid.".php");
 		$linee = count($file);
 
 			for($num1 = 1 ; $num1 < $linee+1; $num1++) {
-			@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+			@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittï¿½, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 			$testo_file .= "\$voti_$outente = array();\n";
 			} # fine for $num1
 		}

@@ -55,7 +55,7 @@ $posizione = $num1;
 } # fine if ($proprietario == $_SESSION['utente'])
 } # fine for $num1
 
-$verifica_num = ereg_replace("[0-9]","",$valore_rivendita);
+$verifica_num = preg_replace("/[0-9]/","",$valore_rivendita);
 if ($verifica_num != "") {
 $trovato = "NO";
 $frase = "L'offerta deve essere un numero intero.<br/>";

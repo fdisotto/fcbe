@@ -25,8 +25,8 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 
 	if(!$_GET['vedi_operazioni']) $vedi_operazioni = "SI";
 
-	####################àà
-	
+	####################ï¿½ï¿½
+
 	echo $acapo."<script type='text/javascript'>
 	function CreaOrario() {
 	nd = new Date;
@@ -115,8 +115,8 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 			$minuto_off = substr($tempo_off,10,2);
 			$secondo_off = substr($tempo_off,12,2);
 			$sec_restanti = mktime($ora_off,$minuto_off,0,$mese_off,$giorno_off,$anno_off) - $adesso;
-			
-			
+
+
 			if ($sec_restanti < 1 OR ($stato_mercato != "I" and $stato_mercato != "P")) {
 				$tempo_restante = "Comprato";
 				$offri = "Nessuna opzione";
@@ -145,7 +145,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 			else {
 				$tempo_restante = "";
 				$giorni=floor($sec_restanti/86400);
-				$secondi_resto=$sec_restanti-($giorni*86400); 
+				$secondi_resto=$sec_restanti-($giorni*86400);
 				$ore=floor($secondi_resto/3600);
 				$secondi_resto=$sec_restanti-($giorni*86400)-($ore*3600);
 				$minuti= floor($secondi_resto/60);
@@ -186,14 +186,14 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 
 				if ($num1 % 2) $color=$colore_riga_alt;
 				else $color="#FFFFFF";
-				
 
-				if ($risparmia_risorse=="NO") { 
+
+				if ($risparmia_risorse=="NO") {
 					$tempo=$anno_off.", ".$mese_off."-1, ".$giorno_off.", ".$ora_off.", ".$minuto_off.", ".$secondo_off; #formato 2012, 8-1, 02, 13, 14
 					countdown($numero,$tempo);
 					$ris="<div id='$numero'></div>";}
 					else $ris="$tempo_restante";
-		
+
 				$tab_comprati .= "<tr bgcolor='$color'>
 				<td align='center'>$numero</td>
 				<td>$nome</td>
@@ -522,7 +522,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 		$formazione = $$formazione;
 		$num_linee_formazione = count($formazione);
 		for ($num2 = 0 ; $num2 < $num_linee_formazione; $num2++) {
-			# $formazione[$num2] = ereg_replace(" ","_",$formazione[$num2]);
+			# $formazione[$num2] = preg_replace("/ /","_",$formazione[$num2]);
 			$tab_formazioni .= $formazione[$num2]."<br />";
 		} # fine for $num2
 		$tab_formazioni .= "</td>";
@@ -680,7 +680,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 		} # fine if ($tipo_campionato != "N")
 	} # fine if ($voti_esistenti == "SI")
 	###########################################################
-       
+
 	##############################
 		if ($vedi_operazioni == "SI" AND ($mercato_libero == "NO" AND $stato_mercato != "B" OR $ordinamento)) {
 		echo "</table><br /><br /><table summary='mercato' width='100%' cellspacing='1' cellpadding='2' align='center' bgcolor='$sfondo_tab'>
@@ -697,7 +697,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 		echo "</td></tr>$tab_comprati";
 	}
 	else 	echo "</table>";
-	
+
 } # fine if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 else header("location: logout.php?logout=2");
 include("./footer.php");

@@ -35,18 +35,18 @@ tabella_squadre();
 	if (@is_file($percorso_cartella_dati."/giornata".$num1."_".$_SESSION['torneo']."_".$_SESSION['serie'])) $ultima_giornata = $num1;
 	else break;
 	} # fine for $num1
-	
+
 	if ($diff_num_giornata_file > 0) $voti_ultima_giornata = $ultima_giornata + $diff_num_giornata_file;
 	else $voti_ultima_giornata = $ultima_giornata;
 
 	if (strlen($voti_ultima_giornata) == 1) $voti_ultima_giornata = "0".$voti_ultima_giornata;
 	$frase_ug = "Ultima giornata giocata: $ultima_giornata - Serie A: $voti_ultima_giornata";
-	
+
 	if ($voti_ultima_giornata - $ultima_giornata != $diff_num_giornata_file) {
-		echo "Errore configurazione giornate!<br/$voti_ultima_giornata - $ultima_giornata != $diff_num_giornata_file"; 
+		echo "Errore configurazione giornate!<br/$voti_ultima_giornata - $ultima_giornata != $diff_num_giornata_file";
 		die;
 	}
-	
+
 	###############################
 	if ($chiusura_giornata != 1 and $ultima_giornata > 0) {
 
@@ -76,12 +76,12 @@ tabella_squadre();
 				if (count($dati_calciatore) >= 6) {
 				$numero = $dati_calciatore[0];
 				$nome = $dati_calciatore[1];
-				$nome = ereg_replace("\"","",$nome);
+				$nome = preg_replace("/\"/","",$nome);
 				$nome = htmlentities($nome, ENT_QUOTES);
 				$ruolo = $dati_calciatore[2];
 				$costo = $dati_calciatore[3];
 				$proprietario = $dati_calciatore[4];
-		
+
 				if ($proprietario == $nome_squadra) {
 				$soldi_spesi = $soldi_spesi + $dati_calciatore[3];
 				$num_calciatori_posseduti++;
@@ -109,7 +109,7 @@ tabella_squadre();
 						}
 					}
 				#####################
-					
+
 					if ($stato_mercato != "I")
 					$offri = "<form method='post' action='valuta.php'>
 					<input type='hidden' name='ins_val_ces' value='SI' />
@@ -120,13 +120,13 @@ tabella_squadre();
 					<input type='hidden' name='val_cal' value='$valutazione' />";
 					#$offri = "<a href='valuta.php?ins_val_ces=SI&amp;num_cal=$numero&amp;nome=$nome&amp;ruolo=$ruolo&amp;costo=$costo&amp;val_cal=$valutazione' class='user'>seleziona</a>";
 					else $offri = "<b>Fase preliminare</b>";
-					
+
 					if ($stat_attivo == "0" AND $trasferiti_ok=="SI") {
-					$csattivo = " - <font color=red class='piccolo'>Trasferito</font>"; 
+					$csattivo = " - <font color=red class='piccolo'>Trasferito</font>";
 					$offri.="<input type='image' src='immagini/ok_no.png' disabled='disabled' /></form>";}
-					else {$offri.="<input type='image' src='immagini/ok.png' name='submit' alt='Seleziona calciatore per cambio' /></form>"; 
+					else {$offri.="<input type='image' src='immagini/ok.png' name='submit' alt='Seleziona calciatore per cambio' /></form>";
 							$csattivo = "";}
-					
+
 					if ($ruolo == "D" or $ruolo == "A") $bgcolore = "$colore_riga_alt";
 					else $bgcolore = "#FFFFFF";
 
@@ -167,7 +167,7 @@ tabella_squadre();
 	$variazioni = INTVAL($ovariazioni);
 	$cambi_effettuati = INTVAL($ocambi);
 	$cambi_extra = 0;
-	$soldi_spendibili = $soldi_iniziali + $variazioni + $surplus - $soldi_spesi; 
+	$soldi_spendibili = $soldi_iniziali + $variazioni + $surplus - $soldi_spesi;
 	$valuta_saldo = $valuta_saldo + $soldi_spendibili;
 
 	echo "<tr><td>Oggi &egrave; $adesso<br/>$frase_ug<br/><br/>";
@@ -253,7 +253,7 @@ tabella_squadre();
 			else $percorso = $percorso_cartella_dati."/calciatori.txt";
 			$calciatori_completi = file($percorso);
 			$num_calciatori_completi = count($calciatori_completi);
-			
+
 			for ($num1 = 0 ; $num1 < $num_calciatori_completi ; $num1++) {
 			$dati_calciatore = explode($separatore_campi_file_calciatori, $calciatori_completi[$num1]);
 			$numero = $dati_calciatore[($num_colonna_numcalciatore_file_calciatori-1)];
@@ -261,7 +261,7 @@ tabella_squadre();
 				if ($numero == $num_ricerca) {
 				$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 				$nome = togli_acapo($nome);
-				$nome = ereg_replace("\"","",$nome);
+				$nome = preg_replace("/\"/","",$nome);
 				$nome = htmlentities($nome, ENT_QUOTES);
 				$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 				$s_ruolo = togli_acapo($s_ruolo);
@@ -276,7 +276,7 @@ tabella_squadre();
 				$valore = togli_acapo($valore);
 				$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 				$xsquadra = togli_acapo($xsquadra);
-				$xsquadra = ereg_replace("\"","",$xsquadra);
+				$xsquadra = preg_replace("/\"/","",$xsquadra);
 				$cerca_giocatore = "<table summary='Cambi' align='center' cellpadding='5'><tr><td>$numero - <a href='valuta.php?ins_val_acq=SI&amp;num_cal=$numero&amp;nome=$nome&amp;ruolo=$ruolo&amp;val_cal=$valore' class='user'><b style='color: red;'>$nome</b></a><br/>Valutazione: $valore - $ruolo - $xsquadra</td></tr><tr><td class='testa'>clicca sul nome per selezionare</td></tr></table>";
 				break;
 				} # fine if ($num_ricerca == $numero)
@@ -300,7 +300,7 @@ tabella_squadre();
 		$valuta_nome = $dati_valuta[1];
 		$valuta_nome = togli_acapo($valuta_nome);
 		$valuta_nome = stripslashes($valuta_nome);
-		$valuta_nome = ereg_replace("\"","",$valuta_nome);
+		$valuta_nome = preg_replace("/\"/","",$valuta_nome);
 
 		$valuta_ruolo = $dati_valuta[2];
 		$valuta_ruolo = togli_acapo($valuta_ruolo);
@@ -348,7 +348,7 @@ tabella_squadre();
 		echo "</table>";
 
 		if ($cambi_extra != 0) echo "<br/><b><font class='evidenziato'>In questa giornata del Campionato si possono effettuare <b><u>$rip_cambi_numero</u></b> cambi extra.<br/>Se non li utilizzi in questa settimana non potrai utilizzarli successivamente.</font></b><br/>";
-		
+
 		if (@is_file("$percorso_cartella_dati/cambi_$nome_squadra")) {
 
 		$controllo = (INT) @file("$percorso_cartella_dati/cambi_$nome_squadra");

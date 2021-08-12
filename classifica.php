@@ -49,7 +49,7 @@ if ($_SESSION['valido'] == "SI" or $escludi_controllo == "SI") {
 	else $color="white";
 
 	$tabstat = "<table summary='' width='100%' cellpadding='2' align='center' bgcolor='$sfondo_tab'>
-	<caption>Classifica alla giornata n° $num_giornata</caption>
+	<caption>Classifica alla giornata nï¿½ $num_giornata</caption>
 	<tr><td class='testa'>Squadra</td>
 	<td class='testa'><a href='classifica.php?ordinamento=1' class='user1'>Punti</a></td>
 	<td class='testa'>G</td>
@@ -201,7 +201,7 @@ if ($_SESSION['valido'] == "SI" or $escludi_controllo == "SI") {
 			#  Calcolo voti
 			######################
 
-			$num_giornata = ereg_replace("giornata","",$giornata);
+			$num_giornata = preg_replace("/giornata/","",$giornata);
 			for ($num1 = $g_inizio_campionato ; $num1 < $num_giornata+1 ; $num1++) {
 				if (strlen($num1) == 1) $num1 = "0".$num1;
 				$giornata_punti = "giornata$num1";
@@ -243,7 +243,7 @@ if ($_SESSION['valido'] == "SI" or $escludi_controllo == "SI") {
 			#  Calcolo gol
 			######################
 
-			$num_giornata = ereg_replace("giornata","",$giornata);
+			$num_giornata = preg_replace("/giornata/","",$giornata);
 			for ($num1 = $g_inizio_campionato ; $num1 < $num_giornata +1 ; $num1++) {
 				if (strlen($num1) == 1) $num1 = "0".$num1;
 				$giornata_punti = "giornata$num1";
@@ -309,7 +309,7 @@ if ($_SESSION['valido'] == "SI" or $escludi_controllo == "SI") {
 
 			for($num1 = 1 ; $num1 < $linee; $num1++) {
 
-				@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file_utenti[$num1]);
+				@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittï¿½, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file_utenti[$num1]);
 
 				$GF[$outente] = $VF[$outente] + $NF[$outente] + $PF[$outente];
 				$GC[$outente] = $VC[$outente] + $NC[$outente] + $PC[$outente];
@@ -394,7 +394,7 @@ if ($_SESSION['valido'] == "SI" or $escludi_controllo == "SI") {
 				$ksquadra = $classifica[$num1][0];
 
 				if (!$ksquadra) {$ksquadra = "<b>".$kgiocatore."</b>";} else $ksquadra = "<b>".$ksquadra."</b>&nbsp;di&nbsp;".$kgiocatore;
-			
+
 				$tabstat .= "<tr>
 				<td align='left'>&nbsp;<a href='giornate.php?opzione=2&amp;nome_squadra=$kgiocatore'>$ksquadra</a></td>
 				<td bgcolor='#D3D3D3' align='center'>&nbsp;$punti[$kgiocatore]</td>
@@ -427,13 +427,13 @@ if ($_SESSION['valido'] == "SI" or $escludi_controllo == "SI") {
 
 	else {
 		if (@is_file($percorso_cartella_voti."/voti".$num_giornata.".txt")) {
-			continue;
+		    ;
 		} # fine if (@is_file("$percorso_cartella_dati/voti$num_giornata.txt"))
 		else {
 			if ($prima_parte_pos_file_voti or $num_giornata_file_voti == "SI") {
 				$posizione_file = $prima_parte_pos_file_voti;
 				if ($num_giornata_file_voti == "SI") {
-					$num_giornata = ereg_replace("giornata","",$giornata);
+					$num_giornata = preg_replace("/giornata/","",$giornata);
 					$num_giornata = $num_giornata + $diff_num_giornata_file;
 					if ($num_giornata_file_voti_doppio == "SI") {
 						if (strlen($num_giornata) == 1) $num_giornata = "0".$num_giornata;

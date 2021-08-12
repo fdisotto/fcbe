@@ -1,7 +1,7 @@
 <?php
 ##################################################################################
 #	FANTACALCIOBAZAR EVOLUTION
-#	Copyright (C) 2003-2009 by Antonello Onida 
+#	Copyright (C) 2003-2009 by Antonello Onida
 #
 #	Prego leggere i file allegati crediti.txt e licenza.txt
 ##################################################################################
@@ -83,8 +83,8 @@ if ($q1 == "nome"){
 	$mv = round(($totale['voto']/$totale['presenza']),2);
 	$mfv = round(($totale['fv']/$totale['presenza']),2);
 	$sost = $totale['presenza'] - $totale['tit'];
-	$n = ereg_replace("\"","",$sc[$q2][$ug]['nome']);
-	$s = ereg_replace("\"","",$sc[$q2][$ug]['squadra']);
+	$n = preg_replace("/\"/","",$sc[$q2][$ug]['nome']);
+	$s = preg_replace("/\"/","",$sc[$q2][$ug]['squadra']);
 
 	if ($sc[$q2][$ug]['ruolo'] == 0) $r = "Portiere";
 	elseif ($sc[$q2][$ug]['ruolo'] == 1) $r = "Difensore";
@@ -201,8 +201,8 @@ elseif ($q1 == "squadra"){
 
 	foreach ($sc as $a => $b){
 		$bb = key($b);
-		$n = trim(ereg_replace("\"","",$b[$bb]['nome']));
-		$s = trim(ereg_replace("\"","",$b[$bb]['squadra']));
+		$n = trim(preg_replace("/\"/","",$b[$bb]['nome']));
+		$s = trim(preg_replace("/\"/","",$b[$bb]['squadra']));
 		$rn = trim($b[$bb]['ruolo']);
 		if ($rn == 0) $r = "Portiere";
 		elseif ($rn == 1) $r = "Difensore";
@@ -253,8 +253,8 @@ elseif ($q1 == "squadra"){
 
 	foreach ($sc as $a => $b){
 		$bb = key($b);
-		$n = trim(ereg_replace("\"","",$b[$bb]['nome']));
-		$s = trim(ereg_replace("\"","",$b[$bb]['squadra']));
+		$n = trim(preg_replace("/\"/","",$b[$bb]['nome']));
+		$s = trim(preg_replace("/\"/","",$b[$bb]['squadra']));
 		$rn = trim($b[$bb]['ruolo']);
 		if ($rn == 0) $r = "Portiere";
 		elseif ($rn == 1) $r = "Difensore";
@@ -290,8 +290,8 @@ $tabella = "<table id='t1' class='sortable'>
 
 foreach ($sc as $a => $b){
 	$bb = key($b);
-	$n = trim(ereg_replace("\"","",$b[$bb]['nome']));
-	$s = trim(ereg_replace("\"","",$b[$bb]['squadra']));
+	$n = trim(preg_replace("/\"/","",$b[$bb]['nome']));
+	$s = trim(preg_replace("/\"/","",$b[$bb]['squadra']));
 	$rn = trim($b[$bb]['ruolo']);
 	if ($rn == 0) $r = "Portiere";
 	elseif ($rn == 1) $r = "Difensore";
