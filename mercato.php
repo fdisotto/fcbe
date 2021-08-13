@@ -51,7 +51,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 	</script>".$acapo;
 
 	$np = 0; $nd = 0; $nc = 0; $nf = 0; $na = 0;
-	$calciatori = @file($percorso_cartella_dati."/mercato_".$_SESSION['torneo']."_".$_SESSION['serie'].".txt");
+	$calciatori = @file($percorso_cartella_dati."/mercato_".$_SESSION['torneo']."_".$_SESSION['serie'].".txt") ?: [];
 	$num_calciatori = count($calciatori);
 	for ($num1 = 0 ; $num1 < $num_calciatori ; $num1++) {
 		$dati_calciatori[$num1] = explode(",", $calciatori[$num1]);
@@ -275,8 +275,8 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 			elseif ($na < substr($verifica_sg,4,1)) $controlla_squadra .= "Attaccanti: $na su ".substr($verifica_sg,4,1)." - <a href='tab_calciatori.php?ruolo_guarda=A&amp;xsquadra_ok=NO&amp;mercato_libero=$mercato_libero' class='user'>acquista</a><br />";
 		} # fine if $xsquadra_ok
 
-		if (@is_file($percorso_cartella_dati."/editoriale.txt"))	$linee_editoriale = @file($percorso_cartella_dati."/editoriale.txt");
-		else $linee_editoriale = "";
+		if (@is_file($percorso_cartella_dati."/editoriale.txt"))	$linee_editoriale = @file($percorso_cartella_dati."/editoriale.txt") ?: [];
+		else $linee_editoriale = [];
 
 		$num_linee_editoriale = count($linee_editoriale);
 		$messaggio_editoriale = "";
@@ -425,7 +425,8 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 	$leggendo_scontri = "NO";
 	$voti_esistenti = "NO";
 
-	if ($giornata_ultima) $file_giornata = @file($percorso_cartella_dati."/giornata".$giornata."_".$_SESSION['torneo']."_".$_SESSION['serie']);
+    $file_giornata = [];
+	if ($giornata_ultima) $file_giornata = @file($percorso_cartella_dati."/giornata".$giornata."_".$_SESSION['torneo']."_".$_SESSION['serie']) ?: [];
 	$num_linee_file_giornata = count($file_giornata);
 	for($num1 = 0 ; $num1 < $num_linee_file_giornata; $num1++) {
 		$linea = togli_acapo($file_giornata[$num1]);
@@ -519,7 +520,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 		$num_colonne++;
 		$tab_formazioni .= "<td valign='top'><h4>$soprannome_squadra di $giocatore</h4>";
 		$formazione = "formazione_$giocatore";
-		$formazione = $$formazione;
+		$formazione = $$formazione ?: [];
 		$num_linee_formazione = count($formazione);
 		for ($num2 = 0 ; $num2 < $num_linee_formazione; $num2++) {
 			# $formazione[$num2] = preg_replace("/ /","_",$formazione[$num2]);

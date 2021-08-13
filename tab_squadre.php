@@ -78,7 +78,7 @@ $table_layout = "<table summary='Dati squadra' cellpadding='3px' align='center' 
 <td class='testa'>Val</td>
 <td class='testa'>&nbsp;</td></tr>";
 
-$calciatori = @file($percorso_cartella_dati."/mercato_".$_SESSION['torneo']."_".$_SESSION['serie'].".txt");
+$calciatori = @file($percorso_cartella_dati."/mercato_".$_SESSION['torneo']."_".$_SESSION['serie'].".txt") ?: [];
 $num_calciatori = count($calciatori);
 
 

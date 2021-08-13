@@ -75,20 +75,23 @@ else {
 
 ### Ricerca valore aggiornato da ultimo file voti presente
 
-for ($num1 = "01" ; $num1 < 40 ; $num1++) {
-if (strlen($num1) == 1) $num1 = "0".$num1;
+    for ( $num1 = "01"; $num1 < 40; $num1++ ) {
+        if ( strlen( $num1 ) == 1 )
+            $num1 = "0" . $num1;
 
-$percorso = "$percorso_cartella_voti/voti$num1.txt";
+        $percorso = "$percorso_cartella_voti/voti$num1.txt";
 
-if (is_file("$percorso")) { echo "";} # fine if
-else {
-$num1 = $num1 -1;
-if (strlen($num1) == 1) $num1 = "0".$num1;
-$ultima_giornata = $num1;
-break;
-}
-
-} # fine for $num1
+        if ( is_file( "$percorso" ) ) {
+            echo "";
+        } # fine if
+        else {
+            $num1 = $num1 - 1;
+            if ( strlen( $num1 ) == 1 )
+                $num1 = "0" . $num1;
+            $ultima_giornata = $num1;
+            break;
+        }
+    } # fine for $num1
 
 if ($ultima_giornata != 0) $percorso = "$prima_parte_pos_file_voti$ultima_giornata$seconda_parte_pos_file_voti";
 else $percorso = "dati/calciatori.txt";

@@ -28,7 +28,7 @@ $foto_path 						= 'immagini/foto/';
 $consenti_logo					=	'SI';
 $vedi_campetto					=	'SI';
 $riduci							=	'100';
-$riduci1							=	'80';
+$riduci1							=	'100';
 $orientamento_campetto			=	'1';
 
 $sfondo_tab						=	'#FFFFFF';
@@ -50,7 +50,7 @@ $uploaddir 						=	'dati/2021';
 $manutenzione 					=	'NO';
 $attiva_log 						=	'SI';
 $attiva_rss 						= 'SI';
-$url_rss							= 'https://www.gazzetta.it/rss/serie-a.xml   ';
+$url_rss							= 'https://www.gazzetta.it/rss/serie-a.xml     ';
 $attiva_multi 					= 'SI';
 
 $attiva_shoutbox 				= 'NO';

@@ -168,7 +168,7 @@ if ($_SESSION['valido'] == "SI") {
 		$giorno_attuale = date("d");
 		$ora_attuale = date("H");
 		$minuto_attuale = date("i");
-		$scadenza_teorica = date("YmdHi",mktime($ora_attuale+$aspetta_ore,$minuto_attuale+$aspetta_minuti,0,$mese_attuale,$giorno_attuale+$aspetta_giorni,$anno_attuale));
+		$scadenza_teorica = date("YmdHi",mktime($ora_attuale+(int)$aspetta_ore,$minuto_attuale+(int)$aspetta_minuti,0,$mese_attuale,$giorno_attuale+(int)$aspetta_giorni,$anno_attuale));
 
 		if (strlen($data_cg) <> 12) unset($data_cg);
 
@@ -213,4 +213,3 @@ if ($_SESSION['valido'] == "SI") {
 else echo"<meta http-equiv=\"refresh\" content=\"0; url=logout.php\">";
 
 include("./footer.php");
-?>

@@ -1,0 +1,25 @@
+103,BELEC Vid,P,8,pippo,0
+104,BERARDI Alessandro,P,1,pippo,0
+101,ARESTI Simone,P,1,pippo,0
+200,ACERBI Francesco,D,16,pippo,0
+201,ADJAPONG Claud,D,3,pippo,0
+202,AINA Ola,D,6,pippo,0
+203,ALEX SANDRO,D,16,pippo,0
+204,AMIONE Bruno,D,1,pippo,0
+205,ANSALDI Cristian,D,13,pippo,0
+206,AUGELLO Tommaso,D,10,pippo,0
+207,AYA Ramzi,D,3,pippo,0
+500,AGOUME Lucien,C,2,pippo,0
+501,AKPA AKPRO Jean-Daniel,C,5,pippo,0
+502,AMRABAT Sofyan,C,13,pippo,0
+503,ARSLAN Tolgay,C,11,pippo,0
+504,ARTHUR,C,12,pippo,0
+505,ASKILDSEN Kristoffer,C,3,pippo,0
+506,BADELJ Milan,C,10,pippo,0
+507,BALDURSSON Andri Fannar,C,2,pippo,0
+705,BERARDI Domenico,A,33,pippo,0
+710,BOGA Jeremie,A,22,pippo,0
+709,BOBBY Adekanye,A,3,pippo,0
+719,COLLEY Ebrima,A,11,pippo,0
+714,CAPRARI Gianluca,A,14,pippo,0
+720,CORREA Joaquin,A,26,pippo,0

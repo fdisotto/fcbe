@@ -34,7 +34,7 @@ include("./header.php");
 		$soldi_spesi = 0;
 		$num_calciatori_posseduti = 0;
 
-		$calciatori = @file($percorso_cartella_dati."/mercato_".$_SESSION['torneo']."_0.txt");
+		$calciatori = @file($percorso_cartella_dati."/mercato_".$_SESSION['torneo']."_0.txt") ?: [];
 		$num_calciatori = count($calciatori);
 
 		for ($num1 = 0 ; $num1 < $num_calciatori ; $num1++) {
@@ -75,7 +75,7 @@ include("./header.php");
 		#############################################
 		# Seleziona giocatore dal elenco calciatori #
 		#############################################
-
+        $calciatori = [];
 		if ($mercato_libero == "SI" and $stato_mercato == "I") $calciatori = file($percorso_cartella_dati."/calciatori.txt");
 		elseif ($mercato_libero == "NO" and $stato_mercato == "R") $calciatori = file($percorso_cartella_dati."/calciatori.txt");
 
@@ -154,7 +154,7 @@ include("./header.php");
 		if ($acquisto == "SI" and $duplicato != "SI") {
 		echo "<br/><b>Valutazione ufficiale del calciatore</b><br/><br/>";
 		echo "<form method='post' action='inserisci_acquisto.php'>
-		Il valore di acquisto per <b>$nome</b> e di <b>$valore</b> FantaEuro.<br/><br/>
+		Il valore di acquisto per <b>$nome</b> è di <b>$valore</b> FantaEuro.<br/><br/>
 		<input type='hidden' name='valore_offerta' value='$valore' />
 		<input type='hidden' name='num_calciatore' value='$num_calciatore' />
 		<input type='hidden' name='xsquadra_ok' value='$xsquadra_ok' />

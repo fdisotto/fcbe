@@ -145,12 +145,12 @@ if ( $_SESSION[ 'valido' ] == "SI" or $escludi_controllo == "SI" ) {
                 $dati_calciatore_merc = explode( ",", $calciatori_merc[ $num2 ] );
 
                 $tempo_off = $dati_calciatore_merc[ 5 ];
-                $anno_off = substr( $tempo_off, 0, 4 );
-                $mese_off = substr( $tempo_off, 4, 2 );
-                $giorno_off = substr( $tempo_off, 6, 2 );
-                $ora_off = substr( $tempo_off, 8, 2 );
-                $minuto_off = substr( $tempo_off, 10, 2 );
-                $secondo_off = substr( $tempo_off, 12, 2 );
+                $anno_off = (int)substr( $tempo_off, 0, 4 );
+                $mese_off = (int)substr( $tempo_off, 4, 2 );
+                $giorno_off = (int)substr( $tempo_off, 6, 2 );
+                $ora_off = (int)substr( $tempo_off, 8, 2 );
+                $minuto_off = (int)substr( $tempo_off, 10, 2 );
+                $secondo_off = (int)substr( $tempo_off, 12, 2 );
                 $sec_restanti = mktime( $ora_off, $minuto_off, 0, $mese_off, $giorno_off, $anno_off ) - $adesso;
 
                 $numero_merc = $dati_calciatore_merc[ 0 ];

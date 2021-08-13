@@ -32,18 +32,23 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
         fwrite( $voti_vecchio, $mcc );
         fclose( $voti_vecchio );
         $errori = error_get_last();
-        if ( !empty( $errori ) ) {
+        if ( ! empty( $errori ) ) {
             $mess_mcc = "Errore nella copia del file: " . $errori[ 'type' ];
             $mess_mcc .= "\n" . $errori[ 'message' ];
         } else $mess_mcc = "File MCC$ultima_gio aggiornato!";
     }
+
+    if ( isset( $crea_stats ) ) {
+        crea_stats();
+    }
+
     if ( isset( $cfv ) && $cfv == "SI" && isset( $nfv ) && isset( $lfv ) ) {
         $voti_1x = file_get_contents( $lfv );
         $voti_2x = fopen( "./" . $prima_parte_pos_file_voti . $nfv . ".txt", "w+" );
         fwrite( $voti_2x, $voti_1x );
         fclose( $voti_2x );
         $errori = error_get_last();
-        if ( !empty( $errori ) ) {
+        if ( ! empty( $errori ) ) {
             $messcfv = "Errore nella copia del file: " . $errori[ 'type' ];
             $messcfv .= "\n" . $errori[ 'message' ];
         } else $messcfv = "File voti $nfv copiato con successo!";
@@ -326,6 +331,13 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
     if ( file_exists( $file_voti_localec ) )
         $gh = date( "j/n/Y", filemtime( $file_voti_localec ) ); else $gh = "---";
 
+    $file_stats = "./dati/_stats";
+    if ( file_exists( $file_stats ) ) {
+        $sh = date( "j/n/Y", filemtime( $file_stats ) );
+    } else {
+        $sh = "---";
+    }
+
     if ( ! isset( $ultima_gio ) || $ultima_gio == 00 ) {
         $curl = curl_init( $clfv );
         curl_setopt( $curl, CURLOPT_NOBODY, true );
@@ -389,6 +401,10 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
 		agg. al: $gh
 		</form></div>";
         }
+
+        $tabella_giornate .= "<div style='float: left; padding: 5px;'><form method='post' action='./a_gestione.php'>
+        <input type='submit' name='crea_stats' value='Crea _stats' /> agg.: $sh
+        </form></div>";
     }
     #######################################
     $tabella_giornate .= "</div></td></tr></table>";
