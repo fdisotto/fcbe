@@ -21,7 +21,7 @@ require_once "./controlla_pass.php";
 require_once "./header.php";
 
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
-    require( "./a_menu.php" );
+    require_once "./a_menu.php";
 
     if ( isset( $procedi ) && $procedi == "SI" ) {
         $mcc = file_get_contents( $sito_mirror . $cartella_remota . "/MCC$ultima_gio.txt" );
@@ -39,7 +39,11 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
     }
 
     if ( isset( $crea_stats ) ) {
-        crea_stats();
+        if ( crea_stats() === true ) {
+            $messcfv = "Stats create con successo";
+        } else {
+            $messcfv = "Errore durante la creazione delle stats";
+        }
     }
 
     if ( isset( $cfv ) && $cfv == "SI" && isset( $nfv ) && isset( $lfv ) ) {
@@ -54,10 +58,8 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
         } else $messcfv = "File voti $nfv copiato con successo!";
     }
     if ( isset( $ccfv ) && $ccfv == "SI" && isset( $clfv ) ) {
-        $voti_1 = file_get_contents( $clfv );
-        $voti_2 = fopen( $percorso_cartella_dati . "/calciatori.txt", "w+" );
-        fwrite( $voti_2, $voti_1 );
-        fclose( $voti_2 );
+        $calciatori_remote = file_get_contents( $clfv );
+        file_put_contents($percorso_cartella_dati . "/calciatori.txt", $calciatori_remote, LOCK_EX);
         $errori = error_get_last();
         if ( ! empty( $errori ) ) {
             $messccfv = "Errore nella copia del file: " . $errori[ 'type' ];
@@ -65,11 +67,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
         } else $messccfv = "File calciatori.txt caricato con successo!";
     }
     if ( isset( $blocca_giornata ) && $blocca_giornata == "chiudi" ) {
-        $file_dati = fopen( $percorso_cartella_dati . "/chiusura_giornata.txt", "wb+" );
-        flock( $file_dati, LOCK_EX );
-        fwrite( $file_dati, "1" );
-        flock( $file_dati, LOCK_UN );
-        fclose( $file_dati );
+        file_put_contents($percorso_cartella_dati . "/chiusura_giornata.txt", "1", LOCK_EX);
         echo "<meta http-equiv='refresh' content='0; url=a_gestione.php?messgestutente=60'>";
         exit;
     }

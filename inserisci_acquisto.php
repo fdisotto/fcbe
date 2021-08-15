@@ -28,7 +28,7 @@ if ($_SESSION['valido'] == "SI") {
 	$soldi_spesi = 0;
 	$num_calciatori_posseduti = 0;
 
-	$valore = $_POST['valore'];
+	$valore = $_POST['valore'] ?? 0;
 	$num_calciatore = $_POST['num_calciatore'];
 	$xsquadra_ok = $_POST['xsquadra_ok'];
 	$valore_mercato = $_POST['valore_mercato'];
@@ -56,7 +56,7 @@ if ($_SESSION['valido'] == "SI") {
 			$trovato = "SI";
 			$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
 			$nome = togli_acapo($nome);
-			$nome = preg_replace("/\"/","",$nome);
+			$nome = str_replace('"',"",$nome);
 			$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
 			$s_ruolo = togli_acapo($s_ruolo);
 			$ruolo = $s_ruolo;
@@ -70,7 +70,7 @@ if ($_SESSION['valido'] == "SI") {
 			$valore = togli_acapo($valore);
 			$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
 			$xsquadra = togli_acapo($xsquadra);
-			$xsquadra = preg_replace("/\"/","",$xsquadra);
+			$xsquadra = str_replace('"',"",$xsquadra);
 		} # fine if ($num_calciatore == $numero)
 	} # fine for $num1
 
@@ -112,7 +112,7 @@ if ($_SESSION['valido'] == "SI") {
 		$frase .= "Calciatore non trovato.<br/>";
 	} # fine if ($num_calciatore == "")
 
-	if ($nuova_offerta == "SI" and $stato_mercato == "S") {
+	if (isset($nuova_offerta) && $nuova_offerta == "SI" and $stato_mercato == "S") {
 		$inserire = "NO";
 		echo "<center>Il mercato &egrave; <b>sospeso</b> in questo momento.</center><br/>";
 	} # fine if ($nuova_offerta == "SI" and $stato_mercato == "S")
@@ -184,7 +184,7 @@ if ($_SESSION['valido'] == "SI") {
 		}
 		else $scadenza = 0;
 
-		$archivio = "\r\n$num_calciatore,$nome,$ruolo,$valore_offerta,".$_SESSION['utente'].",$scadenza";
+		$archivio = "$num_calciatore,$nome,$ruolo,$valore_offerta,".$_SESSION['utente'].",$scadenza\n";
 		$file_mercato = fopen($percorso_cartella_dati."/mercato_".$_SESSION['torneo']."_".$_SESSION['serie'].".txt","ab+");
 		flock($file_mercato,LOCK_EX);
 		fwrite($file_mercato,$archivio);

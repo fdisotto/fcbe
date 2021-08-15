@@ -55,12 +55,12 @@ if ($menu_lato == "SI" AND $_SESSION['permessi'] <= 4 AND $_SESSION['valido'] ==
     		}
 	echo "<a href='./messaggi.php' >Messaggi</a>$acapo";
 ?>
-	<a href="javascript:void(0)" onclick="window.open('chat.php?utente=<?php echo $_SESSION['utente']; ?>','CHAT','width=526,height=380,left=150,top=150,status=no,toolbar=no,menubar=no,location=no');">Chat</a> 
-<?php	
+	<a href="javascript:void(0)" onclick="window.open('chat.php?utente=<?php echo $_SESSION['utente']; ?>','CHAT','width=526,height=380,left=150,top=150,status=no,toolbar=no,menubar=no,location=no');">Chat</a>
+<?php
 if ($chiusura_giornata == 1) echo "<a href='./registro_mercato.php' >Registro mercato</a>".$acapo;
 
 	for ($num1 = 1; $num1 < 40; $num1++) {
-		if ($campionato["1-$num1"] == "S") {
+		if (isset($campionato["1-$num1"]) && $campionato["1-$num1"] == "S") {
 			echo "<a href='./calendario.php' >Calendario partite</a>".$acapo;
 			break;
 		}
@@ -71,7 +71,7 @@ if ($chiusura_giornata == 1) echo "<a href='./registro_mercato.php' >Registro me
 		if ($stato_mercato != "I") echo "<a href='./classifica.php' >Classifica</a>".$acapo;
 	}
 
-	if ($mercato_libero == "SI" AND $stato_mercato != "I" AND $ultgio != 0) {
+	if ($mercato_libero == "SI" AND $stato_mercato != "I" AND (isset($ultgio) && $ultgio != 0)) {
 		echo "<a href='./guarda_giornate.php' >Vedi tutti i voti</a>".$acapo;
 	}
 
@@ -135,7 +135,7 @@ if ($chiusura_giornata == 1) echo "<a href='./registro_mercato.php' >Registro me
 		<option value='tutti'> di tutti</option>$acapo";
 
 		for ($num1 = 1 ; $num1 <= $linee; $num1++) {
-			@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+			@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittï¿½, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 			if ($_SESSION['torneo'] == $otorneo AND $_SESSION['serie'] == $oserie) {
 				if (!$osquadra) $osquadra = "di $outente";
 				echo "<option value='$outente'>".htmlentities($osquadra, ENT_QUOTES)."</option>$acapo";
@@ -158,7 +158,7 @@ if ($chiusura_giornata == 1) echo "<a href='./registro_mercato.php' >Registro me
 		$giormerc .= "</select></form></center>$acapo";
 	}
 
-	echo "$giormerc";
+	echo $giormerc ?? '';
 	echo "</td></tr></table><br/><br/>$acapo";
 
 	###################################
@@ -177,7 +177,7 @@ if ($chiusura_giornata == 1) echo "<a href='./registro_mercato.php' >Registro me
 
 	echo "<option value='A'> gli attaccanti</option></select> <input type='submit' name='tab_calciatori' value='Vedi' /></form>$acapo";
 
-	if ($stato_mercato != "I" AND $ultgio >=1) {
+	if ($stato_mercato != "I" && (isset($ultgio) && $ultgio >=1)) {
 
 		echo "<hr /><form method='post' action='voti.php'>$acapo
 		<input type='submit' name='guarda_voti' value='Voti della giornata' /> n. <select name='giornata' onchange='submit()'>$acapo";
@@ -246,7 +246,7 @@ if ($chiusura_giornata == 1) echo "<a href='./registro_mercato.php' >Registro me
 	echo "<table width='100%' style='padding:2px; border: 1px solid $sfondo_tab3; background-color: $sfondo_tab;' summary='calendario'>
 	<caption>CALENDARIO</caption><tr><td align='left'>";
 	echo "<div id='testo' style='display:'; class='slogan';>".html_entity_decode($messaggi[9]);
-	echo "</td></tr></table><br/><br/>$acapo";	
+	echo "</td></tr></table><br/><br/>$acapo";
 	###################################
 	# SONDAGGI
 
@@ -313,7 +313,7 @@ else if ($menu_lato == "NO" AND $_SESSION['permessi'] == 0) {
 	# MENU TOP
 
 	echo "<center><form method='post' action='voti.php'>
-	<input type='submit' name='guarda_voti' value='Guarda i voti della giornata' /> n° <select name='giornata' onchange='submit()'>";
+	<input type='submit' name='guarda_voti' value='Guarda i voti della giornata' /> nï¿½ <select name='giornata' onchange='submit()'>";
 
 	for ($num1 = "01" ; $num1 < 50 ; $num1++) {
 		if (strlen($num1) == 1) $num1 = "0".$num1;
@@ -354,7 +354,7 @@ else if ($menu_lato == "NO" AND $_SESSION['permessi'] == 0) {
 	<option value='tutti'> di tutti</option>";
 
 	for ($num1 = 1 ; $num1 <= $linee; $num1++) {
-		@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+		@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittï¿½, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 		if (!$osquadra) $osquadra = "di $outente";
 	} # fine for $num1
 

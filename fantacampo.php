@@ -29,6 +29,12 @@ error_reporting( E_ALL );
 if ( $_SESSION[ 'utente' ] == $_GET[ 'iutente' ] ) {
     $clock_fantacampo[] = "Inizio " . microtime();
 
+    $w = 48;
+    $h = 48;
+
+    $newWidth = 48;
+    $newHeight = 48;
+
     if ( isset( $test ) )
         unset( $test );
     if ( isset( $_GET[ 'test' ] ) )
@@ -257,9 +263,6 @@ if ( $_SESSION[ 'utente' ] == $_GET[ 'iutente' ] ) {
                 $lar_imm2 = imagesx( $imm_calciatore );
                 $alt_imm2 = imagesy( $imm_calciatore );
 
-                $w = 64;
-                $h = 64;
-
                 if ( $orientamento_campetto == 0 ) {
                     $alt_p = "12";
 
@@ -286,8 +289,6 @@ if ( $_SESSION[ 'utente' ] == $_GET[ 'iutente' ] ) {
                         $spazio_a++;
                     }
 
-                    $newWidth = 64;
-                    $newHeight = 64;
                     $coefficient =  $newHeight / $alt_imm2;
                     if ($newHeight / $lar_imm2 > $coefficient) {
                         $coefficient = $newHeight / $lar_imm2;
@@ -331,8 +332,6 @@ if ( $_SESSION[ 'utente' ] == $_GET[ 'iutente' ] ) {
                         $spazio_a++;
                     }
 
-                    $newWidth = 64;
-                    $newHeight = 64;
                     $coefficient =  $newHeight / $alt_imm2;
                     if ($newHeight / $lar_imm2 > $coefficient) {
                         $coefficient = $newHeight / $lar_imm2;
@@ -369,8 +368,6 @@ if ( $_SESSION[ 'utente' ] == $_GET[ 'iutente' ] ) {
             $lar_imm2 = imagesx( $imm_calciatore );
             $alt_imm2 = imagesy( $imm_calciatore );
 
-            $w = 64;
-            $h = 64;
             //
             if ( $orientamento_campetto == 0 ) {
                 $alt_p = "12";
@@ -398,8 +395,7 @@ if ( $_SESSION[ 'utente' ] == $_GET[ 'iutente' ] ) {
                     $spazio_a++;
                 }
 
-                $newWidth = 64;
-                $newHeight = 64;
+
                 $coefficient =  $newHeight / $alt_imm2;
                 if ($newHeight / $lar_imm2 > $coefficient) {
                     $coefficient = $newHeight / $lar_imm2;
@@ -443,8 +439,7 @@ if ( $_SESSION[ 'utente' ] == $_GET[ 'iutente' ] ) {
                     $spazio_a++;
                 }
 
-                $newWidth = 64;
-                $newHeight = 64;
+
                 $coefficient =  $newHeight / $alt_imm2;
                 if ($newHeight / $lar_imm2 > $coefficient) {
                     $coefficient = $newHeight / $lar_imm2;

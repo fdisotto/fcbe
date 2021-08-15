@@ -369,7 +369,7 @@ function aggiusta_tag( $stringa )
                             $nome_tag[ $num_tag ] = $nome_tag_corrente; else {
                             for ( $num2 = $num_tag; $num2 > 0; $num2-- ) {
                                 #echo $nome_tag[$num2]." $nome_tag_corrente<br/>";
-                                if ( $nome_tag[ $num2 ] == $nome_tag_corrente and $controtag[ $num2 ] != 1 ) {
+                                if ( isset( $nome_tag[ $num2 ] ) && $nome_tag[ $num2 ] == $nome_tag_corrente and isset($controtag[ $num2 ]) && $controtag[ $num2 ] != 1 ) {
                                     $controtag[ $num2 ] = 1;
                                     break;
                                 } # fine if ($nome_tag[$num2] == $nome_tag_corrente and $controtag[$num2] != 1)
@@ -411,7 +411,7 @@ function aggiusta_tag( $stringa )
         } # fine if ($leggendo_nome_tag == "SI")
     } # fine if ($tag_chiuso == "NO")
     for ( $num1 = $num_tag; $num1 > 0; $num1-- ) {
-        if ( $controtag[ $num1 ] != 1 and $nome_tag[ $num1 ] != "br" and $nome_tag[ $num1 ] != "p" ) {
+        if ( isset($controtag[ $num1 ]) && $controtag[ $num1 ] != 1 and $nome_tag[ $num1 ] != "br" and $nome_tag[ $num1 ] != "p" ) {
             $stringa .= "</" . $nome_tag[ $num1 ] . ">";
         } # fine if ($controtag[$num1] != 1)
     } # fine for $num1
@@ -734,7 +734,7 @@ function ultimi10()
     reset( $files );
 
     for ( $x = 0; $x < 10; $x++ ) {
-        $dato = $files[ $x ];
+        $dato = $files[ $x ] ?? '';
 
         if ( $dato != "" ) {
             $topic = file( $percorso_cartella_dati . "/messaggi/$dato" );
@@ -1474,70 +1474,76 @@ function crea_stats()
 {
     global $percorso_cartella_dati;
 
-    $squadre = file( $percorso_cartella_dati . '/squadre.txt' );
+    try {
+        $squadre = file( $percorso_cartella_dati . '/squadre.txt' );
 
-    $result = [];
-    foreach ( $squadre as $squadra ) {
-        $url = sprintf( "https://www.gazzetta.it/ssi/2011/boxes/calcio/squadre/%s/formazione/formazione.xml", strtolower( trim( $squadra ) ) );
+        $result = [];
+        foreach ( $squadre as $squadra ) {
+            $url = sprintf( "https://www.gazzetta.it/ssi/2011/boxes/calcio/squadre/%s/formazione/formazione.xml", strtolower( trim( $squadra ) ) );
 
-        $content = new SimpleXMLElement( file_get_contents( $url ) );
+            $content = new SimpleXMLElement( file_get_contents( $url ) );
 
-        if ( (int)$content->giornata > (int)prossima_giornata() ) {
-            break;
+            if ( (int)$content->giornata > (int)prossima_giornata() ) {
+                break;
+            }
+
+            $titolari = '';
+            foreach ( $content->titolari->calciatore as $calciatore ) {
+                $titolari .= sprintf( "<calciatore number=\"%s\">%s</calciatore>\n", $calciatore->attributes()[ 'number' ], (string)$calciatore );
+            }
+
+            $panchinari = '';
+            foreach ( $content->panchina->calciatore as $calciatore ) {
+                $panchinari .= sprintf( "<calciatore number=\"%s\">%s</calciatore>\n", $calciatore->attributes()[ 'number' ], (string)$calciatore );
+            }
+
+            $indisponibili = '';
+            foreach ( $content->indisponibili->calciatore as $calciatore ) {
+                $indisponibili .= sprintf( "<calciatore>%s</calciatore>\n", (string)$calciatore );
+            }
+
+            $squalificati = '';
+            foreach ( $content->squalificati->calciatore as $calciatore ) {
+                $squalificati .= sprintf( "<calciatore>%s</calciatore>\n", (string)$calciatore );
+            }
+
+            $diffidati = '';
+            foreach ( $content->diffidati->calciatore as $calciatore ) {
+                $diffidati .= sprintf( "<calciatore>%s</calciatore>\n", (string)$calciatore );
+            }
+
+            $altri = '';
+            foreach ( $content->altri->calciatore as $calciatore ) {
+                $altri .= sprintf( "<calciatore>%s</calciatore>\n", (string)$calciatore );
+            }
+
+            $ballottaggi = '';
+            foreach ( $content->ballottaggi->calciatore as $calciatore ) {
+                $ballottaggi .= sprintf( "<calciatore>%s</calciatore>\n", (string)$calciatore );
+            }
+
+            $result[ (string)$content->squadra ] = [
+                'cat' => (string)$content->categoria,
+                'gio' => (string)$content->giornata,
+                'dat' => (string)$content->data,
+                'ora' => (string)$content->ora,
+                'mod' => (string)$content->modulo,
+                'par' => (string)$content->partita,
+                'tit' => $titolari ?: '<calciatore/>',
+                'pan' => $panchinari ?: '<calciatore/>',
+                'all' => (string)$content->allenatore,
+                'ind' => $indisponibili ?: '<calciatore/>',
+                'squ' => $squalificati ?: '<calciatore/>',
+                'dif' => $diffidati ?: '<calciatore/>',
+                'alt' => $altri ?: '<calciatore/>',
+                'bal' => $ballottaggi ?: '<calciatore/>',
+            ];
         }
 
-        $titolari = '';
-        foreach ( $content->titolari->calciatore as $calciatore ) {
-            $titolari .= sprintf( "<calciatore number=\"%s\">%s</calciatore>\n", $calciatore->attributes()[ 'number' ], (string)$calciatore );
-        }
+        file_put_contents( $percorso_cartella_dati . '/_stats', serialize( $result ), LOCK_EX );
 
-        $panchinari = '';
-        foreach ( $content->panchina->calciatore as $calciatore ) {
-            $panchinari .= sprintf( "<calciatore number=\"%s\">%s</calciatore>\n", $calciatore->attributes()[ 'number' ], (string)$calciatore );
-        }
-
-        $indisponibili = '';
-        foreach ( $content->indisponibili->calciatore as $calciatore ) {
-            $indisponibili .= sprintf( "<calciatore>%s</calciatore>\n", (string)$calciatore );
-        }
-
-        $squalificati = '';
-        foreach ( $content->squalificati->calciatore as $calciatore ) {
-            $squalificati .= sprintf( "<calciatore>%s</calciatore>\n", (string)$calciatore );
-        }
-
-        $diffidati = '';
-        foreach ( $content->diffidati->calciatore as $calciatore ) {
-            $diffidati .= sprintf( "<calciatore>%s</calciatore>\n", (string)$calciatore );
-        }
-
-        $altri = '';
-        foreach ( $content->altri->calciatore as $calciatore ) {
-            $altri .= sprintf( "<calciatore>%s</calciatore>\n", (string)$calciatore );
-        }
-
-        $ballottaggi = '';
-        foreach ( $content->ballottaggi->calciatore as $calciatore ) {
-            $ballottaggi .= sprintf( "<calciatore>%s</calciatore>\n", (string)$calciatore );
-        }
-
-        $result[ (string)$content->squadra ] = [
-            'cat' => (string)$content->categoria,
-            'gio' => (string)$content->giornata,
-            'dat' => (string)$content->data,
-            'ora' => (string)$content->ora,
-            'mod' => (string)$content->modulo,
-            'par' => (string)$content->partita,
-            'tit' => $titolari ?: '<calciatore/>',
-            'pan' => $panchinari ?: '<calciatore/>',
-            'all' => (string)$content->allenatore,
-            'ind' => $indisponibili ?: '<calciatore/>',
-            'squ' => $squalificati ?: '<calciatore/>',
-            'dif' => $diffidati ?: '<calciatore/>',
-            'alt' => $altri ?: '<calciatore/>',
-            'bal' => $ballottaggi ?: '<calciatore/>',
-        ];
+        return true;
+    } catch ( Exception $e ) {
+        return $e->getMessage();
     }
-
-    file_put_contents( $percorso_cartella_dati . '/_stats', serialize( $result ), LOCK_EX );
 }

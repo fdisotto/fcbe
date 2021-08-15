@@ -96,7 +96,7 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
             $dc[ $ndc ][ 'att' ] = trim( $dat_calc[ ( $ncs_attivo - 1 ) ] );
         }
 
-        if ( ! $nome_squadra )
+        if ( ! isset($nome_squadra) )
             $nome_squadra = $_SESSION[ 'utente' ];
 
         $filei = file( $percorso_cartella_dati . "/utenti_" . $_SESSION[ 'torneo' ] . ".php" );
@@ -135,11 +135,10 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
             }
         }
 
-
         if ( isset( $stat_1 ) ) {
             $ok_pre = "SI";
             $stat_x = array();
-            $stat_1 = preg_replace( '/\n/', ' ', $stat_1 );
+            $stat_1 = preg_replace( "/\n/", ' ', $stat_1 );
             $stat_x = unserialize( $stat_1 );
             if ( @! fopen( './dati/_stats', 'r' ) ) {
                 $stat_2 = fopen( './dati/_stats', 'w+' );
@@ -148,14 +147,14 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
             }
             $dati = array();
             $fd = file_get_contents( './dati/_stats' );
-            $fd = preg_replace( '/\n/', ' ', $fd );
+            $fd = preg_replace( "/\n/", ' ', $fd );
             $dati = unserialize( $fd );
             if ( $stat_x != $dati ) {
                 $stat_2 = fopen( "./dati/_stats", "w" );
                 fwrite( $stat_2, $stat_1 );
                 fclose( $stat_2 );
                 $fd = file_get_contents( './dati/_stats' );
-                $fd = preg_replace( '/\n/', ' ', $fd );
+                $fd = preg_replace( "/\n/", ' ', $fd );
                 $dati = unserialize( $fd );
             }
         } else  $ok_pre = "NO";
@@ -326,12 +325,12 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
                             $ruolo = $dati_calciatore[ 2 ];
                             $costo = $dati_calciatore[ 3 ];
                             $tempo_off = $dati_calciatore[ 5 ];
-                            $anno_off = substr( $tempo_off, 0, 4 );
-                            $mese_off = substr( $tempo_off, 4, 2 );
-                            $giorno_off = substr( $tempo_off, 6, 2 );
-                            $ora_off = substr( $tempo_off, 8, 2 );
-                            $minuto_off = substr( $tempo_off, 10, 2 );
-                            $secondo_off = substr( $tempo_off, 12, 2 );
+                            $anno_off = (int)substr( $tempo_off, 0, 4 );
+                            $mese_off = (int)substr( $tempo_off, 4, 2 );
+                            $giorno_off = (int)substr( $tempo_off, 6, 2 );
+                            $ora_off = (int)substr( $tempo_off, 8, 2 );
+                            $minuto_off = (int)substr( $tempo_off, 10, 2 );
+                            $secondo_off = (int)substr( $tempo_off, 12, 2 );
                             $adesso = mktime( date( "H" ), date( "i" ), 0, date( "m" ), date( "d" ), date( "Y" ) );
                             $sec_restanti = mktime( $ora_off, $minuto_off, 0, $mese_off, $giorno_off, $anno_off ) - $adesso;
                             if ( $stato_mercato == "P" ) {
@@ -355,7 +354,7 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
                             if ( $ok_pre == "SI" ) {
                                 $dcs = trim( ucfirst( strtolower( $dc[ $numero ][ 'squ' ] ) ) );
 
-                                if ( $dati[ $dcs ][ 'pan' ] != "" ) {
+                                if ( isset($dati[ $dcs ][ 'pan' ]) && $dati[ $dcs ][ 'pan' ] != "" ) {
                                     $ss_part = html_entity_decode( strip_tags( implode( "", $dati[ $dcs ][ 'par' ] ) ) );
                                     $ss_tito = str_replace( "'", "&#39;", html_entity_decode( strip_tags( implode( "", $dati[ $dcs ][ 'tit' ] ) ) ) );
                                     $ss_panc = str_replace( "'", "&#39;", html_entity_decode( strip_tags( implode( "", $dati[ $dcs ][ 'pan' ] ) ) ) );
@@ -874,7 +873,7 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
 
                         if ( $tab_lato != "" and $xsquadra_ok != "SI" )
                             echo "$fuori_tabella\n"; elseif ( $vedi_campetto == "SI" )
-                            echo "<table summary='fantacampo' align='center'><tr>
+                            echo "<table summary='fantacampo' align='center' width='100%'><tr>
 						<td align='center' valign='top'><img src='fantacampo.php?riduci=$riduci&amp;riduci1=$riduci1&amp;orientamento_campetto=$orientamento_campetto&amp;iutente=$outente' alt='La tua squadra in campo' />
 						</td>
 						<td align='center' valign='top'>

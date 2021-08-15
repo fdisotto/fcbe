@@ -19,15 +19,18 @@
 ##################################################################################
 $escludi_controllo = $_GET[ 'escludi_controllo' ];
 
-if ( $escludi_controllo != "SI" )
-    require_once( "./controlla_pass.php" ); else require( "./dati/dati_gen.php" );
+if ( $escludi_controllo != "SI" ) {
+    require_once "./controlla_pass.php";
+} else {
+    require_once "./dati/dati_gen.php";
+}
 
-include( "./header.php" );
+require_once "./header.php";
 
 $data_busta_chiusa = @join( '', @file( "./dati/data_buste_" . $_SESSION[ 'torneo' ] . "_0.txt" ) );
 $data_busta_precedente = @join( '', @file( "./dati/data_buste_precedente_" . $_SESSION[ 'torneo' ] . "_0.txt" ) );
 if ( $_SESSION[ 'valido' ] == "SI" or $escludi_controllo == "SI" ) {
-    require( "./menu.php" );
+    require_once "./menu.php";
 
     ######################################
     ##### Controlla numero ultima giornata
@@ -142,7 +145,7 @@ if ( $_SESSION[ 'valido' ] == "SI" or $escludi_controllo == "SI" ) {
             #####################��
 
             for ( $num2 = 0; $num2 < $num_calciatori_merc; $num2++ ) {
-                $dati_calciatore_merc = explode( ",", $calciatori_merc[ $num2 ] );
+                $dati_calciatore_merc = array_filter(explode( ",", $calciatori_merc[ $num2 ] ));
 
                 $tempo_off = $dati_calciatore_merc[ 5 ];
                 $anno_off = (int)substr( $tempo_off, 0, 4 );

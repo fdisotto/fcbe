@@ -1,6 +1,7 @@
 <?php
 
-error_reporting( E_ALL ^ E_NOTICE );
+//error_reporting( E_ALL ^ E_NOTICE );
+error_reporting( E_ALL );
 ini_set( 'display_errors', 1 );
 
 $clock[] = "Inizio " . microtime();
@@ -18,13 +19,13 @@ if ( isset( $attiva_log ) && $attiva_log == "SI" ) {
     $date = "$giorno-$mese-$anno $ora:$minuto";
     if ( ! isset( $_SESSION[ 'utente' ] ) || $_SESSION[ 'utente' ] == "" )
         $infonome = "Visitatore"; else $infonome = $_SESSION[ 'utente' ];
-    $torneo = isset( $_SESSION[ 'torneo' ] ) ? $_SESSION[ 'torneo' ] : '';
+    $torneo = $_SESSION[ 'torneo' ] ?? '';
     file_put_contents( $percorso_cartella_dati . "/log" . $torneo . ".txt", "$date - $infonome - $base:$xx1 - $visitatore_info\n", FILE_APPEND | LOCK_EX );
 }
 
 $acapo = "\n";
 
-$chiusura_giornata = INTVAL( @file( $percorso_cartella_dati . "/chiusura_giornata.txt" ) );
+$chiusura_giornata = file_exists($percorso_cartella_dati . "/chiusura_giornata.txt") ? (int) file_get_contents($percorso_cartella_dati . "/chiusura_giornata.txt") : 0;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

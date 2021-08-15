@@ -50,18 +50,18 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
         if ( $proprietario == $_SESSION[ 'utente' ] ) {
             $ruolo = $dati_calciatore[ 2 ];
             $tempo_off = $dati_calciatore[ 5 ];
-            $anno_off = substr( $tempo_off, 0, 4 );
-            $mese_off = substr( $tempo_off, 4, 2 );
-            $giorno_off = substr( $tempo_off, 6, 2 );
-            $ora_off = substr( $tempo_off, 8, 2 );
-            $minuto_off = substr( $tempo_off, 10, 2 );
+            $anno_off = (int)substr( $tempo_off, 0, 4 );
+            $mese_off = (int)substr( $tempo_off, 4, 2 );
+            $giorno_off = (int)substr( $tempo_off, 6, 2 );
+            $ora_off = (int)substr( $tempo_off, 8, 2 );
+            $minuto_off = (int)substr( $tempo_off, 10, 2 );
             $adesso = mktime( date( "H" ), date( "i" ), 0, date( "m" ), date( "d" ), date( "Y" ) );
             $sec_restanti = mktime( $ora_off, $minuto_off, 0, $mese_off, $giorno_off, $anno_off ) - $adesso;
 
             if ( $sec_restanti < 0 ) {
                 $nome_schierato = "schierato$numero";
 
-                if ( $$nome_schierato == "titolare" ) {
+                if ( isset( $$nome_schierato ) && $$nome_schierato == "titolare" ) {
                     $nome_lista = "lista_titolari_$ruolo";
                     $$nome_lista .= "$numero,";
                     $num_titolari++;
@@ -69,7 +69,7 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
                     $$nome_num_titolari++;
                 } # fine if ($$nome_schierato == "titolare")
 
-                if ( $$nome_schierato == "panchinaro" ) {
+                if ( isset( $$nome_schierato ) && $$nome_schierato == "panchinaro" ) {
                     $num_in_panchina = "panchinaro$numero";
                     $num_in_panchina = $$num_in_panchina;
                     $verifica_num = preg_replace( "/[0-9]/i", "", $num_in_panchina );
@@ -86,14 +86,13 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
 
                     $num_in_panchina_usati[ $num_in_panchina ] = $numero;
                     $num_panchinari++;
-
                 } # fine if ($$nome_schierato == "panchinaro")
             } # fine if ($sec_restanti < 0)
         } # fine if ($proprietario == $_SESSION utente)
     } # fine for $num1
 
     for ( $num1 = 1; $num1 <= $max_in_panchina; $num1++ ) {
-        if ( $num_in_panchina_usati[ $num1 ] ) {
+        if ( isset( $num_in_panchina_usati[ $num1 ] ) ) {
             $numero = $num_in_panchina_usati[ $num1 ];
             $lista_panchinari .= "$numero,";
         } # fine if ($num_in_panchina_usati[$num1])
@@ -191,7 +190,7 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
         }
     } # fine if ($num_titolari < 11)
 
-    if ( $inserire != "NO" ) {
+    if ( ! isset( $inserire ) || $inserire != "NO" ) {
         $filesquadra = $percorso_cartella_dati . "/squadra_" . $_SESSION[ 'utente' ];
         $clinee = @file( $filesquadra );
         $file_squadra = @fopen( $filesquadra, "wb+" );
@@ -200,15 +199,17 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
         if ( $num_linee < 3 ) {
             $num_linee = 3;
         }
-        $clinee[ 0 ] = "Test" . $acapo;
-        $clinee[ 1 ] = "$lista_titolari" . $acapo;
-        $clinee[ 2 ] = "$lista_panchinari" . $acapo;
+        $clinee[ 0 ] = "Test\n";
+        $clinee[ 1 ] = "$lista_titolari\n";
+        $clinee[ 2 ] = "$lista_panchinari\n";
         for ( $num = 0; $num < $num_linee; $num++ ) {
-            fwrite( $file_squadra, $clinee[ $num ] );
+            if ( isset( $clinee[ $num ] ) ) {
+                fwrite( $file_squadra, $clinee[ $num ] );
+            }
         } # fine for $num
         flock( $file_squadra, LOCK_UN );
         fclose( $file_squadra );
-        if ( $reset_form ) {
+        if ( isset( $reset_form ) ) {
             echo "Formazione Resettata";
         } else {
             echo "$lista_titolari - $lista_panchinari";
@@ -220,7 +221,7 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
         echo "<font class='evidenziato'>$frase</font>";
     } # fine else if ($inserire != "NO")
 
-    if ( $reset_form and $outente == $_SESSION[ 'utente' ] )
+    if ( isset( $reset_form ) and $outente == $_SESSION[ 'utente' ] )
         unlink( $percorso_cartella_dati . "/squadra_" . $outente );
 
     echo "<br /><br /><center><form method='post' action='squadra.php'>

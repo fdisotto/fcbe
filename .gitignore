@@ -1,10 +1,12 @@
 .idea/
 dati/*.log
-dati/chiusura_giornata.txt
-dati/data_chigio.txt
-dati/log.txt
-dati/log1.txt
+dati/*.txt
 dati/utenti_*.php
 dati/tornei.php
+dati/hash.php
+dati/squadra_*
+dati/utenti_*.php
+dati/_stats
 dati/cache/
+dati/messaggi/*.php
 inc/ajax-chat/php/data.txt

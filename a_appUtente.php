@@ -17,13 +17,15 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
-require_once( "./controlla_pass.php" );
-require( "./header.php" );
+require_once "./controlla_pass.php";
+require_once "./header.php";
 
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 3 ) {
     if ( $_SESSION[ 'permessi' ] == 3 or $_SESSION[ 'permessi' ] == 4 )
-        require( "./menu.php" ); elseif ( $_SESSION[ 'permessi' ] == 5 )
-        require( "./a_menu.php" );
+        require_once "./menu.php"; elseif ( $_SESSION[ 'permessi' ] == 5 )
+        require_once "./a_menu.php";
+
+    $url_sito = 'http://' . $_SERVER['HTTP_HOST'];
 
     if ( isset( $_GET[ 'cambia' ] ) && $_GET[ 'cambia' ] ) {
         if ( isset( $go ) ) {
@@ -32,7 +34,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 3 ) {
             if ( $id == 0 ) {
                 echo "<center><h3>Impossibile modificare questo utente</h3></td></tr></table>";
                 echo "<meta http-equiv='refresh' content='1; url=a_appUtente.php?messgestutente=26'>";
-                include( "./footer.php" );
+                require_once "./footer.php";
                 exit;
             } else {
                 if ( $_SESSION[ 'permessi' ] == 3 or $_SESSION[ 'permessi' ] == 4 )
@@ -48,7 +50,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 3 ) {
                 $fileo[ $id ] = $stringa;
                 $nuovo_file = implode( "", $fileo );
 
-                file_put_contents( $percorso_cartella_dati . "/utenti_" . $itorneo . ".php", $nuovo_file, LOCK_EX | FILE_APPEND );
+                file_put_contents( $percorso_cartella_dati . "/utenti_" . $itorneo . ".php", $nuovo_file, LOCK_EX );
                 $oggetto = "Iscrizione Torneo Fantacalcio\n";
 
                 $messaggio = "Benvenuto in $titolo_sito!
@@ -169,5 +171,4 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 3 ) {
 } # fine if ($_SESSION["valido"] == "SI" $_SESSION["utente"] =="admin") {
 
 else header( "location: index.php?fallito=1" );
-include( "./footer.php" );
-?>
+require_once "./footer.php";

@@ -17,15 +17,17 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
-require_once("./controlla_pass.php");
-include("./header.php");
+require_once "./controlla_pass.php";
+require_once "./header.php";
 
-if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
-	require("./menu.php");
+if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'utente' ] != $admin_user ) {
+    require_once "./menu.php";
 
-	if(!$_GET['vedi_operazioni']) $vedi_operazioni = "SI";
+    if ( ! isset( $_GET[ 'vedi_operazioni' ] ) ) {
+        $vedi_operazioni = "SI";
+    }
 
-	####################��
+    ####################��
 
 	echo $acapo."<script type='text/javascript'>
 	function CreaOrario() {
@@ -57,8 +59,8 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 		$dati_calciatori[$num1] = explode(",", $calciatori[$num1]);
 	}
 
-	if ($ordinamento) {
-		if ($verso == "asc") {
+	if (isset($ordinamento)) {
+		if (isset($verso) && $verso == "asc") {
 			function cmp1 ($a, $b) {
 				global $ordinamento;
 				return strcmp($a[$ordinamento], $b[$ordinamento]);
@@ -107,17 +109,16 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 				else if ($ruolo == "A") $na++;
 			} # fine if ($proprietario == $_SESSION['utente'])
 
-			$tempo_off = $dati_calciatore[5];
-			$anno_off = substr($tempo_off,0,4);
-			$mese_off = substr($tempo_off,4,2);
-			$giorno_off = substr($tempo_off,6,2);
-			$ora_off = substr($tempo_off,8,2);
-			$minuto_off = substr($tempo_off,10,2);
-			$secondo_off = substr($tempo_off,12,2);
-			$sec_restanti = mktime($ora_off,$minuto_off,0,$mese_off,$giorno_off,$anno_off) - $adesso;
+            $tempo_off = $dati_calciatore[ 5 ];
+            $anno_off = (int)substr( $tempo_off, 0, 4 );
+            $mese_off = (int)substr( $tempo_off, 4, 2 );
+            $giorno_off = (int)substr( $tempo_off, 6, 2 );
+            $ora_off = (int)substr( $tempo_off, 8, 2 );
+            $minuto_off = (int)substr( $tempo_off, 10, 2 );
+            $secondo_off = (int)substr( $tempo_off, 12, 2 );
+            $sec_restanti = mktime( $ora_off, $minuto_off, 0, $mese_off, $giorno_off, $anno_off ) - $adesso;
 
-
-			if ($sec_restanti < 1 OR ($stato_mercato != "I" and $stato_mercato != "P")) {
+            if ($sec_restanti < 1 OR ($stato_mercato != "I" and $stato_mercato != "P")) {
 				$tempo_restante = "Comprato";
 				$offri = "Nessuna opzione";
 
@@ -218,7 +219,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 	$cambi_effettuati = INTVAL($ocambi);
 	$soldi_spendibili = $soldi_iniziali + $ocrediti + $ovariazioni - $soldi_spesi;
 	$valore_squadra = $soldi_spesi;
-	$valuta_saldo = $valuta_saldo + $surplus;
+	$valuta_saldo = ($valuta_saldo ?? 0) + $surplus;
 	$spesa_totale = $soldi_spesi - $variazioni;
 
 	/*
@@ -298,7 +299,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 
 		if ($stato_mercato != "I") echo "Rammenta che in questa fase non puoi fare errori di impostazione della formazione, ogni acquisto &egrave; a titolo definitivo, e non puoi annullare eventuali errori. Si consiglia di iniziare gli acquisti solo dopo aver gi&agrave; creato la squadra su carta.<br /><br />";
 
-		echo"<br />$mess01<hr />
+		echo "<br />" . ($mess01 ?? '') . "<hr />
 		Dettagli torneo:<br />
 		<b><u>$otdenom</u></b><br />";
 
@@ -315,9 +316,11 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 
 		if ($stato_mercato == "I" OR $stato_mercato == "B" OR $stato_mercato == "R") echo "<br />Lista calciatori del: " . date ("d-m-Y H:i:s.", filemtime($percorso_cartella_dati."/calciatori.txt"))."<br />";
 
-		$data_busta_chiusa = @join('', @file("./dati/data_buste_".$_SESSION['torneo']."_0.txt"));
-		$giornobuste = "$data_busta_chiusa[6]$data_busta_chiusa[7]/$data_busta_chiusa[4]$data_busta_chiusa[5]";
-		$orabuste = "$data_busta_chiusa[8]$data_busta_chiusa[9]:$data_busta_chiusa[10]$data_busta_chiusa[11]";
+        $data_busta_chiusa = @join( '', @file( "./dati/data_buste_" . $_SESSION[ 'torneo' ] . "_0.txt" ) );
+        if ( $data_busta_chiusa ) {
+            $giornobuste = "$data_busta_chiusa[6]$data_busta_chiusa[7]/$data_busta_chiusa[4]$data_busta_chiusa[5]";
+            $orabuste = "$data_busta_chiusa[8]$data_busta_chiusa[9]:$data_busta_chiusa[10]$data_busta_chiusa[11]";
+        }
 
 		if ($mercato_libero == "NO" and $stato_mercato == "B") echo "<br /><div class='evidenziato'>Il termine per completare le offerte nelle buste &egrave; il <b>$giornobuste</b> alle ore <b>$orabuste</b></div>";
 
@@ -346,7 +349,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 		#### Squadra formata
 
 		if (@is_file($percorso_cartella_dati."/editoriale.txt")) $linee_editoriale = file($percorso_cartella_dati."/editoriale.txt");
-		else $linee_editoriale = "";
+		else $linee_editoriale = [];
 
 		$num_linee_editoriale = count($linee_editoriale);
 		$messaggio_editoriale = "";
@@ -358,9 +361,9 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 		if (isset($messaggi[2]) AND trim($messaggi[2]) != "") echo "<caption>Editoriale</caption><tr><td align='left' colspan='2' bgcolor='$sfondo_tab'>".html_entity_decode($messaggi[2])."</td></tr>";
 
 		$dati_squadra = @file($percorso_cartella_dati."/squadra_".$_SESSION['utente']);
-		$numtitolari = explode(",", $dati_squadra[1]);
+		$numtitolari = isset($dati_squadra[1]) ? explode(",", $dati_squadra[1]) : [];
 		$numtitolari = count ($numtitolari)-1;
-		$numpanchinari = explode(",", $dati_squadra[2]);
+		$numpanchinari = isset($dati_squadra[2]) ? explode(",", $dati_squadra[2]) : [];
 		$numpanchinari = count ($numpanchinari)-1;
 
 		echo "<tr><td valign='top' align='left' bgcolor='$sfondo_tab'>
@@ -387,7 +390,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 		echo"<br /><u><b>Status squadra</b></u><br />FantaEuro residui: <b>$soldi_spendibili</b> Fanta-Euro.<br />Numero di calciatori da comprare: <b>$num_calciatori_comprabili</b>.<br />Titolari schierati: <b>$numtitolari</b> <br />Panchinari schierati: <b>$numpanchinari</b><br /><br />";
 		echo "La prossima chiusura automatica &egrave; fissata per <br />il giorno <b>$def_giorno $gc - $mc - $ac</b> alle ore <b>$orac : $minc</b><br /><br />".$acapo;
 
-		if ($stato_mercato != "I" and $stato_mercato != "B" and $vedi_campetto == "SI") echo "<img src='./fantacampo.php?orientamento_campetto=1&amp;riduci=65&amp;iutente=$outente' alt='La tua squadra in campo' />";
+		if ($stato_mercato != "I" and $stato_mercato != "B" and $vedi_campetto == "SI") echo "<img src='./fantacampo.php?orientamento_campetto=1&amp;riduci=80&amp;iutente=$outente' alt='La tua squadra in campo' />";
 
 		echo "</td><td valign='top' align='center'>".$acapo;
 
@@ -404,6 +407,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 
 	###########################################################
 
+    $giornata_ultima = 0;
 	for ($num1 = 1; $num1 < 40 ; $num1++) {
 		if (strlen($num1) == 1) $num1 = "0".$num1;
 		$giornata_controlla = "giornata$num1";
@@ -411,7 +415,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 		else $giornata_ultima = $num1;
 	} # fine for $num1
 
-	if (!$giornata or $giornata > $giornata_ultima) $giornata = "$giornata_ultima";
+	if (!isset($giornata) or $giornata > $giornata_ultima) $giornata = "$giornata_ultima";
 
 	$tab_formazioni = "<tr>";
 	$num_colonne = 0;
@@ -518,9 +522,9 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 			$num_colonne = 0;
 		} # fine if ($num_colonne >= 2)
 		$num_colonne++;
-		$tab_formazioni .= "<td valign='top'><h4>$soprannome_squadra di $giocatore</h4>";
-		$formazione = "formazione_$giocatore";
-		$formazione = $$formazione ?: [];
+		$tab_formazioni .= "<td valign='top'><h4>$soprannome_squadra di $outente</h4>";
+		$formazione = "formazione_$outente";
+		$formazione = $$formazione ?? [];
 		$num_linee_formazione = count($formazione);
 		for ($num2 = 0 ; $num2 < $num_linee_formazione; $num2++) {
 			# $formazione[$num2] = preg_replace("/ /","_",$formazione[$num2]);
@@ -683,7 +687,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['utente'] != $admin_user) {
 	###########################################################
 
 	##############################
-		if ($vedi_operazioni == "SI" AND ($mercato_libero == "NO" AND $stato_mercato != "B" OR $ordinamento)) {
+		if ($vedi_operazioni == "SI" AND ($mercato_libero == "NO" AND $stato_mercato != "B" OR isset($ordinamento))) {
 		echo "</table><br /><br /><table summary='mercato' width='100%' cellspacing='1' cellpadding='2' align='center' bgcolor='$sfondo_tab'>
 		<caption>Operazioni di mercato effettuate</caption>
 		<tr><td align='center' height='20' colspan='7'>Ordinamento per -
