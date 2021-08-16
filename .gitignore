@@ -5,7 +5,7 @@ dati/utenti_*.php
 dati/tornei.php
 dati/hash.php
 dati/squadra_*
-dati/utenti_*.php
+dati/*.csv
 dati/_stats
 dati/cache/
 dati/messaggi/*.php

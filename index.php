@@ -53,7 +53,7 @@ require_once "./header.php";
                 } elseif ( $usa_cms == "SI" && isset( $_GET[ 'categoria' ] ) && strip_tags( $_GET[ 'categoria' ] ) ) {
                     categoria( $_GET[ 'categoria' ] );
                 } elseif ( $usa_cms == "SI" && isset( $_GET[ 'notiziaid' ] ) && strip_tags( $_GET[ 'notiziaid' ] ) ) {
-                    notizia( $_GET[ 'notiziaid' ], strip_tags( htmlentities( $evidenzia ) ) );
+                    notizia( $_GET[ 'notiziaid' ], strip_tags( htmlentities( ($evidenzia ?? '') ) ) );
                 } elseif ( $usa_cms == "SI" && isset( $ricerca ) && strip_tags( $ricerca ) ) {
                     ricerca( strip_tags( htmlentities( $testo ) ) );
                 } elseif ( $usa_cms == "SI" and $vedi_notizie >= 1 ) {

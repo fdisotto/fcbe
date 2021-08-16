@@ -1,7 +1,7 @@
 <?php
 ##################################################################################
 #    FANTACALCIOBAZAR Evolution
-#    Copyright (C) 2003-2010 by Antonello Onida 
+#    Copyright (C) 2003-2010 by Antonello Onida
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,14 +17,18 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
-require_once ("./controlla_pass.php");
-include("./header.php");
+require_once "./controlla_pass.php";
+require_once "./header.php";
 
-if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 2) {
-	if ($_SESSION['permessi'] == 5) require ("./a_menu.php");
-	else require ("./menu.php");
+if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 2 ) {
+    if ( $_SESSION[ 'permessi' ] == 5 ) {
+        require_once "./a_menu.php";
+    } else {
+        require_once "./menu.php";
+    }
 
-	if ($usa_tinyMCE == "SI") echo '<script language="javascript" type="text/javascript" src="./inc/tiny_mce/tiny_mce.js"></script>
+    if ( $usa_tinyMCE == "SI" )
+        echo '<script language="javascript" type="text/javascript" src="./inc/tiny_mce/tiny_mce.js"></script>
 	<script type="text/javascript" src="./inc/tiny_mce/tiny_mce.js"></script>
 	<script type="text/javascript">
 	tinyMCE.init({
@@ -65,50 +69,51 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 2) {
 	});
 	</script>';
 
-	$oggi = getdate();
-	$giorno = $oggi[mday];
+    $oggi = getdate();
+    $giorno = $oggi[ 'mday' ];
 
-	if ($giorno < 10) {
-		$giorno = "0$giorno";
-	}
-	$mese = $oggi[mon];
-	if ($mese < 10) {
-		$mese = "0$mese";
-	}
-	$anno = $oggi[year];
-	$ora = $oggi[hours];
-	if ($ora < 10) {
-		$ora = "0$ora";
-	}
-	$min = $oggi[minutes];
-	if ($min < 10) {
-		$min = "0$min";
-	}
+    if ( $giorno < 10 ) {
+        $giorno = "0$giorno";
+    }
+    $mese = $oggi[ 'mon' ];
+    if ( $mese < 10 ) {
+        $mese = "0$mese";
+    }
+    $anno = $oggi[ 'year' ];
+    $ora = $oggi[ 'hours' ];
+    if ( $ora < 10 ) {
+        $ora = "0$ora";
+    }
+    $min = $oggi[ 'minutes' ];
+    if ( $min < 10 ) {
+        $min = "0$min";
+    }
 
-	$data_mod	= "$anno$mese$giorno$ora$min";
+    $data_mod = "$anno$mese$giorno$ora$min";
 
-	echo "<div id='content'>
+    echo "<div id='content'>
 	<div style='text-align: left; float: left;'>";
-	if (!$q) {
-		if ( $archivio_dati == "csvfile" ) {
-			require_once ( "./inc/csvfile.inc.php" );
-			$news_list        = new csvfile;
-			$news_list->name  = $notizie_file;
-			$news_list->init();
-			$pagine_list        = new csvfile;
-			$pagine_list->name  = $pagine_file;
-			$pagine_list->init();
-			$categorie_list        = new csvfile;
-			$categorie_list->name  = $categorie_file;
-			$categorie_list->init();
-		}
+    if ( ! isset( $q ) ) {
+        if ( $archivio_dati == "csvfile" ) {
+            require_once( "./inc/csvfile.inc.php" );
+            $news_list = new csvfile;
+            $news_list->name = $notizie_file;
+            $news_list->init();
+            $pagine_list = new csvfile;
+            $pagine_list->name = $pagine_file;
+            $pagine_list->init();
+            $categorie_list = new csvfile;
+            $categorie_list->name = $categorie_file;
+            $categorie_list->init();
+        }
 
-		$num_news  	= $news_list->entries();
-		$num_pagine  	= $pagine_list->entries();
-		$num_categorie = $categorie_list->entries();
+        $num_news = $news_list->entries();
+        $num_pagine = $pagine_list->entries();
+        $num_categorie = $categorie_list->entries();
 
-		echo"<br/>Sono registrate <b>$num_pagine</b> pagine.<br/>Sono registrate <b>$num_news</b> notizie.<br/>Sono registrate <b>$num_categorie</b> categorie.";
-			if ($_SESSION['permessi'] >= 4) echo"</div>
+        echo "<br/>Sono registrate <b>$num_pagine</b> pagine.<br/>Sono registrate <b>$num_news</b> notizie.<br/>Sono registrate <b>$num_categorie</b> categorie.";
+        if ( $_SESSION[ 'permessi' ] >= 4 )
+            echo "</div>
 			<div style='width: 160px; float: right; text-align: left'>
 			<div class='menu_s'>
 			<a href='?q=1'>Aggiungi pagina</a>
@@ -121,37 +126,53 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 2) {
 			-->
 			<a href='?q=11'>Aggiungi notizia</a>
 			<a href='?q=13'>Gestione notizie</a>
-			</div>";
-			else echo"</div>
+			</div>"; else echo "</div>
 			<div style='width: 160px; float: right; text-align: left'>
 			<div class='menu_s'>
 			<a href='?q=11'>Aggiungi notizia</a>
 			<a href='?q=13'>Gestione notizie</a>
 			</div>";
-		echo "</div>
+        echo "</div>
 		<div style='clear: both'></div>
 		</div>";
-	}
-	else	{
-		if ($q == 1){agg_pagina();}
-		elseif ($q == 2){agg_pagina2();}
-		elseif ($q == 3){gestione_pagine();}
-		elseif ($q == 4){modifica_pagina();}
-		elseif ($q == 5){elimina_pagina();}
-		elseif ($q == 6){agg_categoria();}
-		elseif ($q == 7){agg_categoria2();}
-		elseif ($q == 8){gestione_categorie();}
-		elseif ($q == 9){modifica_categoria();}
-		elseif ($q == 10){elimina_categoria();}
-		elseif ($q == 11){agg_notizia();}
-		elseif ($q == 12){agg_notizia2();}
-		elseif ($q == 13){gestione_notizie();}
-		elseif ($q == 14){modifica_notizia();}
-		elseif ($q == 15){elimina_notizia();}
-		else {echo "Funzione non esistente";}
-	}
+    } else {
+        if ( $q == 1 ) {
+            agg_pagina();
+        } elseif ( $q == 2 ) {
+            agg_pagina2();
+        } elseif ( $q == 3 ) {
+            gestione_pagine();
+        } elseif ( $q == 4 ) {
+            modifica_pagina();
+        } elseif ( $q == 5 ) {
+            elimina_pagina();
+        } elseif ( $q == 6 ) {
+            agg_categoria();
+        } elseif ( $q == 7 ) {
+            agg_categoria2();
+        } elseif ( $q == 8 ) {
+            gestione_categorie();
+        } elseif ( $q == 9 ) {
+            modifica_categoria();
+        } elseif ( $q == 10 ) {
+            elimina_categoria();
+        } elseif ( $q == 11 ) {
+            agg_notizia();
+        } elseif ( $q == 12 ) {
+            agg_notizia2();
+        } elseif ( $q == 13 ) {
+            gestione_notizie();
+        } elseif ( $q == 14 ) {
+            modifica_notizia();
+        } elseif ( $q == 15 ) {
+            elimina_notizia();
+        } else {
+            echo "Funzione non esistente";
+        }
+    }
 } # fine if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4)
 
-else header("location: a_sito.php?fallito=1");
-include("./footer.php");
-?>
+else {
+    header( "location: a_sito.php?fallito=1" );
+}
+require_once "./footer.php";
