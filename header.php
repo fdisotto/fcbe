@@ -25,7 +25,7 @@ if ( isset( $attiva_log ) && $attiva_log == "SI" ) {
 
 $acapo = "\n";
 
-$chiusura_giornata = file_exists($percorso_cartella_dati . "/chiusura_giornata.txt") ? (int) file_get_contents($percorso_cartella_dati . "/chiusura_giornata.txt") : 0;
+$chiusura_giornata = file_exists( $percorso_cartella_dati . "/chiusura_giornata.txt" ) ? (int)file_get_contents( $percorso_cartella_dati . "/chiusura_giornata.txt" ) : 0;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -127,7 +127,7 @@ $chiusura_giornata = file_exists($percorso_cartella_dati . "/chiusura_giornata.t
         } elseif ( @$_SESSION[ 'valido' ] == "SI" ) {
             echo "<a href='./mercato.php'>Mercato</a>";
 
-            if ( $stato_mercato == "A" or $stato_mercato == "P" or $stato_mercato == "C" or $stato_mercato == "S" ) {
+            if ( isset( $stato_mercato ) && ($stato_mercato == "A" or $stato_mercato == "P" or $stato_mercato == "C" or $stato_mercato == "S") ) {
                 echo "<a href='./giornate.php'>Campionato</a>";
                 if ( $ottipo_calcolo == "S" )
                     echo "<a href='./calendario.php'>Calendario</a>";

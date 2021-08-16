@@ -1411,7 +1411,7 @@ function ultime_notizie( $status )
         if ( $valore[ "pattivo" ] != "NO" ) {
             $data_vis = $valore[ "data_mod" ];
             $pos_count++;
-            $altri_link .= "<br />&nbsp;" . mostra_dt( $data_vis ) . " - <a href='index.php?notiziaid=$pos_count'>" . $valore[ "ptitolo" ] . "</a>" . $acapo;
+            $altri_link .= "<br />&nbsp;" . mostra_dt( $data_vis ) . " - <a href='index.php?notiziaid=$pos_count'>" . $valore[ "ptitolo" ] . "</a>";
         }
     }
     if ( $altri_link )
