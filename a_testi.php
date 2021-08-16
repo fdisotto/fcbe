@@ -1,7 +1,7 @@
 <?php
 ##################################################################################
 #    FANTACALCIOBAZAR Evolution
-#    Copyright (C) 2003-2010 by Antonello Onida 
+#    Copyright (C) 2003-2010 by Antonello Onida
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,12 +17,14 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
-require_once ("./controlla_pass.php");
-include("./header.php");
+require_once "./controlla_pass.php";
+require_once "./header.php";
 
-if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 4) {
-require ("./a_menu.php");
-	if ($usa_tinyMCE == "SI") echo '<center><div id="content">
+if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
+    require_once "./a_menu.php";
+
+    if ( $usa_tinyMCE == "SI" )
+        echo '<center><div id="content">
 	<script type="text/javascript" src="./inc/tiny_mce/tiny_mce.js"></script>
 	<script type="text/javascript">
 	tinyMCE.init({
@@ -61,27 +63,26 @@ require ("./a_menu.php");
                 staffid : "991234"
         }
 	});
-	</script>';
-	else echo "<center><div id='content'>";
+	</script>'; else echo "<center><div id='content'>";
 
-	$a = array();
-	$a = $_POST;
-	$a1 = array_values($a);
-	$m = substr(key($_POST),0,1);
-	$n = intval(substr(key($_POST),1,2));
-	$a2 = $a1[0];
+    $a = array();
+    $a = $_POST;
+    $a1 = array_values( $a );
+    $m = substr( key( $_POST ), 0, 1 );
+    $n = intval( substr( key( $_POST ), 1, 2 ) );
+    $a2 = $a1[ 0 ] ?? '';
 
-	if (!@is_file($percorso_cartella_dati."/testi.php")) {
-		$ini_file = "<?php die('ACCESSO VIETATO');?>".$acapo.$acapo.$acapo.$acapo.$acapo.$acapo.$acapo.$acapo.$acapo.$acapo;
-		$fp = fopen($percorso_cartella_dati."/testi.php", "wb+") OR die ("errore fileopen");
-		flock ($fp,LOCK_EX) OR die ("errore filelocl ex");
-		fwrite($fp, $ini_file) OR die ("errore fwrite");
-		flock ($fp,LOCK_UN) OR die ("errore filelocl un");
-		fclose($fp) OR die ("errore fileclose");
-		unset ($ini_file,$fp);
-	}
+    if ( ! @is_file( $percorso_cartella_dati . "/testi.php" ) ) {
+        $ini_file = "<?php die('ACCESSO VIETATO');?>" . $acapo . $acapo . $acapo . $acapo . $acapo . $acapo . $acapo . $acapo . $acapo . $acapo;
+        $fp = fopen( $percorso_cartella_dati . "/testi.php", "wb+" ) or die ( "errore fileopen" );
+        flock( $fp, LOCK_EX ) or die ( "errore filelocl ex" );
+        fwrite( $fp, $ini_file ) or die ( "errore fwrite" );
+        flock( $fp, LOCK_UN ) or die ( "errore filelocl un" );
+        fclose( $fp ) or die ( "errore fileclose" );
+        unset ( $ini_file, $fp );
+    }
 
-	echo "<table summary='Editor testi' bgcolor='$sfondo_tab' width='100%' align='center' cellpadding='5' cellspacing='5'>
+    echo "<table summary='Editor testi' bgcolor='$sfondo_tab' width='100%' align='center' cellpadding='5' cellspacing='5'>
 	<caption>EDITOR TESTI $a2 $m $n</caption><tr><td align='center'>
 	<div>
 	<div style='float:none; padding: 1px'>
@@ -203,77 +204,75 @@ require ("./a_menu.php");
 	</td></tr></table>
 	<br/><br/>";
 
-	if (isset($m)) {
-		if ($salva_modifiche) {
-			$linee_mess = @file($percorso_cartella_dati."/testi.php");
-			$n_contenuto_dati = str_replace(array("\n","\r"),"", $n_contenuto_dati);
-			$n_contenuto_dati = nl2br($n_contenuto_dati);
-			$n_contenuto_dati = str_replace("|", " ", $n_contenuto_dati);
-			$n_contenuto_dati = trim(stripslashes($n_contenuto_dati));
-			$n_contenuto_dati = htmlentities($n_contenuto_dati, ENT_QUOTES);
-			$linee_mess[$n] = $n_contenuto_dati.$acapo;
-			$scrivi_testi = implode('',$linee_mess);
-			if (is_file($percorso_cartella_dati."/testi.php")) {
-				$file_dati = fopen($percorso_cartella_dati."/testi.php","wb+");
-				flock($file_dati,LOCK_EX);
-				fwrite($file_dati,$scrivi_testi);
-				flock($file_dati,LOCK_UN);
-				fclose($file_dati);
-				unset ($file_dati,$linee_mess,$scrivi_testi);				
-				echo "<center><h4>Modifiche $n salvate.</h4></center><br/>";
-			} # fine if (fopen("$percorso_cartella_dati/dati.php","w+"))
-			else echo "<b>ERRORE</b>: si devono cambiare i permessi di scrittura del file testi.php per salvare le modifiche, leggi il README.<br/>";
-		} # fine if ($salva_modifiche)
-		elseif ($a2=="vedi") {
-			if (@is_file($percorso_cartella_dati."/testi.php")) $linee_mess = file($percorso_cartella_dati."/testi.php");
-			echo "<table summary='Anteprima' bgcolor='$sfondo_tab' width='100%' border='1' cellpadding='5px'>
+    if ( isset( $m ) ) {
+        if ( isset( $salva_modifiche ) ) {
+            $linee_mess = @file( $percorso_cartella_dati . "/testi.php" );
+            $n_contenuto_dati = str_replace( array( "\n", "\r" ), "", $n_contenuto_dati );
+            $n_contenuto_dati = nl2br( $n_contenuto_dati );
+            $n_contenuto_dati = str_replace( "|", " ", $n_contenuto_dati );
+            $n_contenuto_dati = trim( stripslashes( $n_contenuto_dati ) );
+            $n_contenuto_dati = htmlentities( $n_contenuto_dati, ENT_QUOTES );
+            $linee_mess[ $n ] = $n_contenuto_dati . $acapo;
+            $scrivi_testi = implode( '', $linee_mess );
+            if ( is_file( $percorso_cartella_dati . "/testi.php" ) ) {
+                $file_dati = fopen( $percorso_cartella_dati . "/testi.php", "wb+" );
+                flock( $file_dati, LOCK_EX );
+                fwrite( $file_dati, $scrivi_testi );
+                flock( $file_dati, LOCK_UN );
+                fclose( $file_dati );
+                unset ( $file_dati, $linee_mess, $scrivi_testi );
+                echo "<center><h4>Modifiche $n salvate.</h4></center><br/>";
+            } # fine if (fopen("$percorso_cartella_dati/dati.php","w+"))
+            else echo "<b>ERRORE</b>: si devono cambiare i permessi di scrittura del file testi.php per salvare le modifiche, leggi il README.<br/>";
+        } # fine if ($salva_modifiche)
+        elseif ( $a2 == "vedi" ) {
+            if ( @is_file( $percorso_cartella_dati . "/testi.php" ) )
+                $linee_mess = file( $percorso_cartella_dati . "/testi.php" );
+            echo "<table summary='Anteprima' bgcolor='$sfondo_tab' width='100%' border='1' cellpadding='5px'>
 			<caption>ANTEPRIMA TESTO</caption><tr><td>";
-			echo html_entity_decode($linee_mess[$n])."<br/>";
-			echo"</td></tr></table>";
-		} # fine if
-		elseif ($a2=="attiva"){
-			echo "Funzione per future implementazioni!";
-		}
-		elseif ($a2=="cancella"){
-			echo "<table summary='Elimina' bgcolor='$sfondo_tab' width='100%'>
+            echo html_entity_decode( $linee_mess[ $n ] ) . "<br/>";
+            echo "</td></tr></table>";
+        } # fine if
+        elseif ( $a2 == "attiva" ) {
+            echo "Funzione per future implementazioni!";
+        } elseif ( $a2 == "cancella" ) {
+            echo "<table summary='Elimina' bgcolor='$sfondo_tab' width='100%'>
 			<caption>ELIMINA TESTO</caption><tr><td align ='center'>";
-			echo "<form method='post' action='a_testi.php'>
+            echo "<form method='post' action='a_testi.php'>
 			<input type='hidden' name='m$n' value='$a2' />
 			<b>Vuoi eliminare il testo n. $n?</b><br/><br/>
 			<input type='submit' name='salva_modifiche' value='Elimina testo' />
 			</form>Procedendo il testo sar&agrave; eliminato e non sar&agrave; pi&ugrave; disponibile.
 			</td></tr></table>";
-		}
-		elseif ($a2=="modifica"){
-               if (@is_file($percorso_cartella_dati."/testi.php")) $linee_mess = file($percorso_cartella_dati."/testi.php");
-               echo "<table summary='Edita' bgcolor='$sfondo_tab' width='100%'>
+        } elseif ( $a2 == "modifica" ) {
+            if ( @is_file( $percorso_cartella_dati . "/testi.php" ) )
+                $linee_mess = file( $percorso_cartella_dati . "/testi.php" );
+            echo "<table summary='Edita' bgcolor='$sfondo_tab' width='100%'>
                <caption>EDITA TESTO</caption><tr><td align ='center'>";
-               echo "<form method='post' action='a_testi.php'>
+            echo "<form method='post' action='a_testi.php'>
                <input type='hidden' name='m$n' value='$a2' />
-               <textarea name='n_contenuto_dati' rows='20' cols='120'>".$linee_mess[$n]."</textarea>
+               <textarea name='n_contenuto_dati' rows='20' cols='120'>" . $linee_mess[ $n ] . "</textarea>
                &nbsp;&nbsp;&nbsp;<input type='submit' name='salva_modifiche' value='Salva le modifiche' />
                </form></td></tr></table>";
-          }
-		elseif ($a2=="carica"){
-			if (@fopen('http://fantadownload.altervista.org/mirrorFCBE/giornataseriea.txt', 'r')) {
-			$riga = file('http://fantadownload.altervista.org/mirrorFCBE/giornataseriea.txt'); 
-			$linee_mess[$n]=$riga[1];
-			$giorn_num=$riga[0];
-			echo "<table summary='Carica' bgcolor='$sfondo_tab' width='100%'>
+        } elseif ( $a2 == "carica" ) {
+            if ( @fopen( 'http://fantadownload.altervista.org/mirrorFCBE/giornataseriea.txt', 'r' ) ) {
+                $riga = file( 'http://fantadownload.altervista.org/mirrorFCBE/giornataseriea.txt' );
+                $linee_mess[ $n ] = $riga[ 1 ];
+                $giorn_num = $riga[ 0 ];
+                echo "<table summary='Carica' bgcolor='$sfondo_tab' width='100%'>
 			<caption>Carica Giornata serie A</caption><tr><td align ='center'>";
-			echo "<form method='post' action='a_testi.php'>
+                echo "<form method='post' action='a_testi.php'>
 			<input type='hidden' name='m$n' value='$a2' />
-			<textarea name='n_contenuto_dati' rows='20' cols='120'>".$linee_mess[$n]."</textarea>
-			<input type='submit' name='salva_modifiche' value='Carica  giornata n° $giorn_num' />
-			</form></td></tr></table>";		
-			#$n_contenuto_dati=$linee_mess[$n];
-			}
-			else echo "File origine non disponibile";
-			
-		}
-	} # fine if ($m)
-	echo "</div></center>";
+			<textarea name='n_contenuto_dati' rows='20' cols='120'>" . $linee_mess[ $n ] . "</textarea>
+			<input type='submit' name='salva_modifiche' value='Carica  giornata nï¿½ $giorn_num' />
+			</form></td></tr></table>";
+                #$n_contenuto_dati=$linee_mess[$n];
+            } else echo "File origine non disponibile";
+        }
+    } # fine if ($m)
+    echo "</div></center>";
 } # fine if ($_SESSION["utente"]
-else echo"<meta http-equiv='refresh' content='0; url=logout.php'>";
-include("./footer.php");
-?>
+else {
+    echo "<meta http-equiv='refresh' content='0; url=logout.php'>";
+}
+require_once "./footer.php";
