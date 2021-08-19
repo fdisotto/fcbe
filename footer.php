@@ -26,7 +26,7 @@ foreach ($clock as $single_clock) {
 <div id="footer">
     <p align="center">
         <img src="immagini/separator.gif" alt="|"/> FantacalcioBazar Evolution <a href="licenza.php">Licenza GNU/GPL</a>
-        <img src="immagini/separator.gif" alt="|"/> Pagina generata in <?php echo $total_time ?> secondi.
+        <img src="immagini/separator.gif" alt="|"/> Pagina generata in <?php echo number_format(microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"], 5, '.', ''); ?> secondi.
         <img src="immagini/separator.gif" alt="|"/> Versione <?php echo file_get_contents('version.txt') ?>
         <img src="immagini/separator.gif" alt="|"/> <?php if (isset($vvm)) echo "<span style=\"color: #EEEEEE; \">$vvm</span>"; ?>
     </p>
