@@ -1528,15 +1528,15 @@ function crea_stats()
                 'dat' => (string)$content->data,
                 'ora' => (string)$content->ora,
                 'mod' => (string)$content->modulo,
-                'par' => (string)$content->partita,
-                'tit' => $titolari ?: '<calciatore/>',
-                'pan' => $panchinari ?: '<calciatore/>',
+                'par' => [(string)$content->partita],
+                'tit' => [$titolari ?: '<calciatore/>'],
+                'pan' => [$panchinari ?: '<calciatore/>'],
                 'all' => (string)$content->allenatore,
-                'ind' => $indisponibili ?: '<calciatore/>',
-                'squ' => $squalificati ?: '<calciatore/>',
-                'dif' => $diffidati ?: '<calciatore/>',
-                'alt' => $altri ?: '<calciatore/>',
-                'bal' => $ballottaggi ?: '<calciatore/>',
+                'ind' => [$indisponibili ?: '<calciatore/>'],
+                'squ' => [$squalificati ?: '<calciatore/>'],
+                'dif' => [$diffidati ?: '<calciatore/>'],
+                'alt' => [$altri ?: '<calciatore/>'],
+                'bal' => [$ballottaggi ?: '<calciatore/>'],
             ];
         }
 
