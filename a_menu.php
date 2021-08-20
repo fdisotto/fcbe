@@ -28,7 +28,6 @@ if ($_SESSION['permessi'] == 5) {
 	<a href='./a_torneo.php'>Gestione tornei</a>
 	<a href='./a_aggUtente.php'>Aggiungi utenti</a>
 	<a href='./a_appUtente.php'>Approvazione utenti</a>
-	<a href='./a_acquisti.php'>Acquisto calciatori TODO</a>
 	<a href='./a_verifiche.php'>Verifiche TODO</a>
 	<a href='./logout.php'>Disconnessione</a>
 	</div>
@@ -53,14 +52,6 @@ if ($_SESSION['permessi'] == 5) {
 	<a href='./a_backup.php'>Backup dati</a>
 	<a href='./a_b2mail.php'>Backup per mail</a>
 	<a href='./a_edita_file.php?mod_file=$percorso_cartella_dati/cms.conf.php'>Config CMS</a>
-	<a href='./a_edita_file.php?mod_file=$percorso_cartella_dati/tornei.php'>Modifica file tornei</a>
-	<a href='./a_edita_file.php?mod_file=$percorso_cartella_dati/testi.php'>Modifica file testi</a>
-	<a href='./a_edita_file.php?mod_file=$percorso_cartella_dati/log.txt'>Modifica log accessi</a>
-	<a href='./a_edita_file.php?mod_file=$percorso_cartella_dati/db.txt'>Modifica SMS</a>
-	<a href='./a_edita_file.php?mod_file=immagini/style.css'>Modifica style.css</a>
-	<a href='./a_stra.php'>Sumatra CSS</a>
-	<a href='./a_edita_file.php?mod_file=$percorso_cartella_dati/data_chigio.txt'>Modifica data_chigio.txt</a>
 	</div>
 	</td><td valign='top' width='80%' align='center'>";
 }
-?>
