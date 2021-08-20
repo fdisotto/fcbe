@@ -932,7 +932,7 @@ function ricerca_binaria( $file, $conta, $numero_da_cercare, $tipo = "voti" )
 
 function pr( $val )
 {
-    echo "<u>DEBUG:</u><br /><pre style='text-align: left; border: 1px solid navy; background-color: white; padding: 5px'>";
+    echo "<u>DEBUG:</u><br /><pre style='text-align: left; border: 1px solid navy; background-color: white; padding: 5px;'>";
     print_r( $val );
     echo "</pre>";
 }

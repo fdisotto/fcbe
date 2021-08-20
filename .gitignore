@@ -1,4 +1,5 @@
 .idea/
+.DS_Store
 dati/*.log
 dati/*.txt
 dati/utenti_*.php
@@ -10,5 +11,7 @@ dati/*.csv
 dati/_stats
 dati/cache/
 dati/messaggi/*.php
+dati/2021/*.txt
+dati/copia/*.zip
 immagini/loghi/
 inc/ajax-chat/php/data.txt

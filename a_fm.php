@@ -18,32 +18,32 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
 $a_fm = "SI"; # Controllo in header per il caricamento del CSS relativo
-require_once("./controlla_pass.php");
-include("./header.php");
+require_once "./controlla_pass.php";
+require_once "./header.php";
 
-if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] = 5) {
-require ("./a_menu.php");
-require("./inc/fm_class.php");
+if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] = 5 ) {
+    require_once "./a_menu.php";
+    require_once "./inc/fm_class.php";
 
-// Aggiungere il nome dei files in questo array da proteggere
-// dalle opzioni di scrittura, rinomina, modifica, etc. 
-// I nomi devono essere dentro apici e separati da una virgola.
-$protected_files = array();
+    // Aggiungere il nome dei files in questo array da proteggere
+    // dalle opzioni di scrittura, rinomina, modifica, etc.
+    // I nomi devono essere dentro apici e separati da una virgola.
+    $protected_files = array();
 
-// Crea una istanza di DirPHP.
-$dirphp = new DirPHP("d/m/y", $protected_files, $header, $footer);
+    // Crea una istanza di DirPHP.
+    $dirphp = new DirPHP( "d/m/y", $protected_files, $header ?? '', $footer ?? '' );
 
-// Questa Š la password di protesione.
-// La password di default Š 'default'. 
-// E' inclusa una utility per la generazione in 'inc/make_hash.php'.
-$dirphp->security['hash'] = "c21f969b5f03d33d43e04f8f136e7682";
+    // Questa Ã¨ la password di protesione.
+    // La password di default Ã¨ 'default'.
+    // E' inclusa una utility per la generazione in 'inc/make_hash.php'.
+    $dirphp->security[ 'hash' ] = "c21f969b5f03d33d43e04f8f136e7682";
 
-// Questa funzione fa tutto il lavoro
-echo "<div class='dirphp'>";
-$dirphp->handle_events();
-echo "</div>";
+    // Questa funzione fa tutto il lavoro
+    echo "<div class='dirphp'>";
+    $dirphp->handle_events();
+    echo "</div>";
+} else {
+    header( "location: logout.php?logout=2" );
 }
-else header("location: logout.php?logout=2");
 
-include("./footer.php");
-?>
+require_once "./footer.php";
