@@ -369,7 +369,7 @@ function aggiusta_tag( $stringa )
                             $nome_tag[ $num_tag ] = $nome_tag_corrente; else {
                             for ( $num2 = $num_tag; $num2 > 0; $num2-- ) {
                                 #echo $nome_tag[$num2]." $nome_tag_corrente<br/>";
-                                if ( isset( $nome_tag[ $num2 ] ) && $nome_tag[ $num2 ] == $nome_tag_corrente and isset($controtag[ $num2 ]) && $controtag[ $num2 ] != 1 ) {
+                                if ( isset( $nome_tag[ $num2 ] ) && $nome_tag[ $num2 ] == $nome_tag_corrente and isset( $controtag[ $num2 ] ) && $controtag[ $num2 ] != 1 ) {
                                     $controtag[ $num2 ] = 1;
                                     break;
                                 } # fine if ($nome_tag[$num2] == $nome_tag_corrente and $controtag[$num2] != 1)
@@ -411,7 +411,7 @@ function aggiusta_tag( $stringa )
         } # fine if ($leggendo_nome_tag == "SI")
     } # fine if ($tag_chiuso == "NO")
     for ( $num1 = $num_tag; $num1 > 0; $num1-- ) {
-        if ( isset($controtag[ $num1 ]) && $controtag[ $num1 ] != 1 and $nome_tag[ $num1 ] != "br" and $nome_tag[ $num1 ] != "p" ) {
+        if ( isset( $controtag[ $num1 ] ) && $controtag[ $num1 ] != 1 and $nome_tag[ $num1 ] != "br" and $nome_tag[ $num1 ] != "p" ) {
             $stringa .= "</" . $nome_tag[ $num1 ] . ">";
         } # fine if ($controtag[$num1] != 1)
     } # fine for $num1
@@ -489,35 +489,35 @@ function mostra_shoutbox( $height = "150", $width = "96%", $per_page = "3", $car
         }
     }
 
-    if ( $_SESSION[ 'utente' ] == $admin_user )
+    if ( isset( $_SESSION[ 'utente' ] ) && $_SESSION[ 'utente' ] == $admin_user )
         $smsNome = $admin_nome; elseif ( isset( $_SESSION[ 'utente' ] ) )
         $smsNome = $_SESSION[ 'utente' ];
     else $smsNome = "Nome";
 
     echo "<form method='post' action='" . $_SERVER[ 'PHP_SELF' ] . "'>
-	<table summary='SMS' align='center' style='font-family:$font_family; font-size:$font_sizepx; width:$width;'>
+	<table summary='SMS' align='center' style='font-family:$font_family; font-size:$font_size; width:$width;'>
 	<caption> S M S </caption>
 	<tr>
-	<td style='$border font-family:$font_family; font-size:$font_sizepx;  margin: 2px; padding: 2px; height:$height; overflow:auto;'>
+	<td style='$border font-family:$font_family; font-size:$font_size;  margin: 2px; padding: 2px; height:$height; overflow:auto;'>
 	$output_buffer
 	</td>
 	</tr>
 	<tr>
 	<td>
-	<input type='text' size='15' maxlength='15' name='nome' value='$smsNome' style='$border; font-family:$font_family; font-size:$font_sizepx; width:100%;' onfocus='this.select();' /><br />
+	<input type='text' size='15' maxlength='15' name='nome' value='$smsNome' style='$border; font-family:$font_family; font-size:$font_size; width:100%;' onfocus='this.select();' /><br />
 	<input type='hidden' name='email' value='Email' />
 	<input type='hidden' name='azione' value='aggiungi' />
-	<input type='text' size='15' maxlength='100' name='messaggio' value='Messaggio' style='$border font-family:$font_family; font-size:$font_sizepx; width:100%;' onfocus='this.select();' /><br />
+	<input type='text' size='15' maxlength='100' name='messaggio' value='Messaggio' style='$border font-family:$font_family; font-size:$font_size; width:100%;' onfocus='this.select();' /><br />
 	</td>
 	</tr>
 	<tr><td valign='middle'>
 	<img src='./inc/captcha.inc.php?width=80&amp;height=30&amp;characters=$caratteri_sicurezza' alt='Codice sicurezza'/> 
-	NoSpam: <input name='security_code' type='text' size=$caratteri_sicurezza maxlength=$caratteri_sicurezza style='$border; font-family:$font_family; font-size:$font_sizepx;' onfocus='this.select();' /> 
+	NoSpam: <input name='security_code' type='text' size=$caratteri_sicurezza maxlength=$caratteri_sicurezza style='$border; font-family:$font_family; font-size:$font_size;' onfocus='this.select();' /> 
 	</td>
 	</tr>
 	<tr>
 	<td align='center'>
-	<input type='submit' value='Invia' style='$border font-family:$font_family; font-size:$font_sizepx;' />
+	<input type='submit' value='Invia' style='$border font-family:$font_family; font-size:$font_size;' />
 	</td>
 	</tr>
 	</table></form>";
@@ -1528,15 +1528,15 @@ function crea_stats()
                 'dat' => (string)$content->data,
                 'ora' => (string)$content->ora,
                 'mod' => (string)$content->modulo,
-                'par' => [(string)$content->partita],
-                'tit' => [$titolari ?: '<calciatore/>'],
-                'pan' => [$panchinari ?: '<calciatore/>'],
+                'par' => [ (string)$content->partita ],
+                'tit' => [ $titolari ?: '<calciatore/>' ],
+                'pan' => [ $panchinari ?: '<calciatore/>' ],
                 'all' => (string)$content->allenatore,
-                'ind' => [$indisponibili ?: '<calciatore/>'],
-                'squ' => [$squalificati ?: '<calciatore/>'],
-                'dif' => [$diffidati ?: '<calciatore/>'],
-                'alt' => [$altri ?: '<calciatore/>'],
-                'bal' => [$ballottaggi ?: '<calciatore/>'],
+                'ind' => [ $indisponibili ?: '<calciatore/>' ],
+                'squ' => [ $squalificati ?: '<calciatore/>' ],
+                'dif' => [ $diffidati ?: '<calciatore/>' ],
+                'alt' => [ $altri ?: '<calciatore/>' ],
+                'bal' => [ $ballottaggi ?: '<calciatore/>' ],
             ];
         }
 

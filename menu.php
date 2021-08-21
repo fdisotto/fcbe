@@ -145,7 +145,7 @@ if ($chiusura_giornata == 1) echo "<a href='./registro_mercato.php' >Registro me
 		echo "</select>$acapo<input type='submit' name='guarda_squadra' value='Vedi' /></form></center>$acapo";
 	}
 
-	if ($mostra_giornate_in_mercato == "SI" AND $stato_mercato != "I" AND $ultgio != 0) {
+	if ($mostra_giornate_in_mercato == "SI" AND $stato_mercato != "I" AND isset($ultgio) && $ultgio != 0) {
 		$giormerc = "<center><br/><form method='post' action='guarda_giornata.php'>
 		<input type='submit' name='guarda_giornata' value='Vedi' /> giornata n. <select name='giornata' onchange='submit()'>$acapo";
 
