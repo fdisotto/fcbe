@@ -32,40 +32,24 @@ if ( isset($_POST[ 'invio' ]) && $_POST[ 'invio' ] == "Successiva" )
     $telev = $telev + 1;
 
 if ( $sottop == "" )
-    $lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . ".png"; else
-    $lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . "." . $sottop . ".png";
+    $lnkimage = "https://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . ".png"; else
+    $lnkimage = "https://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . "." . $sottop . ".png";
 
 if ( ! @fopen( $lnkimage, "r" ) ) {
     $errore = "URL: $lnkimage non trovata";
     if ( $sottop == "" ) {
-        $lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . ".png";
+        $lnkimage = "https://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . ".png";
         $sottop = "";
     } elseif ( $sottop != "" ) {
         $sottop = "2";
-        $lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . "." . $sottop . ".png";
+        $lnkimage = "https://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-" . $telev . "." . $sottop . ".png";
     } else
-        $lnkimage = "http://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-100.png";
+        $lnkimage = "https://www.televideo.rai.it/televideo/pub/tt4web/Nazionale/page-100.png";
 }
 
 $tp = $telev - 1;
 $ts = $telev + 1;
-/*
-echo "<form method='post' action='televideo.php'>
-<input type='hidden' name='telev' value='".$_GET['telev']."' />
-<table align=center cellpadding=5 cellspacing=10 width='100%'>
-<tr><td bgcolor=black align=center valign=middle>
-<img SRC='$lnkimage' hspace=5 vspace=5 alt='Televideo RAI' /></td>
-<td align=center valign=middle>
-<h2>Televideo RAI</h2><br/><br/>Pagina <input type='text' name='telev' size=3 maxlength=3 value='$telev' />
-Sottopagina <input type='text' name='sottop' size=2 maxlength=2 value='$sottop' />
-<input type='submit' name='invio' value='Vai' /><br/><br/>
-<input type='submit' name='invio' value='$tp' />
-<input type='submit' name='invio' value='$ts' /><br/>  <br/>
-<input type='submit' name='telev' value='100' />
-<input type='submit' name='telev' value='200'/><br/><br/>
-Se non appare la pagina televideo pu&ograve; significare <br/>che la pagina non esiste <br/>o che occorre cambiare il numero di sottopagina.";
-*/
-#if ($errore) echo "<hr>$errore";
+
 echo "<table align='center' cellpadding='5' cellspacing='10' width='100%'>
 <tr><td bgcolor='black' align='center' valign='middle'>
 <img SRC='$lnkimage' hspace='5' vspace='5' alt='Televideo RAI' /></td>
@@ -73,23 +57,23 @@ echo "<table align='center' cellpadding='5' cellspacing='10' width='100%'>
 <a href='televideo.php?telev=230'>Atalanta</a> <br />
 <a href='televideo.php?telev=231'>Bologna</a><br />
 <a href='televideo.php?telev=232'>Cagliari</a> <br />
-<a href='televideo.php?telev=233'>Chievo</a> <br />
-<a href='televideo.php?telev=234'>Crotone</a> <br />
-<a href='televideo.php?telev=235'>Empoli</a> <br />
-<a href='televideo.php?telev=236'>Fiorentina</a> <br />
-<a href='televideo.php?telev=237'>Genoa</a> <br />
-<a href='televideo.php?telev=238'>Inter</a> <br />
-<a href='televideo.php?telev=239'>Juventus</a> <br />
-<a href='televideo.php?telev=240'>Lazio</a> <br />
-<a href='televideo.php?telev=241'>Milan</a> <br />
-<a href='televideo.php?telev=242'>Napoli</a> <br />
-<a href='televideo.php?telev=243'>Palermo</a> <br />
-<a href='televideo.php?telev=244'>Pescara</a> <br />
-<a href='televideo.php?telev=245'>Roma</a> <br />
-<a href='televideo.php?telev=246'>Samp</a> <br />
-<a href='televideo.php?telev=247'>Sassuolo</a> <br />
-<a href='televideo.php?telev=248'>Torino</a> <br />
-<a href='televideo.php?telev=249'>Udinese</a> <br /> <br />
+<a href='televideo.php?telev=233'>Empoli</a> <br />
+<a href='televideo.php?telev=234'>Fiorentina</a> <br />
+<a href='televideo.php?telev=235'>Genoa</a> <br />
+<a href='televideo.php?telev=236'>H. Verona</a> <br />
+<a href='televideo.php?telev=237'>Inter</a> <br />
+<a href='televideo.php?telev=238'>Juventus</a> <br />
+<a href='televideo.php?telev=239'>Lazio</a> <br />
+<a href='televideo.php?telev=240'>Milan</a> <br />
+<a href='televideo.php?telev=241'>Napoli</a> <br />
+<a href='televideo.php?telev=242'>Roma</a> <br />
+<a href='televideo.php?telev=243'>Salernitana</a> <br />
+<a href='televideo.php?telev=244'>Samp</a> <br />
+<a href='televideo.php?telev=245'>Sassuolo</a> <br />
+<a href='televideo.php?telev=246'>Spezia</a> <br />
+<a href='televideo.php?telev=247'>Torino</a> <br />
+<a href='televideo.php?telev=248'>Udinese</a> <br />
+<a href='televideo.php?telev=249'>Venezia</a> <br /> <br />
 <br/>
 <a href='televideo.php?telev=229'>Brevi calcio</a> <br />
 <br/>
