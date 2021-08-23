@@ -147,7 +147,7 @@ function ricerca( $testo )
     global $archivio_dati, $notizie_file, $categorie_file, $pagine_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_notizie = new csvfile;
         $lista_notizie->name = $notizie_file;
         $lista_notizie->init();
@@ -255,7 +255,7 @@ function gestione_pagine()
     global $percorso_cartella_dati, $archivio_dati, $pagine_file, $lp;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $news_list = new csvfile;
         $news_list->name = $pagine_file;
         $news_list->init();
@@ -321,7 +321,7 @@ function link_pagine()
     global $archivio_dati, $pagine_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_pagine = new csvfile;
         $lista_pagine->name = $pagine_file;
         $lista_pagine->init();
@@ -355,7 +355,7 @@ function link_pagine_box()
     global $archivio_dati, $pagine_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_pagine = new csvfile;
         $lista_pagine->name = $pagine_file;
         $lista_pagine->init();
@@ -389,7 +389,7 @@ function link_pagine_link()
     global $archivio_dati, $pagine_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_pagine = new csvfile;
         $lista_pagine->name = $pagine_file;
         $lista_pagine->init();
@@ -423,7 +423,7 @@ function elimina_pagina()
     global $conferma, $id, $archivio_dati, $pagine_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_pagine = new csvfile;
         $lista_pagine->name = $pagine_file;
         $lista_pagine->init();
@@ -450,7 +450,7 @@ function modifica_pagina()
     global $archivio_dati, $ptitolo, $priorita, $ptesto, $putente, $pattivo, $data_mod, $pagine_file, $conferma, $id;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_pagine = new csvfile;
         $lista_pagine->name = $pagine_file;
         $lista_pagine->init();
@@ -558,7 +558,7 @@ function pagina( $paginaid )
     global $archivio_dati, $pagine_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_pagine = new csvfile;
         $lista_pagine->name = $pagine_file;
         $lista_pagine->init();
@@ -606,7 +606,7 @@ function agg_categoria2()
     global $archivio_dati, $percorso_cartella_dati, $ptitolo, $ptesto, $pbox, $pimmagine, $data_mod, $categorie_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $news_list = new csvfile;
         $news_list->name = $categorie_file;
         $news_list->init();
@@ -724,7 +724,7 @@ function link_categorie()
     global $archivio_dati, $categorie_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_categorie = new csvfile;
         $lista_categorie->name = $categorie_file;
         $lista_categorie->init();
@@ -748,7 +748,7 @@ function elimina_categoria()
     global $conferma, $id, $percorso_cartella_dati, $archivio_dati, $categorie_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_categorie = new csvfile;
         $lista_categorie->name = $categorie_file;
         $lista_categorie->init();
@@ -774,7 +774,7 @@ function categoria( $categoria )
     global $archivio_dati, $categorie_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_categorie = new csvfile;
         $lista_categorie->name = $categorie_file;
         $lista_categorie->init();
@@ -812,7 +812,7 @@ function modifica_categoria()
     global $archivio_dati, $percorso_cartella_dati, $ptitolo, $ptesto, $pbox, $putente, $data_mod, $categorie_file, $conferma, $id;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_categorie = new csvfile;
         $lista_categorie->name = $categorie_file;
         $lista_categorie->init();
@@ -908,7 +908,7 @@ function agg_notizia()
     global $archivio_dati, $categorie_file, $sottocategorie_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_categorie = new csvfile;
         $lista_categorie->name = $categorie_file;
         $lista_categorie->init();
@@ -935,7 +935,7 @@ function agg_notizia()
     $vedi_categorie .= '</select>';
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_sottocategorie = new csvfile;
         $lista_sottocategorie->name = $sottocategorie_file;
         $lista_sottocategorie->init();
@@ -1025,7 +1025,7 @@ function agg_notizia2()
     global $archivio_dati, $percorso_cartella_dati, $ptitolo, $pcategoria, $psottocategoria, $pabstract, $ptesto, $pbox, $pdataeventog, $pdataeventom, $pdataeventoa, $ptitoloevento, $pdescrevento, $pimmagine, $puploadfile, $pattivo, $data_mod, $notizie_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $news_list = new csvfile;
         $news_list->name = $notizie_file;
         $news_list->init();
@@ -1095,7 +1095,7 @@ function gestione_notizie()
     global $percorso_cartella_dati, $archivio_dati, $notizie_file, $lp;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $news_list = new csvfile;
         $news_list->name = $notizie_file;
         $news_list->init();
@@ -1167,7 +1167,7 @@ function elimina_notizia()
     global $conferma, $id, $archivio_dati, $notizie_file, $percorso_cartella_dati;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_notizie = new csvfile;
         $lista_notizie->name = $notizie_file;
         $lista_notizie->init();
@@ -1185,7 +1185,7 @@ function elimina_notizia()
         $lista_notizie->delete( $id - 1 );
         $messaggio = "Notizia eliminata";
         echo "<script language='javascript'>top.location.href = 'a_sito.php?q=13&amp;$messaggio';</script>";
-        exit;;
+        exit;
     }
 }
 
@@ -1194,7 +1194,7 @@ function notizie()
     global $lp, $news_per_pagina, $archivio_dati, $notizie_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_notizie = new csvfile;
         $lista_notizie->name = $notizie_file;
         $lista_notizie->init();
@@ -1289,7 +1289,7 @@ function notizia( $notiziaid, $evidenzia )
     $evidenzia = strip_tags( $evidenzia );
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_notizie = new csvfile;
         $lista_notizie->name = $notizie_file;
         $lista_notizie->init();
@@ -1351,7 +1351,7 @@ function link_notizie( $categoria )
     global $archivio_dati, $notizie_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_notizie = new csvfile;
         $lista_notizie->name = $notizie_file;
         $lista_notizie->init();
@@ -1394,7 +1394,7 @@ function ultime_notizie( $status )
     $a = '';
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_notizie = new csvfile;
         $lista_notizie->name = $notizie_file;
         $lista_notizie->init();
@@ -1427,7 +1427,7 @@ function modifica_notizia()
     global $archivio_dati, $percorso_cartella_dati, $data_mod, $putente, $ptitolo, $pcategoria, $pabstract, $ptesto, $pbox, $pdataevento, $ptitoloevento, $pdescrevento, $pimmagine, $puploadfile, $pattivo, $notizie_file, $conferma, $id, $categorie_file;
 
     if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
+        require_once INC_DIR . "/csvfile.inc.php";
         $lista_notizie = new csvfile;
         $lista_notizie->name = $notizie_file;
         $lista_notizie->init();
@@ -1513,7 +1513,7 @@ function modifica_notizia()
         unset( $dati_notizie );
 
         if ( $archivio_dati == "csvfile" ) {
-            require_once( "./inc/csvfile.inc.php" );
+            require_once INC_DIR . "/csvfile.inc.php";
             $lista_categorie = new csvfile;
             $lista_categorie->name = $categorie_file;
             $lista_categorie->init();

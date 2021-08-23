@@ -1,0 +1,21 @@
+{
+  "name": "fcbe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fdisotto/fcbe/issues"
+  },
+  "homepage": "https://github.com/fdisotto/fcbe#readme",
+  "dependencies": {
+    "mdb-ui-kit": "^3.9.0"
+  }
+}

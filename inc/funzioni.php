@@ -1,13 +1,18 @@
-<?php
+<?php defined( "FCBE" ) or die( "You shall not pass!" );
+
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 ##################################################################################
 if ( $usa_cms == "SI" ) {
-    require_once( "./dati/cms.conf.php" );
-    require_once( "./inc/cms.inc.php" );
+    require_once DATI_DIR . "/cms.conf.php";
+    require_once INC_DIR . "/cms.inc.php";
 }
 
-if ( @is_file( $percorso_cartella_dati . "/testi.php" ) )
-    $messaggi = file( $percorso_cartella_dati . "/testi.php" );
+if ( @is_file( DATI_DIR . "/testi.php" ) ) {
+    $messaggi = file( DATI_DIR . "/testi.php" );
+}
 
 function ultimo_del_mese( $mon, $year )
 {
@@ -438,91 +443,6 @@ function num_pag( $total_pages, $current = 1 )
     return $buffer;
 }
 
-function mostra_shoutbox( $height = "150", $width = "96%", $per_page = "3", $caratteri_sicurezza = 5, $border = "border:1px #DDDDDD solid;", $font_family = "tahoma", $font_size = "9" )
-{
-    global $db_sb, $admin_user, $admin_nome;
-
-    if ( isset( $_GET[ 'shoutbox_page' ] ) )
-        $shoutbox_page = $_GET[ 'shoutbox_page' ];
-
-    if ( empty( $_GET[ 'shoutbox_page' ] ) )
-        $shoutbox_page = 1;
-
-    $file = $db_sb;
-    $output_buffer = "";
-    $shouts = array();
-
-    if ( @filesize( $file ) ) {
-        $fp = fopen( $file, "r" );
-        $fp1 = fread( $fp, filesize( $file ) );
-        $shouts = explode( "\r\n", $fp1 );
-        $total_shouts = count( $shouts );
-        $total_pages = ceil( $total_shouts / $per_page );
-        $shout_pointer = ( ( $total_shouts - ( $shoutbox_page * $per_page ) ) + $per_page ) - 1;
-
-        if ( $shoutbox_page > $total_pages )
-            $shoutbox_page = 1;
-
-        $output_buffer .= num_pag( $total_pages, $shoutbox_page );
-    } else {
-        $shouts = 0;
-        $total_shouts = 0;
-        $shout_pointer = 0;
-        $output_buffer .= num_pag( 1, 1 );
-    }
-
-    for ( $i = $shout_pointer; $i > ( $shout_pointer - $per_page ); $i-- ) {
-        if ( $i > -1 ) {
-            if ( $shouts[ $i ] )
-                list( $name, $email, $date, $shout ) = explode( "|", $shouts[ $i ] );
-
-            if ( ! empty( $name ) ) {
-                $email_start = "";
-                $email_end = "";
-
-                if ( ! empty( $email ) ) {
-                    $email_start = "<a href='mailto:" . $email . "'>";
-                    $email_end = "</a>";
-                }
-                $output_buffer .= "<br /><strong>" . $email_start . $name . $email_end . "</strong>\r\n<br />" . $shout . "<br />\r\n";
-            }
-        }
-    }
-
-    if ( isset( $_SESSION[ 'utente' ] ) && $_SESSION[ 'utente' ] == $admin_user )
-        $smsNome = $admin_nome; elseif ( isset( $_SESSION[ 'utente' ] ) )
-        $smsNome = $_SESSION[ 'utente' ];
-    else $smsNome = "Nome";
-
-    echo "<form method='post' action='" . $_SERVER[ 'PHP_SELF' ] . "'>
-	<table summary='SMS' align='center' style='font-family:$font_family; font-size:$font_size; width:$width;'>
-	<caption> S M S </caption>
-	<tr>
-	<td style='$border font-family:$font_family; font-size:$font_size;  margin: 2px; padding: 2px; height:$height; overflow:auto;'>
-	$output_buffer
-	</td>
-	</tr>
-	<tr>
-	<td>
-	<input type='text' size='15' maxlength='15' name='nome' value='$smsNome' style='$border; font-family:$font_family; font-size:$font_size; width:100%;' onfocus='this.select();' /><br />
-	<input type='hidden' name='email' value='Email' />
-	<input type='hidden' name='azione' value='aggiungi' />
-	<input type='text' size='15' maxlength='100' name='messaggio' value='Messaggio' style='$border font-family:$font_family; font-size:$font_size; width:100%;' onfocus='this.select();' /><br />
-	</td>
-	</tr>
-	<tr><td valign='middle'>
-	<img src='./inc/captcha.inc.php?width=80&amp;height=30&amp;characters=$caratteri_sicurezza' alt='Codice sicurezza'/> 
-	NoSpam: <input name='security_code' type='text' size=$caratteri_sicurezza maxlength=$caratteri_sicurezza style='$border; font-family:$font_family; font-size:$font_size;' onfocus='this.select();' /> 
-	</td>
-	</tr>
-	<tr>
-	<td align='center'>
-	<input type='submit' value='Invia' style='$border font-family:$font_family; font-size:$font_size;' />
-	</td>
-	</tr>
-	</table></form>";
-}
-
 function select_vedi_tornei()
 {
     global $percorso_cartella_dati;
@@ -722,7 +642,7 @@ function ultimi10()
 {
     global $percorso_cartella_dati;
     $files = array();
-    $dhandle = opendir( $percorso_cartella_dati . "/messaggi" ) or die( "impossibile aprire la directory dei messaggi" );
+    $dhandle = opendir( DATI_DIR . "/messaggi" ) or die( "impossibile aprire la directory dei messaggi" );
     while ( $filei = readdir( $dhandle ) ) {
         if ( ( $filei == "." ) || ( $filei == ".." ) || ( $filei == "index.php" ) ) {
         } else {
@@ -737,7 +657,7 @@ function ultimi10()
         $dato = $files[ $x ] ?? '';
 
         if ( $dato != "" ) {
-            $topic = file( $percorso_cartella_dati . "/messaggi/$dato" );
+            $topic = file( DATI_DIR . "/messaggi/$dato" );
             $topicinfo = explode( "|", $topic[ 0 ] );
             echo "- <a href='messaggi.php?a=topic&amp;topic=" . substr( $dato, 0, strlen( $dato ) - 4 ) . "'>" . $topicinfo[ 0 ] . "</a><br />";
         }
@@ -1389,8 +1309,7 @@ function syntax_hilight( $filename )
 
 function tabella_squadre()
 {
-    global $percorso_cartella_dati;
-    $sq = file( $percorso_cartella_dati . "/squadre.txt" );
+    $sq = file( DATI_DIR . "/squadre.txt" );
     echo "<center><div>";
 
     foreach ( $sq as $val ) {
@@ -1546,4 +1465,32 @@ function crea_stats()
     } catch ( Exception $e ) {
         return $e->getMessage();
     }
+}
+
+function scrivi_log()
+{
+    global $attiva_log;
+
+    if ( isset( $attiva_log ) && $attiva_log == "SI" ) {
+        $torneo = $_SESSION[ 'torneo' ] ?? 0;
+
+        $log = new Logger( 'website' );
+        $logRotate = new RotatingFileHandler( sprintf( "%s/log_%s.txt", LOG_DIR, $torneo ) );
+        $log->pushHandler( $logRotate );
+
+        $info = [
+            'ip'     => $_SERVER[ 'REMOTE_ADDR' ],
+            'url'    => "https://" . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'REQUEST_URI' ],
+            'utente' => $_SESSION[ 'utente' ] ?? "Visitatore",
+        ];
+
+        $log->info( "page view", $info );
+    }
+}
+
+function chiusura_giornata(): int
+{
+    global $percorso_cartella_dati;
+
+    return file_exists( DATI_DIR . "/chiusura_giornata.txt" ) ? (int)file_get_contents( $percorso_cartella_dati . "/chiusura_giornata.txt" ) : 0;
 }

@@ -4,11 +4,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      PHP_DISPLAY_ERRORS: 1
     ports:
-      - 80:80
+      - "80:5000"
     volumes:
-      - ./:/app
+      - ./:/var/www/app
     dns:
       - 8.8.8.8

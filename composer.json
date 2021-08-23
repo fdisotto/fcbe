@@ -1,0 +1,12 @@
+{
+    "name": "fdisotto/fcbe",
+    "authors": [
+        {
+            "name": "Fabio Di Sotto",
+            "email": "fabio.disotto@gmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "^2.3"
+    }
+}

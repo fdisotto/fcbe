@@ -22,16 +22,17 @@
 #=================================================================
 #= LETTURA FILE LOG
 #=================================================================
-function ReadLog($file): array
+function ReadLog( $file ): array
 {
-    $handle = @fopen($file, "r");
-    @flock($handle, LOCK_SH);
-    $LoggedUsers = @fread($handle, filesize($file));
-    @flock($handle, LOCK_UN);
-    @fclose($handle);
-    $LoggedUsers = trim($LoggedUsers);
-    $LoggedUsers = substr($LoggedUsers, 0, -3);
-    return explode("[x]", $LoggedUsers);
+    $handle = @fopen( $file, "r" );
+    @flock( $handle, LOCK_SH );
+    $LoggedUsers = @fread( $handle, filesize( $file ) );
+    @flock( $handle, LOCK_UN );
+    @fclose( $handle );
+    $LoggedUsers = trim( $LoggedUsers );
+    $LoggedUsers = substr( $LoggedUsers, 0, -3 );
+
+    return explode( "[x]", $LoggedUsers );
 }
 
 # CONFIGURAZIONE ONLINE E LOG
@@ -45,86 +46,92 @@ $Online_name_users = "";
 
 #= CODICE PHP =#
 
-$file = $_REQUEST['file'] ?? null;
+$file = $_REQUEST[ 'file' ] ?? null;
 
-if (!isset($Expire)) $Expire = 30;
+if ( ! isset( $Expire ) )
+    $Expire = 30;
 
-if (isset($file)) $file = "$file";
-else $file = "./dati/c_ol.log";
+if ( isset( $file ) )
+    $file = "$file"; else $file = DATI_DIR . "/c_ol.log";
 
-if (!file_exists($file)) @fopen($file, "wb+");
+if ( ! file_exists( $file ) )
+    @fopen( $file, "wb+" );
 
 $Online = 0;
 $Interval = time() - $Expire;
 $MaxFileSize = $MaxFileSize * 1000;
 
-$NewUser = time() . "|" . $_SERVER['REMOTE_ADDR'] . "|" . $_SESSION['utente'] . "[x]";
+$NewUser = time() . "|" . $_SERVER[ 'REMOTE_ADDR' ] . "|" . $_SESSION[ 'utente' ] . "[x]";
 
 #=================================================================
 #= SOVRASCRIVE NUOVE INFO DELL'UTENTE
 #=================================================================
-if (filesize($file) > $MaxFileSize and $AutoMonitor == "1") {
-    $LoggedUsers = ReadLog($file);
-    $conta = count($LoggedUsers);
+if ( filesize( $file ) > $MaxFileSize and $AutoMonitor == "1" ) {
+    $LoggedUsers = ReadLog( $file );
+    $conta = count( $LoggedUsers );
 
     $SavedUsers = "";
-    for ($x = 0; $x < $conta; $x++) {
-        if ($Interval <= trim(substr($LoggedUsers[$x], 0, 10)))
-            $SavedUsers .= $LoggedUsers[$x] . "\r\n";
+    for ( $x = 0; $x < $conta; $x++ ) {
+        if ( $Interval <= trim( substr( $LoggedUsers[ $x ], 0, 10 ) ) )
+            $SavedUsers .= $LoggedUsers[ $x ] . "\r\n";
     }
     $SavedUsers .= $NewUser;
 
-    $handle = @fopen($file, "w");
-    @flock($handle, LOCK_EX);
-    @fwrite($handle, $SavedUsers . "\r\n");
+    $handle = @fopen( $file, "w" );
+    @flock( $handle, LOCK_EX );
+    @fwrite( $handle, $SavedUsers . "\r\n" );
 } # LOGGA INFO UTENTI NEL FILE
 else {
-    $handle = @fopen($file, "a");
-    @flock($handle, LOCK_EX);
-    @fwrite($handle, $NewUser . "\r\n");
+    $handle = @fopen( $file, "a" );
+    @flock( $handle, LOCK_EX );
+    @fwrite( $handle, $NewUser . "\r\n" );
 }
-@flock($handle, LOCK_UN);
-@fclose($handle);
+@flock( $handle, LOCK_UN );
+@fclose( $handle );
 
-$LoggedUsers = ReadLog($file);
+$LoggedUsers = ReadLog( $file );
 
 # CONTA GLI UTENTI ONLINE
-$cuo = count($LoggedUsers);
+$cuo = count( $LoggedUsers );
 $CheckUsers = '';
 $CheckUsersName = '';
-for ($x = 0; $x < $cuo; $x++) {
-    $UserInfo = explode("|", $LoggedUsers[$x]);
-    if (!empty($CheckUsers)) // VERIFICA NEL FILE SE CI SONO UTENTI DOPPI
+for ( $x = 0; $x < $cuo; $x++ ) {
+    $UserInfo = explode( "|", $LoggedUsers[ $x ] );
+    if ( ! empty( $CheckUsers ) ) // VERIFICA NEL FILE SE CI SONO UTENTI DOPPI
     {
-        if ($Interval <= trim($UserInfo[0]) and (!stristr($CheckUsers, trim($UserInfo[1]) . "*") or !stristr($CheckUsersName, trim($UserInfo[2]) . "*"))) {
-            if (!stristr($CheckUsers, trim($UserInfo[1]) . "*")) $CheckUsers .= $UserInfo[1] . "*";
-            if (!stristr($CheckUsersName, trim($UserInfo[2]) . "*")) $CheckUsersName .= $UserInfo[2] . "*";
+        if ( $Interval <= trim( $UserInfo[ 0 ] ) and ( ! stristr( $CheckUsers, trim( $UserInfo[ 1 ] ) . "*" ) or ! stristr( $CheckUsersName, trim( $UserInfo[ 2 ] ) . "*" ) ) ) {
+            if ( ! stristr( $CheckUsers, trim( $UserInfo[ 1 ] ) . "*" ) )
+                $CheckUsers .= $UserInfo[ 1 ] . "*";
+            if ( ! stristr( $CheckUsersName, trim( $UserInfo[ 2 ] ) . "*" ) )
+                $CheckUsersName .= $UserInfo[ 2 ] . "*";
             $Online++;
-            if ($Online > 1 and strlen(trim($Online_name_users)) > 0) $Online_name_users .= " - ";
-            $Online_name_users .= $UserInfo[2];
+            if ( $Online > 1 and strlen( trim( $Online_name_users ) ) > 0 )
+                $Online_name_users .= " - ";
+            $Online_name_users .= $UserInfo[ 2 ];
         }
     } else {
-        $CheckUsers .= $_SERVER['REMOTE_ADDR'] . "*";
-        $CheckUsersName .= $_SESSION['utente'] . "*";
+        $CheckUsers .= $_SERVER[ 'REMOTE_ADDR' ] . "*";
+        $CheckUsersName .= $_SESSION[ 'utente' ] . "*";
         $Online++;
-        if ($Online > 1 and strlen(trim($Online_name_users)) > 0) $Online_name_users .= " - ";
-        $Online_name_users .= $_SESSION['utente'];
+        if ( $Online > 1 and strlen( trim( $Online_name_users ) ) > 0 )
+            $Online_name_users .= " - ";
+        $Online_name_users .= $_SESSION[ 'utente' ];
     }
 }
 
 #=================================================================
 #= VISUALIZZAZIONE MESSAGGIO
 #=================================================================
-$Display = str_replace("[utenti]", $Online, $Display);
-$Online_name_users = trim($Online_name_users);
-$Display = str_replace("[nomi]", $Online_name_users, $Display);
+$Display = str_replace( "[utenti]", $Online, $Display );
+$Online_name_users = trim( $Online_name_users );
+$Display = str_replace( "[nomi]", $Online_name_users, $Display );
 
-if ($Online == 1 and $AutoCorrect == "1") {
-    $Display = preg_replace("!s([^[:alpha:]])!", "$1", $Display);
-    $Display = str_replace("Ci sono", "C'&egrave;", $Display);
+if ( $Online == 1 and $AutoCorrect == "1" ) {
+    $Display = preg_replace( "!s([^[:alpha:]])!", "$1", $Display );
+    $Display = str_replace( "Ci sono", "C'&egrave;", $Display );
 }
 
-$Display = str_replace("()", "", $Display);
-$Display = str_replace($admin_user, $admin_nome, $Display);
+$Display = str_replace( "()", "", $Display );
+$Display = str_replace( $admin_user, $admin_nome, $Display );
 //
 echo $Display;

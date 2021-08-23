@@ -15,3 +15,5 @@ dati/2021/*.txt
 dati/copia/*.zip
 immagini/loghi/
 inc/ajax-chat/php/data.txt
+
+/vendor/
