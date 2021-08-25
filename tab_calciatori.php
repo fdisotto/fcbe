@@ -145,7 +145,7 @@ if ( $_SESSION[ 'valido' ] == "SI" or $escludi_controllo == "SI" ) {
             #####################��
 
             for ( $num2 = 0; $num2 < $num_calciatori_merc; $num2++ ) {
-                $dati_calciatore_merc = array_filter(explode( ",", $calciatori_merc[ $num2 ] ));
+                $dati_calciatore_merc = array_filter( explode( ",", $calciatori_merc[ $num2 ] ) );
 
                 $tempo_off = $dati_calciatore_merc[ 5 ];
                 $anno_off = (int)substr( $tempo_off, 0, 4 );
@@ -272,7 +272,7 @@ if ( $_SESSION[ 'valido' ] == "SI" or $escludi_controllo == "SI" ) {
 
                 else $azione = "-";
             } elseif ( $mercato_libero == "SI" ) {
-                if ( $xsquadra_ok == "NO" and $_SESSION[ 'utente' ] != $propr_c )
+                if ( ! empty( $xsquadra_ok ) && $xsquadra_ok == "NO" and $_SESSION[ 'utente' ] != $propr_c )
                     $azione = "<a href='compra.php?num_calciatore=$numero&amp;valutazione=$valutazione&amp;xsquadra_ok=NO' class='user'>compra</a>"; elseif ( $stato_mercato == "I" and $_SESSION[ 'utente' ] == $propr_c )
                     $azione = "<a href='vedi_vendi_subito.php?num_calciatore=$numero' class='user'>svincola</a>";
                 elseif ( $stato_mercato == "I" and $_SESSION[ 'utente' ] != $propr_c )
@@ -323,4 +323,5 @@ if ( $_SESSION[ 'valido' ] == "SI" or $escludi_controllo == "SI" ) {
     echo "<script type='text/javascript' src='./inc/js/ordina_tabella.js'></script>";
     echo $layout;
 } # fine if ($pass_errata != "SI")
-include( "./footer.php" );
+
+require_once "./footer.php";
