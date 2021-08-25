@@ -72,7 +72,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
                     $linee = count( $file );
 
                     for ( $num1 = 1; $num1 < $linee + 1; $num1++ ) {
-                        @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num1 ] );
+                        @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num1 ] );
                         $testo_file .= "\$voti_$outente = array();\n";
                     } # fine for $num1
                 }

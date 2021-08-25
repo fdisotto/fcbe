@@ -131,7 +131,7 @@ echo "<table bgcolor='$sfondo_tab' width='100%' border='0' cellspacing='0' cellp
 $file = @file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
 $linee = count($file);
 for ($num1 = 1 ; $num1 < $linee; $num1++) {
-@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 	$nome_posizione[$num1] = $outente;
 	$soprannome_squadra = $osquadra;
 

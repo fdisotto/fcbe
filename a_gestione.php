@@ -156,15 +156,19 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
     if ( strlen( $mesedopo ) == 1 )
         $mesedopo = "0" . $mesedopo;
 
-    if ( ! $ac )
+    if ( ! $ac ) {
         $ac = 2013;
+    }
     $annodopo = $ac + 1;
+
+    $annoprima = $ac - 1;
 
     $tabella_chigio .= "<select name='mesem'>
 	<option value='$mc' selected>$mc</option>
 	<option value='$mesedopo'>$mesedopo</option>
 	</select>
 	<select name='annom'>
+	<option value='$annoprima'>$annoprima</option>
 	<option value='$ac' selected>$ac</option>
 	<option value='$annodopo'>$annodopo</option>
 	</select>
@@ -204,6 +208,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
     } # fine for $nums1
 
     $num1 = 1;
+    $prossima = 0;
     while ( $num1 <= 38 ) {
         if ( strlen( $num1 ) == 1 )
             $num1 = "0" . $num1;
@@ -223,10 +228,12 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
         $num1++;
     } # fine for $num1
 
-    if ( ! isset( $prossima ) || $prossima < 1 )
+    if ( $prossima < 1 ) {
         $prossima = 1;
-    if ( strlen( $prossima ) == 1 )
+    }
+    if ( strlen( $prossima ) == 1 ) {
         $prossima = "0" . $prossima;
+    }
 
     switch ( $abilita_stat ) {
         case 'AUTO':

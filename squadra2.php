@@ -26,7 +26,7 @@ include("./header.php");
 		$linee = count($utenti);
 
 			for($num1=1; $num1 < $linee; $num1++) {
-			@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $utenti[$num1]);
+			@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $utenti[$num1]);
 			$dati_squadra = @file($percorso_cartella_dati."/squadra_".$outente);
 
 			if ($sfondo_tab == "") $sfondo_tab = "#E4EDED";

@@ -32,7 +32,7 @@ $num_giocatori = 0;
 	}
 
 	for($num1 = 1 ; $num1 < $num_giocatori; $num1++) {
-	@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+	@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 	$ssquadra[$outente] = $osquadra;
 	}
 

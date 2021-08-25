@@ -473,7 +473,7 @@ function mostra_shoutbox( $height = "150", $width = "96%", $per_page = "3", $car
 
     for ( $i = $shout_pointer; $i > ( $shout_pointer - $per_page ); $i-- ) {
         if ( $i > -1 ) {
-            if ( $shouts[ $i ] )
+            if ( isset( $shouts[ $i ] ) )
                 list( $name, $email, $date, $shout ) = explode( "|", $shouts[ $i ] );
 
             if ( ! empty( $name ) ) {

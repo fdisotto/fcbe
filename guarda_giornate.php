@@ -122,7 +122,7 @@ $num2 = 0;
 $file = file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
 $linee = count($file);
 for($num1 = 1; $num1 < $linee; $num1++){
-@list($outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+@list($outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 $nome_posizione[$num1] = $outente;
 
 if ($osquadra) {
@@ -265,7 +265,7 @@ $file = file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
 $linee = count($file);
 
 for($num1 = 1; $num1 < $linee; $num1++){
-@list($outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+@list($outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 $totpunti = 0;
 $soprannome_squadra = $osquadra;
 

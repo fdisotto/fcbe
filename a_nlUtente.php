@@ -188,7 +188,7 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 3) {
 						$totalLines = count($filei);
 
 						for($line = 1; $line < $totalLines; $line++) {
-							@list($outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $filei[$line]);
+							@list($outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $filei[$line]);
 
 							if (isset($oemail)) $destinatari[] = $oemail;
 						}

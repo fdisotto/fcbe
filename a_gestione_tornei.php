@@ -1169,8 +1169,8 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
                     $titolo .= "$osquadra"; else $titolo .= "Squadra";
                 $titolo .= " di $outente</u></font>";
                 $titolo .= "<br /><br />Presidente: <b>$outente</b>";
-                if ( $ocitt� )
-                    $titolo .= "<br />Citt�: <b>$ocitt�</b>";
+                if ( $ocitta )
+                    $titolo .= "<br />Citt�: <b>$ocitta</b>";
                 if ( $ourl and $ourl != "http://" )
                     $titolo .= "<br />Sito Web: <b>$ourl</b>";
                 $titolo .= "<br />Email: <b>$oemail</b>";

@@ -309,7 +309,7 @@ if ($_SESSION['valido'] == "SI" or $escludi_controllo == "SI") {
 
 			for($num1 = 1 ; $num1 < $linee; $num1++) {
 
-				@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file_utenti[$num1]);
+				@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file_utenti[$num1]);
 
 				$GF[$outente] = $VF[$outente] + $NF[$outente] + $PF[$outente];
 				$GC[$outente] = $VC[$outente] + $NC[$outente] + $PC[$outente];

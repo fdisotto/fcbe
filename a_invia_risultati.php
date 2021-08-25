@@ -147,7 +147,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 4 ) {
         $file = @file( $percorso_cartella_dati . "/utenti_" . $_SESSION[ 'torneo' ] . ".php" );
         $linee = count( $file );
         for ( $num1 = 1; $num1 < $linee; $num1++ ) {
-            @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num1 ] );
+            @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num1 ] );
             $nome_posizione[ $num1 ] = $outente;
             $soprannome_squadra = $osquadra;
 
@@ -527,7 +527,7 @@ if ( $_SESSION[ 'permessi' ] == 5 ) {
         $file = @file( "./dati/utenti_" . $storneo . ".php" ) ?: [];
         $linee = count( $file );
         for ( $num1 = 1; $num1 < $linee; $num1++ ) {
-            @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num1 ] );
+            @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num1 ] );
             $nome_posizione[ $num1 ] = $outente;
             $soprannome_squadra = $osquadra;
 

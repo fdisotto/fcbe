@@ -60,7 +60,7 @@ for($num1 = 1 ; $num1 <= $giornata_ultima ; $num1++) {
 } # fine for $num1
 
 for($num1 = 1 ; $num1 < $linee; $num1++) {
-	@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocittà, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file_utenti[$num1]);
+	@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file_utenti[$num1]);
 	$nome_posizione[$num1] = $outente;
 
 	if ($osquadra) $nome_squadra_memo[$outente] = $osquadra;
@@ -90,7 +90,7 @@ for($num1 = 0 ; $num1 < $num_campionati; $num1++) {
 			$contaUtenti = 0;
 
 			for($linea = 1; $linea < $linee; $linea++){
-				@list($ooutente, $oopass, $oopermessi, $ooemail, $oourl, $oosquadra, $ootorneo, $ooserie, $oocittà, $oocrediti, $oovariazioni, $oocambi, $ooreg) = explode("<del>", $file_utenti[$linea]);
+				@list($ooutente, $oopass, $oopermessi, $ooemail, $oourl, $oosquadra, $ootorneo, $ooserie, $oocittï¿½, $oocrediti, $oovariazioni, $oocambi, $ooreg) = explode("<del>", $file_utenti[$linea]);
 				$contaUtenti++;
 			}
 			$num_giocatori=$contaUtenti;

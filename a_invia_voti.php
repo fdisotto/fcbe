@@ -58,7 +58,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] <= 4 ) {
         $linee = count( $file );
 
         for ( $num1 = 1; $num1 < $linee; $num1++ ) {
-            @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num1 ] );
+            @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num1 ] );
             $giocatore = $outente;
             $soprannome_squadra = $osquadra;
             $soprannome_squadra = togli_acapo( $soprannome_squadra );
@@ -317,7 +317,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] <= 4 ) {
         $file = file( $percorso_cartella_dati . "/utenti_" . $_SESSION[ 'torneo' ] . ".php" );
         $linee = count( $file );
         for ( $linea = 1; $linea < $linee; $linea++ ) {
-            @list( $outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $linea ] );
+            @list( $outente, $opassword, $opermessi, $oemail, $ourl, $osquadra, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $linea ] );
             $destinatari .= "$outente <$oemail>,";
         }
         $destinatari .= "\r\n";
@@ -381,7 +381,7 @@ if ( $_SESSION[ 'permessi' ] == 5 ) {
         $linee = count( $file );
 
         for ( $num1 = 1; $num1 < $linee; $num1++ ) {
-            @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num1 ] );
+            @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num1 ] );
             $giocatore = $outente;
             $soprannome_squadra = $osquadra;
             $soprannome_squadra = togli_acapo( $soprannome_squadra );

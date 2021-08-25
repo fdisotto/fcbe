@@ -174,10 +174,10 @@ fclose($file_mercato);
 #if ($stato_mercato != "I" OR $stato_mercato == "R") {
 
 $file = file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
-@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg, $otitolari, $opanchina, $onome, $ocognome) = explode("<del>", trim($file[$_SESSION['uid']]));
+@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg, $otitolari, $opanchina, $onome, $ocognome) = explode("<del>", trim($file[$_SESSION['uid']]));
 $nuovo_credito = $ocrediti + $aggiungi_surplus;
 
-$agg_dati = $outente."<del>".($opass)."<del>".$opermessi."<del>".$oemail."<del>".$ourl."<del>".$osquadra."<del>".$otorneo."<del>".$oserie."<del>".$ocitt�."<del>".$nuovo_credito."<del>".$ovariazioni."<del>".$ocambi."<del>".$oreg. "<del>0<del>0<del>".$onome."<del>".$ocognome."<del>0<del>0<del>0<del>0<del>0<del>0<del>0<del>0".$acapo;
+$agg_dati = $outente."<del>".($opass)."<del>".$opermessi."<del>".$oemail."<del>".$ourl."<del>".$osquadra."<del>".$otorneo."<del>".$oserie."<del>".$ocitta."<del>".$nuovo_credito."<del>".$ovariazioni."<del>".$ocambi."<del>".$oreg. "<del>0<del>0<del>".$onome."<del>".$ocognome."<del>0<del>0<del>0<del>0<del>0<del>0<del>0<del>0".$acapo;
 
 $file[$_SESSION['uid']] = $agg_dati;
 

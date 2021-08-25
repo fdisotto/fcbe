@@ -135,7 +135,7 @@ if ($chiusura_giornata == 1) echo "<a href='./registro_mercato.php' >Registro me
 		<option value='tutti'> di tutti</option>$acapo";
 
 		for ($num1 = 1 ; $num1 <= $linee; $num1++) {
-			@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+			@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 			if ($_SESSION['torneo'] == $otorneo AND $_SESSION['serie'] == $oserie) {
 				if (!$osquadra) $osquadra = "di $outente";
 				echo "<option value='$outente'>".htmlentities($osquadra, ENT_QUOTES)."</option>$acapo";
@@ -354,7 +354,7 @@ else if ($menu_lato == "NO" AND $_SESSION['permessi'] == 0) {
 	<option value='tutti'> di tutti</option>";
 
 	for ($num1 = 1 ; $num1 <= $linee; $num1++) {
-		@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
+		@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$num1]);
 		if (!$osquadra) $osquadra = "di $outente";
 	} # fine for $num1
 

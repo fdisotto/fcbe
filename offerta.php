@@ -380,7 +380,7 @@ if ($_SESSION['valido'] == "SI") {
 		}
 
 		$ifile = file($percorso_cartella_dati."/utenti_".$_SESSION['torneo'].".php");
-		@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $ifile[$_SESSION['uid']]);
+		@list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $ifile[$_SESSION['uid']]);
 
 		$surplus = $ocrediti;
 		$variazioni = $ovariazioni;

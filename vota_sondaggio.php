@@ -87,7 +87,7 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
         if ( $voto_palese == "SI" ) {
             $file = file( "./dati/utenti_" . $_SESSION[ 'torneo' ] . ".php" );
             for ( $i = 1; $i < sizeof( $file ); $i++ ) {
-                @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $i ] );
+                @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $i ] );
                 if ( $outente != "admin" ) {
                     echo "Voti di $outente: ";
                     $voti_giocatore = "voti_" . $outente;

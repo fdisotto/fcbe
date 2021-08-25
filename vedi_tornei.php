@@ -33,7 +33,7 @@ for ( $num1 = 1; $num1 < $num_tornei; $num1++ ) {
     $num_giocatori = 0;
 
     for ( $numx = 1; $numx < $linee; $numx++ ) {
-        @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $numx ] );
+        @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $numx ] );
         if ( $otorneo == $otid )
             $num_giocatori++;
     }

@@ -181,7 +181,7 @@ if ($stato_mercato != "B") {
 
     $num_calciatori_comprabili = $max_calciatori - $num_calciatori_posseduti;
 
-    @list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitt�, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$_SESSION['uid']]);
+    @list($outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg) = explode("<del>", $file[$_SESSION['uid']]);
     $surplus = (int) $ocrediti;
     $variazioni = (int) $ovariazioni;
 
