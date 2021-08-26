@@ -24,8 +24,7 @@ if ( stristr( $_SERVER[ 'SCRIPT_NAME' ], "controlla_pass.php" ) ) {
     header( "Location: ./index.php" );
     exit;
 }
-$scadenza_sessioni = 60 * 60 * 2;        # secondi x minuti x ore
-session_set_cookie_params( $scadenza_sessioni );
+
 session_start();
 #header ("cache-control: private");
 require_once "./dati/dati_gen.php";

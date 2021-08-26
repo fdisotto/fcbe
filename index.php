@@ -36,87 +36,67 @@ for ( $num1 = 0; $num1 < $conta; $num1++ ) {
     next( $_GET );
 } # fine for $num1
 
-header( "Cache-control: private" );
 require_once "./dati/dati_gen.php";
 require_once "./inc/funzioni.php";
 require_once "./header.php";
+
+global $messaggi, $vedi_notizie;
 ?>
 
-<div class="contenuto">
-    <div id="articoli">
-        <div id="sinistra">
-            <div class="articoli_s">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <?php if ( isset( $_GET[ 'paginaid' ] ) ): ?>
+                    <?php echo pagina( $_GET[ 'paginaid' ] ); ?>
+                <?php elseif ( isset( $_GET[ 'categoria' ] ) ): ?>
+                    <?php echo categoria( $_GET[ 'categoria' ] ); ?>
+                <?php elseif ( isset( $_GET[ 'notiziaid' ] ) ): ?>
+                    <?php echo notizia( $_GET[ 'notiziaid' ], $evidenzia ?? '' ); ?>
+                <?php else: ?>
+                    <?php if ( ! empty( trim( $messaggi[ 1 ] ) ) ): ?>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-text">
+                                    <?php echo html_entity_decode( $messaggi[ 1 ] ) ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif ?>
 
-                <?php
-                if ( $usa_cms == "SI" && isset( $_GET[ 'paginaid' ] ) && strip_tags( $_GET[ 'paginaid' ] ) ) {
-                    pagina( strip_tags( $_GET[ 'paginaid' ] ) );
-                } elseif ( $usa_cms == "SI" && isset( $_GET[ 'categoria' ] ) && strip_tags( $_GET[ 'categoria' ] ) ) {
-                    categoria( $_GET[ 'categoria' ] );
-                } elseif ( $usa_cms == "SI" && isset( $_GET[ 'notiziaid' ] ) && strip_tags( $_GET[ 'notiziaid' ] ) ) {
-                    notizia( $_GET[ 'notiziaid' ], strip_tags( htmlentities( ($evidenzia ?? '') ) ) );
-                } elseif ( $usa_cms == "SI" && isset( $ricerca ) && strip_tags( $ricerca ) ) {
-                    ricerca( strip_tags( htmlentities( $testo ) ) );
-                } elseif ( $usa_cms == "SI" and $vedi_notizie >= 1 ) {
-                    echo "<p style='float: left; margin: 10; padding-right: 10px;'>";
-                    if ( $mostra_gall_index == "SI" )
-                        immagine_casuale( 'sx', 0, 0 );
-                    echo "</p>" . $acapo;
+                    <?php if ( ! empty( trim( $messaggi[ 3 ] ) ) || ! empty( trim( $messaggi[ 4 ] ) ) ): ?>
+                        <div class="row mt-4">
+                            <div class="col-12 col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-text">
+                                            <?php echo html_entity_decode( $messaggi[ 3 ] ) ?>
+                                        </div>
+                                    </div>
+                                </div>
 
-                    if ( trim( $messaggi[ 1 ] ) != "" )
-                        echo "<div class='slogan'>" . html_entity_decode( $messaggi[ 1 ] ) . "</div><div style='clear:both;'>&nbsp;</div>" . $acapo;
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-text">
+                                            <?php echo html_entity_decode( $messaggi[ 4 ] ) ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    if ( trim( $messaggi[ 3 ] ) or trim( $messaggi[ 4 ] ) )
-                        echo "<div>" . $acapo;
-                    if ( trim( $messaggi[ 3 ] ) != "" )
-                        echo "<div class='box1'>" . html_entity_decode( $messaggi[ 3 ] ) . "</div>" . $acapo;
-                    if ( trim( $messaggi[ 4 ] ) != "" )
-                        echo "<div class='box2'>" . html_entity_decode( $messaggi[ 4 ] ) . "</div>" . $acapo;
-                    if ( trim( $messaggi[ 3 ] ) or trim( $messaggi[ 4 ] ) )
-                        echo "</div>" . $acapo;
-
-                    echo "<div style='clear:both;'>&nbsp;</div>" . $acapo;
-                    notizie();
-                } elseif ( trim( $messaggi[ 1 ] ) != "" ) {
-                    echo "<p style='float: left; margin: 10; padding-right: 10px;'>";
-                    immagine_casuale( 'sx', 0, 0 );
-                    echo "</p>" . $acapo;
-
-                    if ( trim( $messaggi[ 1 ] ) != "" )
-                        echo "<div class='slogan'>" . html_entity_decode( $messaggi[ 1 ] ) . "</div><div style='clear:both;'>&nbsp;</div>" . $acapo;
-
-                    if ( trim( $messaggi[ 3 ] ) or trim( $messaggi[ 4 ] ) )
-                        echo "<div>" . $acapo;
-                    if ( trim( $messaggi[ 3 ] ) != "" )
-                        echo "<div class='box1'>" . html_entity_decode( $messaggi[ 3 ] ) . "</div>" . $acapo;
-                    if ( trim( $messaggi[ 4 ] ) != "" )
-                        echo "<div class='box2'>" . html_entity_decode( $messaggi[ 4 ] ) . "</div>" . $acapo;
-                    if ( trim( $messaggi[ 3 ] ) or trim( $messaggi[ 4 ] ) )
-                        echo "</div>" . $acapo;
-
-                    echo "<div style='clear:both;'>&nbsp;</div>" . $acapo;
-                } else {
-                    echo "<p style='float: left; margin: 0; padding-right: 10px;'>";
-                    immagine_casuale( 'sx', 0, 0 );
-                    echo "</p>.$acapo";
-                    if ( trim( $messaggi[ 3 ] ) or trim( $messaggi[ 4 ] ) )
-                        echo "<div>" . $acapo;
-                    if ( trim( $messaggi[ 3 ] ) != "" )
-                        echo "<div class='box1'>" . html_entity_decode( $messaggi[ 3 ] ) . "</div>" . $acapo;
-                    if ( trim( $messaggi[ 4 ] ) != "" )
-                        echo "<div class='box2'>" . html_entity_decode( $messaggi[ 4 ] ) . "</div>" . $acapo;
-                    if ( trim( $messaggi[ 3 ] ) or trim( $messaggi[ 4 ] ) )
-                        echo "</div>" . $acapo;
-
-                    echo "<div style='clear:both;'>&nbsp;</div>" . $acapo;
-                }
-
-                echo "</div>
-</div>
-<div id='destra'>";
-                include( "./menu_i.php" );
-                echo "</div>";
-                ?>
+                    <?php endif ?>
+                    <?php if ( $vedi_notizie >= 1 ): ?>
+                        <?php notizie(); ?>
+                    <?php endif ?>
+                <?php endif ?>
             </div>
-            <?php
-            include( "./footer.php" );
-            ?>
+
+            <div class="col-12 col-md-4">
+                <?php require_once "./menu_i.php"; ?>
+            </div>
+        </div>
+    </div>
+<?php
+require_once "./footer.php";

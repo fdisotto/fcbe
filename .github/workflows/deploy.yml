@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy demo
 on:
   push:
     branches:
@@ -7,7 +7,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy php app
+      - name: Deploy FCBE Demo
         uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}}

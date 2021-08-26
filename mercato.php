@@ -390,9 +390,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'utente' ] != $admin_user ) {
         echo "</td><td width='50%' align='center'>
 		<div id='orario' style='text-align:right; font-size:36px; color: #cccccc'>Attendere...</div>
 		<div id='data' style='text-align:right; font-size:18px; color: #cccccc'>Attendere...</div><br />";
-        if ( $mostra_immagini_in_login == "SI" ) {
-            immagine_casuale( 'sx', 0, 0 );
-        }
+
         echo "<br /><br /><b><u><font color='red'>Acquisto calciatori</font></u></b><br />
 		FantaEuro disponibili: <b>$soldi_spendibili</b> Fanta-Euro.<br />
 		Numero di calciatori da comprare: <b>$num_calciatori_comprabili</b>.<br />$controlla_squadra</td></tr></table>";

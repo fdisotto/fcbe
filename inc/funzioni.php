@@ -1,13 +1,14 @@
 <?php
 
 ##################################################################################
-if ( $usa_cms == "SI" ) {
-    require_once( "./dati/cms.conf.php" );
-    require_once( "./inc/cms.inc.php" );
-}
+require_once "./dati/cms.conf.php";
+require_once "./inc/cms.inc.php";
 
-if ( @is_file( $percorso_cartella_dati . "/testi.php" ) )
+require_once "./vendor/autoload.php";
+
+if ( @is_file( $percorso_cartella_dati . "/testi.php" ) ) {
     $messaggi = file( $percorso_cartella_dati . "/testi.php" );
+}
 
 function ultimo_del_mese( $mon, $year )
 {
@@ -45,95 +46,6 @@ function countdown( $id, $tempo )
 	$('#$id').countdown({until: new Date($tempo), serverSync: serverTime, compact: true, format: 'odHMS', expiryText: '<div class=$id><b>Tempo scaduto</b></div>'});
 	});
 	</script>";
-}
-
-function crea_calendario()
-{
-    global $giorno, $mese, $anno, $m, $y;
-
-    if ( ( ! $_GET[ 'm' ] ) || ( ! $_GET[ 'y' ] ) ) {
-        $m = date( "m", mktime() );
-        $y = date( "Y", mktime() );
-    }
-
-    $tmpd = getdate( mktime( 0, 0, 0, $m, 1, $y ) );
-    $month = $tmpd[ "mon" ];
-    if ( $month == 1 )
-        $mese_cal = "gennaio"; elseif ( $month == 2 )
-        $mese_cal = "febbraio";
-    elseif ( $month == 3 )
-        $mese_cal = "marzo";
-    elseif ( $month == 4 )
-        $mese_cal = "aprile";
-    elseif ( $month == 5 )
-        $mese_cal = "maggio";
-    elseif ( $month == 6 )
-        $mese_cal = "giugno";
-    elseif ( $month == 7 )
-        $mese_cal = "luglio";
-    elseif ( $month == 8 )
-        $mese_cal = "agosto";
-    elseif ( $month == 9 )
-        $mese_cal = "settembre";
-    elseif ( $month == 10 )
-        $mese_cal = "ottobre";
-    elseif ( $month == 11 )
-        $mese_cal = "novembre";
-    elseif ( $month == 12 )
-        $mese_cal = "dicembre";
-    $firstwday = $tmpd[ "wday" ];
-    $lastday = ultimo_del_mese( $m, $y );
-
-    echo "<table summary='' cellpadding='2' cellspacing='0' border='0'>
-	<tr><td colspan='7'>
-	<table summary='' cellpadding='0' width='100%'>
-	<tr><td width='20'><a href='" . $_SERVER[ 'SCRIPT_NAME' ] . "?m=" . ( ( ( $m - 1 ) < 1 ) ? 12 : $m - 1 ) . "&amp;y=" . ( ( ( $m - 1 ) < 1 ) ? $y - 1 : $y ) . "'>&lt;&lt;</a></td>
-	<td align='center'><b>" . $mese_cal . " " . $y . "</b></td>
-	<td width='20'><a href='" . $_SERVER[ 'SCRIPT_NAME' ] . "?m=" . ( ( ( $m + 1 ) > 12 ) ? 1 : $m + 1 ) . "&amp;y=" . ( ( ( $m + 1 ) > 12 ) ? $y + 1 : $y ) . "'>&gt;&gt;</a></td>
-	</tr></table>
-	</td></tr>
-	<tr><td width='20' class='datario'><u>D</u></td><td width='20' class='datario'><u>L</u></td>
-	<td width='20' class='datario'><u>M</u></td><td width='20' class='datario'><u>M</u></td>
-	<td width='20' class='datario'><u>G</u></td><td width='20' class='datario'><u>V</u></td>
-	<td width='20' class='datario'><u>S</u></td></tr>";
-
-    $d = 1;
-    $wday = $firstwday;
-    $firstweek = true;
-
-    /*== loop through all the days of the month ==*/
-    while ( $d <= $lastday ) {
-        /*== set up blank days for first week ==*/
-        if ( $firstweek ) {
-            echo "<tr>";
-            for ( $i = 1; $i <= $firstwday; $i++ ) {
-                echo "<td><font size='2'>&nbsp;</font></td>";
-            }
-            $firstweek = false;
-        }
-
-        /*== Sunday start week with <tr> ==*/
-        if ( $wday == 0 ) {
-            echo "<tr>";
-        }
-
-        /*== check for event ==*/
-        echo "<td class='datario' align='center'>";
-        if ( INTVAL( "$giorno" ) == $d and INTVAL( "$mese" ) == $m and INTVAL( "$anno" ) == $y )
-            echo "<a href='#' class='evidenziato'>&nbsp;<b>$d</b>&nbsp;</a>"; else echo "&nbsp;$d&nbsp;";
-        #else echo "<a href='#'>&nbsp;$d&nbsp;</a>";
-        echo "</td>\r\n";
-
-        /*== Saturday end week with </tr> ==*/
-        if ( $wday == 6 ) {
-            echo "</tr>\r\n";
-        }
-
-        $wday++;
-        $wday = $wday % 7;
-        $d++;
-    }
-    echo "</tr></table>\r\n";
 }
 
 function crea_calendario_admin()
@@ -438,111 +350,6 @@ function num_pag( $total_pages, $current = 1 )
     return $buffer;
 }
 
-function mostra_shoutbox( $height = "150", $width = "96%", $per_page = "3", $caratteri_sicurezza = 5, $border = "border:1px #DDDDDD solid;", $font_family = "tahoma", $font_size = "9" )
-{
-    global $db_sb, $admin_user, $admin_nome;
-
-    if ( isset( $_GET[ 'shoutbox_page' ] ) )
-        $shoutbox_page = $_GET[ 'shoutbox_page' ];
-
-    if ( empty( $_GET[ 'shoutbox_page' ] ) )
-        $shoutbox_page = 1;
-
-    $file = $db_sb;
-    $output_buffer = "";
-    $shouts = array();
-
-    if ( @filesize( $file ) ) {
-        $fp = fopen( $file, "r" );
-        $fp1 = fread( $fp, filesize( $file ) );
-        $shouts = explode( "\r\n", $fp1 );
-        $total_shouts = count( $shouts );
-        $total_pages = ceil( $total_shouts / $per_page );
-        $shout_pointer = ( ( $total_shouts - ( $shoutbox_page * $per_page ) ) + $per_page ) - 1;
-
-        if ( $shoutbox_page > $total_pages )
-            $shoutbox_page = 1;
-
-        $output_buffer .= num_pag( $total_pages, $shoutbox_page );
-    } else {
-        $shouts = 0;
-        $total_shouts = 0;
-        $shout_pointer = 0;
-        $output_buffer .= num_pag( 1, 1 );
-    }
-
-    for ( $i = $shout_pointer; $i > ( $shout_pointer - $per_page ); $i-- ) {
-        if ( $i > -1 ) {
-            if ( isset( $shouts[ $i ] ) )
-                list( $name, $email, $date, $shout ) = explode( "|", $shouts[ $i ] );
-
-            if ( ! empty( $name ) ) {
-                $email_start = "";
-                $email_end = "";
-
-                if ( ! empty( $email ) ) {
-                    $email_start = "<a href='mailto:" . $email . "'>";
-                    $email_end = "</a>";
-                }
-                $output_buffer .= "<br /><strong>" . $email_start . $name . $email_end . "</strong>\r\n<br />" . $shout . "<br />\r\n";
-            }
-        }
-    }
-
-    if ( isset( $_SESSION[ 'utente' ] ) && $_SESSION[ 'utente' ] == $admin_user )
-        $smsNome = $admin_nome; elseif ( isset( $_SESSION[ 'utente' ] ) )
-        $smsNome = $_SESSION[ 'utente' ];
-    else $smsNome = "Nome";
-
-    echo "<form method='post' action='" . $_SERVER[ 'PHP_SELF' ] . "'>
-	<table summary='SMS' align='center' style='font-family:$font_family; font-size:$font_size; width:$width;'>
-	<caption> S M S </caption>
-	<tr>
-	<td style='$border font-family:$font_family; font-size:$font_size;  margin: 2px; padding: 2px; height:$height; overflow:auto;'>
-	$output_buffer
-	</td>
-	</tr>
-	<tr>
-	<td>
-	<input type='text' size='15' maxlength='15' name='nome' value='$smsNome' style='$border; font-family:$font_family; font-size:$font_size; width:100%;' onfocus='this.select();' /><br />
-	<input type='hidden' name='email' value='Email' />
-	<input type='hidden' name='azione' value='aggiungi' />
-	<input type='text' size='15' maxlength='100' name='messaggio' value='Messaggio' style='$border font-family:$font_family; font-size:$font_size; width:100%;' onfocus='this.select();' /><br />
-	</td>
-	</tr>
-	<tr><td valign='middle'>
-	<img src='./inc/captcha.inc.php?width=80&amp;height=30&amp;characters=$caratteri_sicurezza' alt='Codice sicurezza'/> 
-	NoSpam: <input name='security_code' type='text' size=$caratteri_sicurezza maxlength=$caratteri_sicurezza style='$border; font-family:$font_family; font-size:$font_size;' onfocus='this.select();' /> 
-	</td>
-	</tr>
-	<tr>
-	<td align='center'>
-	<input type='submit' value='Invia' style='$border font-family:$font_family; font-size:$font_size;' />
-	</td>
-	</tr>
-	</table></form>";
-}
-
-function select_vedi_tornei()
-{
-    global $percorso_cartella_dati;
-    $vedi_tornei_attivi = "<select name='itorneo'>";
-    $tornei = @file( $percorso_cartella_dati . "/tornei.php" );
-    $num_tornei = 0;
-    for ( $num1 = 0; $num1 < count( $tornei ); $num1++ ) {
-        $num_tornei++;
-    }
-
-    for ( $num1 = 1; $num1 < $num_tornei; $num1++ ) {
-        @list( $otid, $otdenom, $otpart, $otserie, $otmercato_libero, $ottipo_calcolo, $otgiornate_totali, $otritardo_torneo, $otcrediti_iniziali, $otnumcalciatori, $otcomposizione_squadra, $temp1, $temp2, $temp3, $temp4, $otstato, $otmodificatore_difesa, $otschemi, $otmax_in_panchina, $otpanchina_fissa, $otmax_entrate_dalla_panchina, $otsostituisci_per_ruolo, $otsostituisci_per_schema, $otsostituisci_fantasisti_come_centrocampisti, $otnumero_cambi_max, $otrip_cambi_numero, $otrip_cambi_giornate, $otrip_cambi_durata, $otaspetta_giorni, $otaspetta_ore, $otaspetta_minuti, $otnum_calciatori_scambiabili, $otscambio_con_soldi, $otvendi_costo, $otpercentuale_vendita, $otsoglia_voti_primo_gol, $otincremento_voti_gol_successivi, $otvoti_bonus_in_casa, $otpunti_partita_vinta, $otpunti_partita_pareggiata, $otpunti_partita_persa, $otdifferenza_punti_a_parita_gol, $otdifferenza_punti_zero_a_zero, $otmin_num_titolari_in_formazione, $otpunti_pareggio, $otpunti_pos, $otreset_scadenza ) = explode( ",", $tornei[ $num1 ] );
-
-        $vedi_tornei_attivi .= "<option value='$otid'>$otdenom</option>";
-    } # fine for $num1
-
-    $vedi_tornei_attivi .= "</select>";
-    echo $vedi_tornei_attivi;
-}
-
 function ricerca_estesa( $testo, $termini, $op )
 {
     $termini = trim( $termini );
@@ -664,7 +471,7 @@ function form_contatti()
 		<input type='hidden' name='q' value='98' />
 		<input type='hidden' name='contatti' value='invia' />
 		<table  summary=''border='0' cellpadding='3' cellspacing='3' style='border-collapse: collapse' bordercolor='$sfondo_tab' width='450'>
-		<colgroup span=1 style='font-family: Verdana; font-size:10pt; font-color: navy; text-align: right'></colgroup>
+		<colgroup span=1 style='font-size:10pt; font-color: navy; text-align: right'></colgroup>
 		<tr>
 		<td>
 		Nome:
@@ -698,7 +505,7 @@ function getHtmlOutput( $k, $v )
     $tagAllowed = "<b><i><br><br/><u>";    # Specifica quali tag html sono permessi nel caso in cui il parametro di sopra sia settato a 1
 
     $return = "<center><div style=\"width: 322; height: 147; text-align: center\">";
-    $return .= "<fieldset style=\"font-family: Verdana; font-size: 10pt; color: #008080; font-weight: bold; border: 3px double #F3C65C; background-color: #F4F5FF\">";
+    $return .= "<fieldset style=\"font-size: 10pt; color: #008080; font-weight: bold; border: 3px double #F3C65C; background-color: #F4F5FF\">";
     $return .= "<legend align='center'>Dati inseriti</legend>";
     $return .= "<table summary='' border=0 cellpadding=3 style=\"border-collapse: collapse; font-family:Verdana; font-size:10pt; color:#4062EA\" bordercolor=#111111 cellspacing=5 width=300>";
     $return .= "<colgroup span=1 style=\"text-align:right; font-weight: bold; background-color: #DDE8FF\"></colgroup>";
@@ -1546,4 +1353,27 @@ function crea_stats()
     } catch ( Exception $e ) {
         return $e->getMessage();
     }
+}
+
+function latest_feed_news( $limit = 5 ): array
+{
+    global $url_rss;
+
+    $feed = new SimplePie();
+
+    $feed->set_feed_url( $url_rss );
+    $feed->set_cache_location( "./cache/feed" );
+    $feed->init();
+
+    $items = [];
+    foreach ( $feed->get_items( 0, $limit ) as $item ) {
+        $items[] = [
+            'title'       => $item->get_title(),
+            'link'        => $item->get_permalink(),
+            'description' => $item->get_description(),
+            'date'        => $item->get_date( "d-m-Y H:i" ),
+        ];
+    }
+
+    return $items;
 }

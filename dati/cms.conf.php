@@ -12,10 +12,6 @@ $sottocategorie_file = './dati/sottocategorie_file.csv';
 $news_per_pagina = '3';
 $n_ultime_notizie = '10';
 $mostra_calendario = 'NO';
-$mostra_gall_index = 'SI';
-$commenti_fb = "NO";
-$like_fb = "NO";    # solo se commenti == NO
-$dim_comm_fb = "400";
 
 /* MySQL Server (per $archivio dati = "mysql")
 $db_server      = '';

@@ -17,7 +17,7 @@ function mostra_data( $data_vis )
     return $data_vis;
 } # fine function mostra_data($data_vis)
 
-function mostra_dt( $data_vis )
+function mostra_dt( $data_vis ): string
 {
     $anno = substr( $data_vis, 0, 4 );
     $mese = substr( $data_vis, 4, 2 );
@@ -25,10 +25,8 @@ function mostra_dt( $data_vis )
     $ora = substr( $data_vis, 8, 2 );
     $min = substr( $data_vis, 10, 2 );
 
-    $data_vis = "<small>$giorno/$mese</small>";
-
-    return $data_vis;
-} # fine function mostra_dt($data_vis)
+    return "$giorno-$mese-$anno";
+}
 
 #################################################################################################
 
@@ -116,19 +114,14 @@ function CreaQueryRicerca( $queryvar, $pesotitolo = 5, $pesotesto = 3, $searchle
     }
 }
 
-function ricerca( $testo )
+function ricerca( $queryvar )
 {
     // stringa da ricercare presa da form.
     //$queryvar="parola1 parola2"; //esempio
 
-    if ( isset( $_POST[ 'search' ] ) ) {
-        $queryvar = $_POST[ 'search' ];
-    } else {
-        $queryvar = "";
-    }
-
+    $text = "";
     if ( trim( $queryvar ) == "" || strlen( trim( $queryvar ) ) <= 3 ) {
-        echo "La stringa di ricerca deve contenere pi&ugrave; di 3 caratteri.";
+        $text .= "La stringa di ricerca deve contenere più di 3 caratteri.";
     } else {
         // query da eseguire
         // primo valore passato &egrave; peso delle parole cercate nel titolo, secondo peso parole nel testo
@@ -137,21 +130,20 @@ function ricerca( $testo )
         $queryRicerca = CreaQueryRicerca( $queryvar, 5, 3, 1 );
         // Eseguo la query
         // La query restituisce ID, titolo e % di rilevanza del risultato
-        echo $queryRicerca;
+        $text .= $queryRicerca;
     }
 
     $word = $_POST[ 'testo' ];
     $word = stripslashes( trim( $word ) );
     $word = strip_tags( $word );
 
-    global $archivio_dati, $notizie_file, $categorie_file, $pagine_file;
+    global $notizie_file;
 
-    if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
-        $lista_notizie = new csvfile;
-        $lista_notizie->name = $notizie_file;
-        $lista_notizie->init();
-    }
+    require_once "./inc/csvfile.inc.php";
+    $lista_notizie = new csvfile;
+    $lista_notizie->name = $notizie_file;
+    $lista_notizie->init();
+
     $dati_notizie = array();
     $lista_notizie->get_entrylist( 0, 999, $dati_notizie );
     #uasort ($dati_categorie, "cmp");
@@ -169,7 +161,9 @@ function ricerca( $testo )
     }
     $elenco .= "</div>";
 
-    echo "<center><h2>Risultati ricerca</h2></center>Testo ricercato: <b>$word</b><br/>Risultati trovati: <b>$conta_trovato</b><br/>Sono evidenziati solo i termini che coincidono esattamente in minuscole/MAIUSCOLE.<br/><br/>$elenco";
+    $text .= "<center><h2>Risultati ricerca</h2></center>Testo ricercato: <b>$word</b><br/>Risultati trovati: <b>$conta_trovato</b><br/>Sono evidenziati solo i termini che coincidono esattamente in minuscole/MAIUSCOLE.<br/><br/>$elenco";
+
+    return $text;
 }
 
 ########################################################################################
@@ -316,16 +310,14 @@ function gestione_pagine()
     } while ( ! $news_list->eol() && ! $page_break );
 }
 
-function link_pagine()
+function link_pagine(): array
 {
-    global $archivio_dati, $pagine_file;
+    global $pagine_file;
 
-    if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
-        $lista_pagine = new csvfile;
-        $lista_pagine->name = $pagine_file;
-        $lista_pagine->init();
-    }
+    require_once "./inc/csvfile.inc.php";
+    $lista_pagine = new csvfile;
+    $lista_pagine->name = $pagine_file;
+    $lista_pagine->init();
 
     $start_pos_count = 1;
     $pos_count = $start_pos_count;
@@ -337,29 +329,34 @@ function link_pagine()
 
     $dati_pagina = array();
     $lista_pagine->get_entry( $start_pos_count - 1, $dati_pagina );
+
+    $pagine = [];
 
     do {
         if ( ! $lista_pagine->eol() ) {
             if ( $dati_pagina[ "pattivo" ] == "SI" ) {
-                echo "<a href='index.php?paginaid=$pos_count'>" . $dati_pagina[ "ptitolo" ] . "</a>";
+                $pagine[] = [
+                    'id'    => $pos_count,
+                    'title' => $dati_pagina[ 'ptitolo' ],
+                ];
             }
             $lista_pagine->get_next_entry( $dati_pagina );
         }
 
         $pos_count++;
     } while ( ! $lista_pagine->eol() );
+
+    return $pagine;
 }
 
-function link_pagine_box()
+function link_pagine_box(): array
 {
-    global $archivio_dati, $pagine_file;
+    global $pagine_file;
 
-    if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
-        $lista_pagine = new csvfile;
-        $lista_pagine->name = $pagine_file;
-        $lista_pagine->init();
-    }
+    require_once "./inc/csvfile.inc.php";
+    $lista_pagine = new csvfile;
+    $lista_pagine->name = $pagine_file;
+    $lista_pagine->init();
 
     $start_pos_count = 1;
     $pos_count = $start_pos_count;
@@ -371,29 +368,34 @@ function link_pagine_box()
 
     $dati_pagina = array();
     $lista_pagine->get_entry( $start_pos_count - 1, $dati_pagina );
+
+    $pagine = [];
 
     do {
         if ( ! $lista_pagine->eol() ) {
             if ( $dati_pagina[ "pattivo" ] == "BOX" ) {
-                echo "<a href='index.php?paginaid=$pos_count'>" . $dati_pagina[ "ptitolo" ] . "</a>";
+                $pagine[] = [
+                    'id'    => $pos_count,
+                    'title' => $dati_pagina[ 'ptitolo' ],
+                ];
             }
             $lista_pagine->get_next_entry( $dati_pagina );
         }
 
         $pos_count++;
     } while ( ! $lista_pagine->eol() );
+
+    return $pagine;
 }
 
-function link_pagine_link()
+function link_pagine_link(): array
 {
-    global $archivio_dati, $pagine_file;
+    global $pagine_file;
 
-    if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
-        $lista_pagine = new csvfile;
-        $lista_pagine->name = $pagine_file;
-        $lista_pagine->init();
-    }
+    require_once( "./inc/csvfile.inc.php" );
+    $lista_pagine = new csvfile;
+    $lista_pagine->name = $pagine_file;
+    $lista_pagine->init();
 
     $start_pos_count = 1;
     $pos_count = $start_pos_count;
@@ -406,16 +408,22 @@ function link_pagine_link()
     $dati_pagina = array();
     $lista_pagine->get_entry( $start_pos_count - 1, $dati_pagina );
 
+    $links = [];
     do {
         if ( ! $lista_pagine->eol() ) {
             if ( $dati_pagina[ "pattivo" ] == "LINK" ) {
-                echo "<br/>&#8226; <a href='index.php?paginaid=$pos_count'>" . $dati_pagina[ "ptitolo" ] . "</a>";
+                $links[] = [
+                    'id'    => $pos_count,
+                    'title' => $dati_pagina[ 'ptitolo' ],
+                ];
             }
             $lista_pagine->get_next_entry( $dati_pagina );
         }
 
         $pos_count++;
     } while ( ! $lista_pagine->eol() );
+
+    return $links;
 }
 
 function elimina_pagina()
@@ -553,7 +561,7 @@ function modifica_pagina()
     }
 }
 
-function pagina( $paginaid )
+function pagina( $paginaid ): string
 {
     global $archivio_dati, $pagine_file;
 
@@ -575,8 +583,11 @@ function pagina( $paginaid )
             $adm_opz = "&nbsp;&nbsp;<small>$paginaid)</small>&nbsp;&nbsp;<a href='a_sito.php?q=4&amp;id=" . $paginaid . "'>M</a> - <a href='a_sito.php?q=5&amp;id=" . $paginaid . "'>X</a>";
 
         $data_vis = $dati_pagine[ "data_mod" ];
-        echo "<div><h2>" . html_entity_decode( aggiusta_tag( $dati_pagine[ "ptitolo" ] ) ) . "</h2><br/>\r\n" . "<p align='justify'>" . html_entity_decode( aggiusta_tag( $dati_pagine[ "ptesto" ] ) ) . "</p><br/><br/>\r\n" . "<p class='date'>|&nbsp;Revisione:&nbsp; " . mostra_data( $data_vis ) . "&nbsp;&nbsp;|&nbsp;" . $dati_pagine[ "putente" ] . ( $adm_opz ?? '' ) . "</div>";
-    } else echo "<h2>Pagina non attiva</h2>";
+
+        return "<div><h2>" . html_entity_decode( aggiusta_tag( $dati_pagine[ "ptitolo" ] ) ) . "</h2><br/>\r\n" . "<p align='justify'>" . html_entity_decode( aggiusta_tag( $dati_pagine[ "ptesto" ] ) ) . "</p><br/><br/>\r\n" . "<p class='date'>|&nbsp;Revisione:&nbsp; " . mostra_data( $data_vis ) . "&nbsp;&nbsp;|&nbsp;" . $dati_pagine[ "putente" ] . ( $adm_opz ?? '' ) . "</div>";
+    } else {
+        return "<h2>Pagina non attiva</h2>";
+    }
 }
 
 ########################################################################################
@@ -719,28 +730,32 @@ function gestione_categorie()
     } while ( ! $news_list->eol() && ! $page_break );
 }
 
-function link_categorie()
+function link_categorie(): array
 {
-    global $archivio_dati, $categorie_file;
+    global $categorie_file;
 
-    if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
-        $lista_categorie = new csvfile;
-        $lista_categorie->name = $categorie_file;
-        $lista_categorie->init();
-    }
+    require_once( "./inc/csvfile.inc.php" );
+    $lista_categorie = new csvfile;
+    $lista_categorie->name = $categorie_file;
+    $lista_categorie->init();
 
     $dati_categorie = array();
     $lista_categorie->get_entrylist( 0, 100, $dati_categorie );
+
+    $categorie = [];
+
     if ( $dati_categorie ) {
         uasort( $dati_categorie, "cmp" );
-        echo "<ul>";
         foreach ( $dati_categorie as $chiave => $valore ) {
             $ntitolo = preg_replace( "/ /", "%20", $valore[ "ptitolo" ] );
-            echo "<li><a href='index.php?categoria=$ntitolo'>" . $valore[ "ptitolo" ] . "</a></li>";
+            $categorie[] = [
+                'id'    => $ntitolo,
+                'title' => $valore[ 'ptitolo' ],
+            ];
         }
-        echo "</ul>";
     }
+
+    return $categorie;
 }
 
 function elimina_categoria()
@@ -769,42 +784,47 @@ function elimina_categoria()
     }
 }
 
-function categoria( $categoria )
+function categoria( $categoria ): string
 {
-    global $archivio_dati, $categorie_file;
+    global $categorie_file;
 
-    if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
-        $lista_categorie = new csvfile;
-        $lista_categorie->name = $categorie_file;
-        $lista_categorie->init();
-    }
+    require_once( "./inc/csvfile.inc.php" );
+    $lista_categorie = new csvfile;
+    $lista_categorie->name = $categorie_file;
+    $lista_categorie->init();
 
     $categoria = htmlentities( $categoria );
     $categoria = strip_tags( $categoria );
     $dati_categorie = array();
     $lista_categorie->get_entrylist( 0, 100, $dati_categorie );
     $cc = 0;
+    $trovato = "NO";
+    $text = "";
     foreach ( $dati_categorie as $chiave => $valore ) {
         $cc++;
         if ( $categoria == $valore[ "ptitolo" ] ) {
-            echo "<h2>" . html_entity_decode( $valore[ "ptitolo" ] ) . "</h2><br/>\r\n" . "<p align='justify'>" . html_entity_decode( $valore[ "ptesto" ] ) . "</p><br/><br/>\r\n";
+            $text .= "<h2>" . html_entity_decode( $valore[ "ptitolo" ] ) . "</h2><br/>" . "<p align='justify'>" . html_entity_decode( $valore[ "ptesto" ] ) . "</p><br/><br/>";
 
-            if ( $valore[ "pbox" ] )
-                echo "<div class='box'>" . html_entity_decode( $valore[ "pbox" ] ) . "</div><br /><br />\r\n";
+            if ( $valore[ "pbox" ] ) {
+                $text .= "<div class='box'>" . html_entity_decode( $valore[ "pbox" ] ) . "</div><br /><br />";
+            }
             $data_vis = $valore[ "data_mod" ];
 
-            if ( isset( $_SESSION[ "permessi" ] ) && $_SESSION[ "permessi" ] >= 4 )
+            $adm_opz = "";
+            if ( isset( $_SESSION[ "permessi" ] ) && $_SESSION[ "permessi" ] >= 4 ) {
                 $adm_opz = "<a href='a_sito.php?q=9&amp;id=" . $cc . "'><b>M</b></a> - <a href='a_sito.php?q=10&amp;id=" . $cc . "'><b>X</b></a>";
+            }
 
-            echo link_notizie( $categoria ) . "<br /><br /><p class='date'> |&nbsp;" . mostra_data( $data_vis ) . "&nbsp;&nbsp;|&nbsp;" . $valore[ "putente" ] . "&nbsp;&nbsp;&nbsp;" . ( $adm_opz ?? '' ) . "</p>";
+            $text .= link_notizie( $categoria ) . "<br /><br /><p class='date'> |&nbsp;" . mostra_data( $data_vis ) . "&nbsp;&nbsp;|&nbsp;" . $valore[ "putente" ] . "&nbsp;&nbsp;&nbsp;" . ( $adm_opz ) . "</p>";
             $trovato = "SI";
             break;
         }
     }
     if ( $trovato != "SI" ) {
-        echo "<div class='articolo_s'><h2>Categoria non trovata</h2></div>";
+        $text .= "<div class='articolo_s'><h2>Categoria non trovata</h2></div>";
     }
+
+    return $text;
 }
 
 function modifica_categoria()
@@ -1219,23 +1239,25 @@ function notizie()
     $news_data = array();
     $lista_notizie->get_entry( $start_pos_count - 1, $news_data );
     $page_break = false;
+    $PHP_SELF = $_SERVER['PHP_SELF'];
 
     $odd_sign = 1;
     do {
         if ( ! $lista_notizie->eol() ) {
             if ( $news_data[ "pattivo" ] == "SI" ) {
-                $news_field = "<div class='articolo_s'><h2><a href='" . $PHP_SELF . "?notiziaid=" . $pos_count . "'>" . $news_data[ "ptitolo" ] . "</a></h2><br/>" . $acapo;
+                $news_field = "<div class='articolo_s'><h2><a href='" . $PHP_SELF . "?notiziaid=" . $pos_count . "'>" . $news_data[ "ptitolo" ] . "</a></h2><br/>";
 
                 $vedi_news_data = html_entity_decode( $news_data[ "pabstract" ] );
 
+                $news_continua = "";
                 if ( strlen( $news_data[ "ptesto" ] ) <> 0 )
                     $news_continua = "&nbsp;|&nbsp;<a href='" . $PHP_SELF . "?notiziaid=" . $pos_count . "'>continua lettura!</a>&nbsp;";
 
-                $news_field .= "<p align='justify'>$vedi_news_data &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>" . $acapo;
+                $news_field .= "<p align='justify'>$vedi_news_data &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>";
                 $data_vis = $news_data[ "data_mod" ];
                 $news_field .= "<p class='date'>";
 
-                $news_field .= "&nbsp;|&nbsp;" . mostra_data( $data_vis ) . "&nbsp;|&nbsp;" . $news_data[ "putente" ] . "&nbsp;&nbsp;<a href='" . $PHP_SELF . "?categoria=" . $dati_notizie[ "pcategoria" ] . "'>" . $dati_notizie[ "pcategoria" ] . "</a>$news_continua</p></div>" . $acapo;
+                $news_field .= "&nbsp;|&nbsp;" . mostra_data( $data_vis ) . "&nbsp;|&nbsp;" . $news_data[ "putente" ] . "&nbsp;&nbsp;<a href='" . $PHP_SELF . "?categoria=" . $news_data[ "pcategoria" ] . "'>" . $news_data[ "pcategoria" ] . "</a>$news_continua</p></div>";
                 echo $news_field;
                 $odd_sign++;
                 unset ( $vedi_news_data, $news_continua );
@@ -1273,65 +1295,36 @@ function notizie()
     } while ( ! $lista_notizie->eol() && ! $page_break );
 }
 
-function notizia( $notiziaid, $evidenzia )
+function notizia( $notiziaid, $evidenzia ): string
 {
-    global $notiziaid, $evidenzia, $archivio_dati, $notizie_file, $commenti_fb, $like_fb, $dim_comm_fb;
+    global $notiziaid, $evidenzia, $notizie_file;
+    $notiziaid = (int)$notiziaid;
 
-    if ( ! $notiziaid )
+    if ( ! $notiziaid ) {
         $notiziaid = $_GET[ 'notiziaid' ];
+    }
     $notiziaid = htmlentities( $notiziaid );
     $notiziaid = strip_tags( $notiziaid );
     $notiziaid = intval( $notiziaid );
 
-    if ( ! $evidenzia )
+    if ( ! $evidenzia ) {
         $evidenzia = $_GET[ 'evidenzia' ] ?? '';
+    }
     $evidenzia = htmlentities( $evidenzia );
     $evidenzia = strip_tags( $evidenzia );
 
-    if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
-        $lista_notizie = new csvfile;
-        $lista_notizie->name = $notizie_file;
-        $lista_notizie->init();
-    }
-
-    if ( $commenti_fb == "SI" ) {
-        $plugin_fb = "<div id='fb-root' style='text-align: left; padding: 10px'></div>
-		<script>
-		  window.fbAsyncInit = function() {
-		    FB.init({appId: 'your app id', status: true, cookie: true,
-		             xfbml: true});
-		  };
-		  (function() {
-		    var e = document.createElement('script'); e.async = true;
-		    e.src = document.location.protocol +
-		      '//connect.facebook.net/it_IT/all.js';
-		    document.getElementById('fb-root').appendChild(e);
-		  }());
-		</script>
-		<fb:comments width=" . $dim_comm_fb . "></fb:comments>";
-    } elseif ( $like_fb == "SI" ) {
-        $plugin_fb = "<div id='fb-root'></div>
-		<script>
-		  window.fbAsyncInit = function() {
-		    FB.init({appId: 'your app id', status: true, cookie: true,
-		             xfbml: true});
-		  };
-		  (function() {
-		    var e = document.createElement('script'); e.async = true;
-		    e.src = document.location.protocol +
-		      '//connect.facebook.net/it_IT/all.js';
-		    document.getElementById('fb-root').appendChild(e);
-		  }());
-		</script>
-		<fb:like layout='button_count'></fb:like>";
-    } else $plugin_fb = "";
+    require_once "./inc/csvfile.inc.php";
+    $lista_notizie = new csvfile;
+    $lista_notizie->name = $notizie_file;
+    $lista_notizie->init();
 
     $dati_notizie = array();
     $lista_notizie->get_entry( $notiziaid - 1, $dati_notizie );
+    $text = "";
     if ( $dati_notizie[ "pattivo" ] != "NO" ) {
-        if ( isset( $_SESSION[ "permessi" ] ) && ( $_SESSION[ "permessi" ] >= 4 or $_SESSION[ "utente" ] == $dati_notizie[ "putente" ] ) )
+        if ( isset( $_SESSION[ "permessi" ] ) && ( $_SESSION[ "permessi" ] >= 4 or $_SESSION[ "utente" ] == $dati_notizie[ "putente" ] ) ) {
             $adm_opz = "<a href='a_sito.php?q=14&amp;id=" . $notiziaid . "'><b>M</b></a> - <a href='a_sito.php?q=15&amp;id=" . $notiziaid . "'><b>X</b></a>";
+        }
 
         if ( $evidenzia ) {
             $dati_notizie[ "pabstract" ] = preg_replace( "/$evidenzia/", "<font class='evidenziato'>" . strtoupper( "$evidenzia" ) . "</font>", $dati_notizie[ "pabstract" ] );
@@ -1339,11 +1332,17 @@ function notizia( $notiziaid, $evidenzia )
         }
 
         $data_vis = $dati_notizie[ "data_mod" ];
-        if ( strlen( $dati_notizie[ "pbox" ] ) > 0 )
+        $vedi_box = "";
+        if ( strlen( $dati_notizie[ "pbox" ] ) > 0 ) {
             $vedi_box = "<div class='slogan_piccolo'>" . html_entity_decode( $dati_notizie[ "pbox" ] ) . "</div><br/><br/>";
+        }
 
-        echo "<div class='articolo'><h2>" . html_entity_decode( $dati_notizie[ "ptitolo" ] ) . "</h2><br/><div class='slogan'>" . html_entity_decode( $dati_notizie[ "pabstract" ] ) . "</div><br/><div align='justify'>" . html_entity_decode( $dati_notizie[ "ptesto" ] ) . "</div><br/><br/>" . $vedi_box . $plugin_fb . "<div class='date'>|&nbsp;" . mostra_data( $data_vis ) . "&nbsp;&nbsp;|&nbsp;" . $dati_notizie[ "putente" ] . "&nbsp;&nbsp;&nbsp;&nbsp;<small>$notiziaid</small>&nbsp;&nbsp;&nbsp;&nbsp;<a href='" . $_SERVER[ 'PHP_SELF' ] . "?categoria=" . $dati_notizie[ "pcategoria" ] . "'>" . $dati_notizie[ "pcategoria" ] . "</a>&nbsp;&nbsp;" . ( $adm_opz ?? '' ) . "</div></div>";
-    } else echo "<h2>Notizia non attiva</h2>";
+        $text .= "<div class='articolo'><h2>" . html_entity_decode( $dati_notizie[ "ptitolo" ] ) . "</h2><br/><div class='slogan'>" . html_entity_decode( $dati_notizie[ "pabstract" ] ) . "</div><br/><div align='justify'>" . html_entity_decode( $dati_notizie[ "ptesto" ] ) . "</div><br/><br/>" . $vedi_box . "<div class='date'>|&nbsp;" . mostra_data( $data_vis ) . "&nbsp;&nbsp;|&nbsp;" . $dati_notizie[ "putente" ] . "&nbsp;&nbsp;&nbsp;&nbsp;<small>$notiziaid</small>&nbsp;&nbsp;&nbsp;&nbsp;<a href='" . $_SERVER[ 'PHP_SELF' ] . "?categoria=" . $dati_notizie[ "pcategoria" ] . "'>" . $dati_notizie[ "pcategoria" ] . "</a>&nbsp;&nbsp;" . ( $adm_opz ?? '' ) . "</div></div>";
+    } else {
+        $text .= "<h2>Notizia non attiva</h2>";
+    }
+
+    return $text;
 }
 
 function link_notizie( $categoria )
@@ -1387,39 +1386,37 @@ function link_notizie( $categoria )
     }
 }
 
-function ultime_notizie( $status )
+function ultime_notizie( $status = "" ): array
 {
-    global $n_ultime_notizie, $news_per_pagina, $archivio_dati, $notizie_file;
+    global $n_ultime_notizie, $news_per_pagina, $notizie_file;
 
-    $a = '';
+    require_once "./inc/csvfile.inc.php";
+    $lista_notizie = new csvfile;
+    $lista_notizie->name = $notizie_file;
+    $lista_notizie->init();
 
-    if ( $archivio_dati == "csvfile" ) {
-        require_once( "./inc/csvfile.inc.php" );
-        $lista_notizie = new csvfile;
-        $lista_notizie->name = $notizie_file;
-        $lista_notizie->init();
+    if ( $status == "tutte" ) {
+        $news_per_pagina = 0;
     }
 
-    if ( $status == "tutte" )
-        $news_per_pagina = 0;
-    $dati_notizie = array();
-    $lista_notizie->get_entrylist( $news_per_pagina, $n_ultime_notizie - 1 + $news_per_pagina, $dati_notizie );
+    $news = [];
+    $dati_notizie = [];
+    $lista_notizie->get_entrylist( 0, $n_ultime_notizie - 1 + $news_per_pagina, $dati_notizie );
     $pos_count = $news_per_pagina;
-    $altri_link = "";
 
     foreach ( $dati_notizie as $chiave => $valore ) {
-        if ( $valore[ "pattivo" ] != "NO" ) {
+        if ( $valore[ "pattivo" ] == "SI" ) {
             $data_vis = $valore[ "data_mod" ];
             $pos_count++;
-            $altri_link .= "<br />&nbsp;" . mostra_dt( $data_vis ) . " - <a href='index.php?notiziaid=$pos_count'>" . $valore[ "ptitolo" ] . "</a>";
+            $news[] = [
+                "id"    => $pos_count,
+                "title" => $valore[ 'ptitolo' ],
+                "date"  => mostra_dt( $data_vis ),
+            ];
         }
     }
-    if ( $altri_link )
-        $a = "<b><u>Ultime notizie</u></b>" . $altri_link;
 
-    # else $a = "$n_ultime_notizie, $news_per_pagina";
-
-    return $a;
+    return $news;
 }
 
 function modifica_notizia()

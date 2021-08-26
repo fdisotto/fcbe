@@ -42,7 +42,6 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] == 5) {
         $n_contenuto_dati .= "\$trasferiti_ok       			= '$N_trasferiti_ok';\n";
         $n_contenuto_dati .= "\$mostra_giornate_in_login 		= '$N_mostra_giornate_in_login';\n";
         $n_contenuto_dati .= "\$mostra_giornate_in_mercato 		= '$N_mostra_giornate_in_mercato';\n";
-        $n_contenuto_dati .= "\$mostra_immagini_in_login 		= '$N_mostra_immagini_in_login';\n";
         $n_contenuto_dati .= "\$dir_immagini 					= '$N_dir_immagini';\n";
         $n_contenuto_dati .= "\$larghezza_immagine 				= '$N_larghezza_immagine';\n";
         $n_contenuto_dati .= "\$larghezza_immagine_casuale 		= '$N_larghezza_immagine_casuale';\n";
@@ -75,9 +74,6 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] == 5) {
         $n_contenuto_dati .= "\$attiva_log 						=	'$N_attiva_log';\n";
         $n_contenuto_dati .= "\$attiva_rss 						= '$N_attiva_rss';\n";
         $n_contenuto_dati .= "\$url_rss							= '$N_url_rss';\n";
-        $n_contenuto_dati .= "\$attiva_multi 					= '$N_attiva_multi';\n\n";
-        $n_contenuto_dati .= "\$attiva_shoutbox 				= '$N_attiva_shoutbox';\n";
-        $n_contenuto_dati .= "\$usa_cms 						= '$N_usa_cms';\n";
         $n_contenuto_dati .= "\$vedi_notizie 					= '$N_vedi_notizie';\n";
         $n_contenuto_dati .= "\$temp1	= '';\n";
         $n_contenuto_dati .= "\$temp2	= '';\n";
@@ -255,34 +251,8 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] == 5) {
 
         echo "<tr><td>Giornate in mercato</td><td align='center'>SI&nbsp;<input type='radio' name='N_mostra_giornate_in_mercato' value='SI' $checkSI />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO&nbsp;<input type='radio' name='N_mostra_giornate_in_mercato' value='NO' $checkNO /></td><td>Consente di visualizzare le giornate in mercato.</td></tr>";
 
-        $checkSI = "";
-        $checkNO = "";
-        if ($usa_cms == "SI") $checkSI = "checked";
-        else $checkNO = "checked";
+        echo "<tr><td>Notizie in index</td><td><input type='text' value='$vedi_notizie' name='N_vedi_notizie' size=2 maxlength=1 /></td><td>0 - disabilitato 1 - blocco in index - 2 - blocco in index e blocco laterale in menu.</td></tr>";
 
-        echo "<tr><td>Utilizza CMS</td><td align='center'>SI&nbsp;<input type='radio' name='N_usa_cms' value='SI' $checkSI />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO&nbsp;<input type='radio' name='N_usa_cms' value='NO' $checkNO /></td><td>Utilizza il CMS Alessia di Antonello Onida da richiedere separatamente.</td></tr>
-				<tr><td>Notizie in index</td><td><input type='text' value='$vedi_notizie' name='N_vedi_notizie' size=2 maxlength=1 /></td><td>0 - disabilitato 1 - blocco in index - 2 - blocco in index e blocco laterale in menu.</td></tr>";
-
-
-        $checkSI = "";
-        $checkNO = "";
-        if ($attiva_shoutbox == "SI") $checkSI = "checked";
-        else $checkNO = "checked";
-
-        echo "<tr><td>Attiva shoutbox</td><td align='center'>SI&nbsp;<input type='radio' name='N_attiva_shoutbox' value='SI' $checkSI />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO&nbsp;<input type='radio' name='N_attiva_shoutbox' value='NO' $checkNO /></td><td>Attiva lo shoutbox in prima pagina.</td></tr>";
-
-        $checkSI = "";
-        $checkNO = "";
-        if ($mostra_immagini_in_login == "SI") $checkSI = "checked";
-        else $checkNO = "checked";
-
-        echo "<tr><td>Galleria immagini</td><td align='center'>SI&nbsp;<input type='radio' name='N_mostra_immagini_in_login' value='SI' $checkSI />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO&nbsp;<input type='radio' name='N_mostra_immagini_in_login' value='NO' $checkNO /></td><td>Mostra una galleria di immagini nella prima pagina.</td></tr>
-
-		<tr><td>Cartella immagini</td><td><input type='text' value='$dir_immagini' name='N_dir_immagini' size=40 maxlength=40 /></td><td>Indica la cartella dove sono situate le immagini per la galleria.</td></tr>
-
-		<tr><td>Larghezza immagini</td><td><input type='text' value='$larghezza_immagine' name='N_larghezza_immagine' size=4 maxlength=4 /></td><td>Indica la larghezza delle immagini mostrate nella galleria IN PIXEL.</td></tr>
-
-		<tr><td>Larghezza immagini casuali</td><td><input type='text' value='$larghezza_immagine_casuale' name='N_larghezza_immagine_casuale' size=4 maxlength=4 /></td><td>Indica la larghezza delle immagini casuali della funzione immagine_casuale () IN PIXEL.</td></tr>";
 
         $checkSI = "";
         $checkNO = "";
@@ -401,13 +371,6 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] == 5) {
         echo "<tr><td>Attiva lettore RSS</td><td align='center'>SI&nbsp;<input type='radio' name='N_attiva_rss' value='SI' $checkSI />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO&nbsp;<input type='radio' name='N_attiva_rss' value='NO' $checkNO /></td><td>Attiva lettore interno di RSS in index.</td></tr>";
 
         echo "<tr><td>URL RSS feed</td><td><input type='text' value='$url_rss ' name='N_url_rss' size=40 maxlength=40 /></td><td>Indirizzo al file RSS.</td></tr>";
-
-        $checkSI = "";
-        $checkNO = "";
-        if ($attiva_multi == "SI") $checkSI = "checked";
-        else $checkNO = "checked";
-
-        echo "<tr><td>Attiva gestione multicampionati</td><td align='center'>SI&nbsp;<input type='radio' name='N_attiva_multi' value='SI' $checkSI />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO&nbsp;<input type='radio' name='N_attiva_multi' value='NO' $checkNO /></td><td>Funzione da migliorare</td></tr>";
 
         echo "</table><input type='hidden' name='verifiche_config' value='2' />
 		<center><input type='submit' value='Salva le modifiche' /></center>

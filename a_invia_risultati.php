@@ -333,7 +333,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 4 ) {
 
         $oggetto = "Invio risultati\r\n";
         $mail_css = "<style type=\"text/css\">
-    BODY {background-color:#EEEEEE; font-family: Tahoma; font-size:9pt; color: #700b0b}
+    BODY {background-color:#EEEEEE; font-size:9pt; color: #700b0b}
     
     TABLE { font-family:Tahoma; font-size:8pt }
     
@@ -711,7 +711,7 @@ if ( $_SESSION[ 'permessi' ] == 5 ) {
 
         $oggetto = "Invio risultati\r\n";
         $mail_css = "<style type=\"text/css\">
-    BODY {background-color:#EEEEEE; font-family: Tahoma; font-size:9pt; color: #700b0b}
+    BODY {background-color:#EEEEEE; font-size:9pt; color: #700b0b}
     
     TABLE { font-family:Tahoma; font-size:8pt }
     

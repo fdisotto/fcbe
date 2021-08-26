@@ -1,10 +1,13 @@
 <?php
 
+use FCBE\Util\Utenti;
+use FCBE\Enum\StatoMercato;
+use FCBE\Enum\TipoCalcolo;
+
 //error_reporting( E_ALL ^ E_NOTICE );
 error_reporting( E_ALL );
 ini_set( 'display_errors', 1 );
 
-$clock[] = "Inizio " . microtime();
 if ( isset( $attiva_log ) && $attiva_log == "SI" ) {
     $xx1 = $_SERVER[ 'SERVER_PORT' ];
     $giorno = date( "d", time() );
@@ -17,48 +20,36 @@ if ( isset( $attiva_log ) && $attiva_log == "SI" ) {
     $x1 = "host $visitatore_info";
     $x2 = $_SERVER[ 'REMOTE_PORT' ];
     $date = "$giorno-$mese-$anno $ora:$minuto";
-    if ( ! isset( $_SESSION[ 'utente' ] ) || $_SESSION[ 'utente' ] == "" )
-        $infonome = "Visitatore"; else $infonome = $_SESSION[ 'utente' ];
+
+    $infonome = $_SESSION[ 'utente' ] ?? "Visitatore";
+
     $torneo = $_SESSION[ 'torneo' ] ?? '';
     file_put_contents( $percorso_cartella_dati . "/log" . $torneo . ".txt", "$date - $infonome - $base:$xx1 - $visitatore_info\n", FILE_APPEND | LOCK_EX );
 }
-
-$acapo = "\n";
-
-$chiusura_giornata = file_exists( $percorso_cartella_dati . "/chiusura_giornata.txt" ) ? (int)file_get_contents( $percorso_cartella_dati . "/chiusura_giornata.txt" ) : 0;
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it" lang="it" dir="ltr">
+<!doctype html>
+<html lang="it">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="Content-Language" content="Italian"/>
-    <meta name="Author" content="Antonello Onida - http://fantacalciobazar.sssr.it"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Description" content="FantacalcioBazar | Il migliore gestore di Fantacalcio on line"/>
-    <meta name="Keywords" content="fantacalciobazar, fantacalcio, semplice, completo, online"/>
-    <meta name="Robots" content="INDEX, FOLLOW"/>
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" type="text/css" media="all" href="./immagini/style.css"/>
     <style type="text/css">
-        body {
-            background-color: <?php echo $sfondo_tab1 ?>;
-            color: <?php echo $carattere_colore ?>;
-            font-family: <?php echo $carattere_tipo ?>;
-            font-size: <?php echo $carattere_size ?>
-        }
-
         caption {
             background-color: <?php echo $sfondo_tab2 ?>
         }
 
         .menu_s a {
             background: <?php echo $sfondo_tab3 ?> url(immagini/vmenuarrow.gif) no-repeat center left;
-            color: <?php echo $carattere_colore_chiaro ?>
         }
     </style>
 
     <?php
     if ( isset( $a_fm ) && $a_fm == "SI" )
-        echo "<link rel='stylesheet' type='text/css' href='./inc/fm_style.css' />" . $acapo;
+        echo "<link rel='stylesheet' type='text/css' href='./inc/fm_style.css' />";
     ?>
     <!--[if lt IE 9]>
     <script src="./inc/js/jquery-1.10.2.min.js"></script>
@@ -97,49 +88,114 @@ $chiusura_giornata = file_exists( $percorso_cartella_dati . "/chiusura_giornata.
 
     <title><?php echo $titolo_sito; ?></title>
 </head>
-<body>
+<body class="bg-light">
 
-<a name="top"></a>
-<ul id="nav">
+<a id="top"></a>
 
-    <li><a href="index.php" title="Ritorna alla pagina iniziale del sito - accesskey = h" accesskey="h"><u>H</u>ome</a>
-    </li>
-    <li><a href="http://fantacalciobazar.altervista.org/comunica/index.php"
-            title="Forum per discutere e chiedere informazioni di vario carattere - accesskey = f"
-            accesskey="f"><u>F</u>orum</a></li>
-    <li><a href="#top" title="Risale ad inizio pagina - accesskey = t" accesskey="t"><u>T</u>op</a></li>
-</ul>
-<div id="header">
-    <div id="logo">
-        <div style="float: left">
-            <a href="index.php" title="<?php echo "$titolo_sito"; ?>"><?php echo "$titolo_sito"; ?></a>
-        </div>
+
+<nav class="py-2 bg-dark fixed-top navbar-expand">
+    <div class="container d-flex flex-wrap">
+        <ul class="nav me-auto">
+            <li class="nav-item">
+                <a href="./index.php" class="nav-link link-light px-2">Home</a>
+            </li>
+            <?php foreach ( link_pagine() as $pagina ): ?>
+                <li class="nav-item">
+                    <a href="index.php?paginaid=<?php echo $pagina[ 'id' ] ?>" class="nav-link link-light px-2">
+                        <?php echo $pagina[ 'title' ] ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+
+            <?php if ( Utenti::isAdminLogged() ): ?>
+                <li class="nav-item">
+                    <a href="./a_gestione.php" class="nav-link link-light px-2">
+                        Gestione
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="./a_torneo.php" class="nav-link link-light px-2">
+                        Tornei
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="./a_sito.php" class="nav-link link-light px-2">
+                        CMS
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="./a_configura.php" class="nav-link link-light px-2">
+                        Config
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="./logout.php" class="nav-link link-light px-2">
+                        Esci
+                    </a>
+                </li>
+            <?php elseif ( Utenti::isUserLogged() ): ?>
+                <li class="nav-item">
+                    <a href="./mercato.php" class="nav-link link-light px-2">
+                        Mercato
+                    </a>
+                </li>
+
+                <?php if ( isset( $stato_mercato ) && ( $stato_mercato == StatoMercato::MERCATO_APERTO || $stato_mercato == StatoMercato::ASTA_PERENNE || $stato_mercato == StatoMercato::MERCATO_CHIUSO || $stato_mercato == StatoMercato::MERCATO_SOSPESO ) ): ?>
+                    <li class="nav-item">
+                        <a href="./giornate.php" class="nav-link link-light px-2">
+                            Campionato
+                        </a>
+                    </li>
+                <?php endif ?>
+
+                <?php if ( isset( $ottipo_calcolo ) && $ottipo_calcolo == TipoCalcolo::SCONTRI_DIRETTI ): ?>
+                    <li class="nav-item">
+                        <a href="./calendario.php" class="nav-link link-light px-2">
+                            Calendario
+                        </a>
+                    </li>
+                <?php endif ?>
+
+                <?php if ( isset( $ottipo_calcolo ) && isset( $mercato_libero ) && ( $mercato_libero == "NO" || $ottipo_calcolo == TipoCalcolo::SCONTRI_DIRETTI ) ): ?>
+                    <li class="nav-item">
+                        <a href="./classifica.php" class="nav-link link-light px-2">
+                            Classifica
+                        </a>
+                    </li>
+                <?php endif ?>
+
+                <li class="nav-item">
+                    <a href="./logout.php" class="nav-link link-light px-2">
+                        Esci
+                    </a>
+                </li>
+            <?php endif ?>
+        </ul>
+        <ul class="nav">
+            <li class="nav-item">
+                <a target="_blank" href="http://fantacalciobazar.altervista.org" class="nav-link link-light px-2">Forum</a>
+            </li>
+            <li class="nav-item">
+                <a href="#top" class="nav-link link-light px-2">Top</a>
+            </li>
+        </ul>
     </div>
-    <div id="hmenu">
-        <?php
-        if ( $usa_cms == "SI" )
-            link_pagine();
-        if ( @$_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'utente' ] == $admin_user ) {
-            echo "<a href='./a_gestione.php'>gestione</a><a href='./a_torneo.php' title='Gestione tornei'>tornei</a>";
-            if ( $usa_cms == "SI" )
-                echo "<a href='./a_sito.php' title='Gestione contenuti testuali'>cms</a>";
-            echo "<a href='./a_configura.php' title='Configurazione parametri generali'>config</a><a href='./logout.php' title='Disconnessione amministratore'>esci</a>";
-        } elseif ( @$_SESSION[ 'valido' ] == "SI" ) {
-            echo "<a href='./mercato.php'>Mercato</a>";
+</nav>
 
-            if ( isset( $stato_mercato ) && ($stato_mercato == "A" or $stato_mercato == "P" or $stato_mercato == "C" or $stato_mercato == "S") ) {
-                echo "<a href='./giornate.php'>Campionato</a>";
-                if ( $ottipo_calcolo == "S" )
-                    echo "<a href='./calendario.php'>Calendario</a>";
-                if ( $mercato_libero == "NO" or $ottipo_calcolo == "S" )
-                    echo "<a href='./classifica.php'>Classifica</a>";
-            }
-            echo "<a href='./logout.php'>Logout</a>";
-        }
-        echo "</div>
-</div>
-<table width='100%' cellpadding='5' align='center' summary='Tabella principale'>
-<tr>
-<td valign='top'>
-";
-        ?>
+<header class="py-3 mb-4 border-bottom bg-white">
+    <div class="container d-flex flex-wrap justify-content-center">
+        <a href="./index.php" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-decoration-none text-dark">
+            <span class="fs-4">
+                <?php echo $titolo_sito; ?>
+            </span>
+        </a>
+    </div>
+</header>
+
+<table width='100%' cellpadding='5' summary='Tabella principale'>
+    <tr>
+        <td valign='top'>

@@ -1,0 +1,58 @@
+@import "fonts.css";
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Lato", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    padding-top: 3.2rem;
+}
+
+a,
+a:link,
+a:hover,
+a:visited {
+    color: #6c757d;
+}
+
+nav a,
+nav a:link,
+nav a:hover,
+nav a:visited {
+    color: #f8f9fa;
+}
+
+footer.footer {
+    background-color: #1a1d20;
+    padding: 3rem 0;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+footer.footer ul.list-group .list-group-item {
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+}
+
+footer.footer a {
+    color: #6c757d;
+}
+
+.side-navbar .nav-link:active,
+.side-navbar .nav-link:focus,
+.side-navbar .nav-link:hover {
+    background-color: #21252910;
+}
+
+.side-navbar.bg-dark .nav-link:active,
+.side-navbar.bg-dark .nav-link:focus,
+.side-navbar.bg-dark .nav-link:hover {
+    background-color: #ffffff26;
+}
+
+.card, .alert {
+    border-radius: 0;
+}

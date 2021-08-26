@@ -68,9 +68,9 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
     $a = array();
     $a = $_POST;
     $a1 = array_values( $a );
-    $m = substr( key( $_POST ), 0, 1 );
-    $n = intval( substr( key( $_POST ), 1, 2 ) );
-    $a2 = $a1[ 0 ] ?? '';
+    $m = substr( array_key_first( $_POST ), 0, 1 );
+    $n = intval( substr( array_key_first( $_POST ), 1, 2 ) );
+    $a2 = $a1[ 0 ];
 
     if ( ! @is_file( $percorso_cartella_dati . "/testi.php" ) ) {
         $ini_file = "<?php die('ACCESSO VIETATO');?>" . $acapo . $acapo . $acapo . $acapo . $acapo . $acapo . $acapo . $acapo . $acapo . $acapo;
@@ -204,72 +204,74 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
 	</td></tr></table>
 	<br/><br/>";
 
-    if ( isset( $m ) ) {
-        if ( isset( $salva_modifiche ) ) {
-            $linee_mess = @file( $percorso_cartella_dati . "/testi.php" );
-            $n_contenuto_dati = str_replace( array( "\n", "\r" ), "", $n_contenuto_dati );
-            $n_contenuto_dati = nl2br( $n_contenuto_dati );
-            $n_contenuto_dati = str_replace( "|", " ", $n_contenuto_dati );
-            $n_contenuto_dati = trim( stripslashes( $n_contenuto_dati ) );
-            $n_contenuto_dati = htmlentities( $n_contenuto_dati, ENT_QUOTES );
-            $linee_mess[ $n ] = $n_contenuto_dati . $acapo;
-            $scrivi_testi = implode( '', $linee_mess );
-            if ( is_file( $percorso_cartella_dati . "/testi.php" ) ) {
-                $file_dati = fopen( $percorso_cartella_dati . "/testi.php", "wb+" );
-                flock( $file_dati, LOCK_EX );
-                fwrite( $file_dati, $scrivi_testi );
-                flock( $file_dati, LOCK_UN );
-                fclose( $file_dati );
-                unset ( $file_dati, $linee_mess, $scrivi_testi );
-                echo "<center><h4>Modifiche $n salvate.</h4></center><br/>";
-            } # fine if (fopen("$percorso_cartella_dati/dati.php","w+"))
-            else echo "<b>ERRORE</b>: si devono cambiare i permessi di scrittura del file testi.php per salvare le modifiche, leggi il README.<br/>";
-        } # fine if ($salva_modifiche)
-        elseif ( $a2 == "vedi" ) {
-            if ( @is_file( $percorso_cartella_dati . "/testi.php" ) )
-                $linee_mess = file( $percorso_cartella_dati . "/testi.php" );
-            echo "<table summary='Anteprima' bgcolor='$sfondo_tab' width='100%' border='1' cellpadding='5px'>
+    if ( isset( $salva_modifiche ) ) {
+        $linee_mess = @file( $percorso_cartella_dati . "/testi.php" );
+        $n_contenuto_dati = str_replace( array( "\n", "\r" ), "", $n_contenuto_dati );
+        $n_contenuto_dati = nl2br( $n_contenuto_dati );
+        $n_contenuto_dati = str_replace( "|", " ", $n_contenuto_dati );
+        $n_contenuto_dati = trim( stripslashes( $n_contenuto_dati ) );
+        $n_contenuto_dati = htmlentities( $n_contenuto_dati, ENT_QUOTES );
+        $linee_mess[ $n ] = $n_contenuto_dati . $acapo;
+        $scrivi_testi = implode( '', $linee_mess );
+        if ( is_file( $percorso_cartella_dati . "/testi.php" ) ) {
+            $file_dati = fopen( $percorso_cartella_dati . "/testi.php", "wb+" );
+            flock( $file_dati, LOCK_EX );
+            fwrite( $file_dati, $scrivi_testi );
+            flock( $file_dati, LOCK_UN );
+            fclose( $file_dati );
+            unset ( $file_dati, $linee_mess, $scrivi_testi );
+            echo "<center><h4>Modifiche $n salvate.</h4></center><br/>";
+        } # fine if (fopen("$percorso_cartella_dati/dati.php","w+"))
+        else {
+            echo "<b>ERRORE</b>: si devono cambiare i permessi di scrittura del file testi.php per salvare le modifiche, leggi il README.<br/>";
+        }
+    } # fine if ($salva_modifiche)
+    elseif ( $a2 == "vedi" ) {
+        if ( @is_file( $percorso_cartella_dati . "/testi.php" ) )
+            $linee_mess = file( $percorso_cartella_dati . "/testi.php" );
+        echo "<table summary='Anteprima' bgcolor='$sfondo_tab' width='100%' border='1' cellpadding='5px'>
 			<caption>ANTEPRIMA TESTO</caption><tr><td>";
-            echo html_entity_decode( $linee_mess[ $n ] ) . "<br/>";
-            echo "</td></tr></table>";
-        } # fine if
-        elseif ( $a2 == "attiva" ) {
-            echo "Funzione per future implementazioni!";
-        } elseif ( $a2 == "cancella" ) {
-            echo "<table summary='Elimina' bgcolor='$sfondo_tab' width='100%'>
+        echo html_entity_decode( $linee_mess[ $n ] ) . "<br/>";
+        echo "</td></tr></table>";
+    } # fine if
+    elseif ( $a2 == "attiva" ) {
+        echo "Funzione per future implementazioni!";
+    } elseif ( $a2 == "cancella" ) {
+        echo "<table summary='Elimina' bgcolor='$sfondo_tab' width='100%'>
 			<caption>ELIMINA TESTO</caption><tr><td align ='center'>";
-            echo "<form method='post' action='a_testi.php'>
+        echo "<form method='post' action='a_testi.php'>
 			<input type='hidden' name='m$n' value='$a2' />
 			<b>Vuoi eliminare il testo n. $n?</b><br/><br/>
 			<input type='submit' name='salva_modifiche' value='Elimina testo' />
 			</form>Procedendo il testo sar&agrave; eliminato e non sar&agrave; pi&ugrave; disponibile.
 			</td></tr></table>";
-        } elseif ( $a2 == "modifica" ) {
-            if ( @is_file( $percorso_cartella_dati . "/testi.php" ) )
-                $linee_mess = file( $percorso_cartella_dati . "/testi.php" );
-            echo "<table summary='Edita' bgcolor='$sfondo_tab' width='100%'>
+    } elseif ( $a2 == "modifica" ) {
+        if ( @is_file( $percorso_cartella_dati . "/testi.php" ) )
+            $linee_mess = file( $percorso_cartella_dati . "/testi.php" );
+        echo "<table summary='Edita' bgcolor='$sfondo_tab' width='100%'>
                <caption>EDITA TESTO</caption><tr><td align ='center'>";
-            echo "<form method='post' action='a_testi.php'>
+        echo "<form method='post' action='a_testi.php'>
                <input type='hidden' name='m$n' value='$a2' />
                <textarea name='n_contenuto_dati' rows='20' cols='120'>" . $linee_mess[ $n ] . "</textarea>
                &nbsp;&nbsp;&nbsp;<input type='submit' name='salva_modifiche' value='Salva le modifiche' />
                </form></td></tr></table>";
-        } elseif ( $a2 == "carica" ) {
-            if ( @fopen( 'http://fantadownload.altervista.org/mirrorFCBE/giornataseriea.txt', 'r' ) ) {
-                $riga = file( 'http://fantadownload.altervista.org/mirrorFCBE/giornataseriea.txt' );
-                $linee_mess[ $n ] = $riga[ 1 ];
-                $giorn_num = $riga[ 0 ];
-                echo "<table summary='Carica' bgcolor='$sfondo_tab' width='100%'>
+    } elseif ( $a2 == "carica" ) {
+        if ( @fopen( 'http://fantadownload.altervista.org/mirrorFCBE/giornataseriea.txt', 'r' ) ) {
+            $riga = file( 'http://fantadownload.altervista.org/mirrorFCBE/giornataseriea.txt' );
+            $linee_mess[ $n ] = $riga[ 1 ];
+            $giorn_num = $riga[ 0 ];
+            echo "<table summary='Carica' bgcolor='$sfondo_tab' width='100%'>
 			<caption>Carica Giornata serie A</caption><tr><td align ='center'>";
-                echo "<form method='post' action='a_testi.php'>
+            echo "<form method='post' action='a_testi.php'>
 			<input type='hidden' name='m$n' value='$a2' />
 			<textarea name='n_contenuto_dati' rows='20' cols='120'>" . $linee_mess[ $n ] . "</textarea>
 			<input type='submit' name='salva_modifiche' value='Carica  giornata n� $giorn_num' />
 			</form></td></tr></table>";
-                #$n_contenuto_dati=$linee_mess[$n];
-            } else echo "File origine non disponibile";
+            #$n_contenuto_dati=$linee_mess[$n];
+        } else {
+            echo "File origine non disponibile";
         }
-    } # fine if ($m)
+    }
     echo "</div></center>";
 } # fine if ($_SESSION["utente"]
 else {

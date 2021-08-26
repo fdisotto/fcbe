@@ -1,0 +1,23 @@
+name: Dev deploy
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy FCBE Dev
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.SSH_HOST}}
+          key: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+
+          script: |
+            rm -rf /app/dev.fcbe.fdisotto.com
+            cd /app/
+            git clone https://${{secrets.TOKEN}}@github.com/fdisotto/fcbe dev.fcbe.fdisotto.com
+            cd /app/dev.fcbe.fdisotto.com
+            git checkout dev
+            echo "Deploy Success!!!"

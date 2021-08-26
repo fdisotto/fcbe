@@ -1,0 +1,21 @@
+{
+  "name": "fdisotto/fcbe",
+  "authors": [
+    {
+      "name": "Fabio Di Sotto",
+      "email": "fabio.disotto@gmail.com"
+    }
+  ],
+  "require": {
+    "monolog/monolog": "^2.3",
+    "tedivm/stash": "^0.16.0",
+    "nette/caching": "^3.1",
+    "ext-json": "*",
+    "simplepie/simplepie": "^1.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "FCBE\\": "src/"
+    }
+  }
+}

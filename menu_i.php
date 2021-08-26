@@ -17,143 +17,323 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
-require_once("./dati/dati_gen.php");
-require_once("./inc/funzioni.php");
 
-if (trim($messaggi[5]) != "") echo "<div class='slogan'>" . html_entity_decode($messaggi[5]) . "</div>";
-elseif ($mostra_calendario == "SI") {
-    echo " <div class='slogan'><center>";
-    crea_calendario();
-    echo "</center></div>";
+use FCBE\Util\Giornate;
+use FCBE\Util\Utenti;
+use FCBE\Util\Tornei;
+
+require_once "./dati/dati_gen.php";
+require_once "./inc/funzioni.php";
+
+global $messaggi, $percorso_cartella_dati, $iscrizione_online, $vedi_notizie, $attiva_rss, $mostra_voti_in_login, $considera_fantasisti_come;
+
+$login_error = "";
+
+if ( isset( $_GET[ 'fallito' ] ) ) {
+    switch ( (int)$_GET[ 'fallito' ] ) {
+        case 1:
+            $login_error = "Username o password errati o mancanti!";
+            break;
+        case 2:
+            $login_error = "Password amministratore errata.\nE' stata inviata una mail di notifica.";
+            break;
+        case 3:
+            $login_error = "Scegli il torneo dal menù a tendina";
+            break;
+    }
+} elseif ( isset( $_GET[ 'nofile' ] ) ) {
+    $login_error = "Database utenti non trovato!";
+} elseif ( isset( $_GET[ 'logout' ] ) ) {
+    switch ( $_GET[ 'logout' ] ) {
+        case 1:
+            $login_error = "Disconnesso!";
+            break;
+        case 2:
+            $login_error = "Accesso riservato!";
+            break;
+        case 3:
+            $login_error = "Rieseguire l'accesso";
+            break;
+    }
+} elseif ( isset( $_GET[ 'nuovo' ] ) ) {
+    $login_error = "Connesso!";
+} elseif ( isset( $_GET[ 'iscritto' ] ) ) {
+    $login_error = "Utente iscritto! Email inviata!";
+} elseif ( isset( $_GET[ 'attesa' ] ) ) {
+    $login_error = "Utente in attesa di autorizzazione!";
 }
-
-echo "<div id='menu_d'>";
-
-if ($iscrizione_online == "SI") echo "<a href='./iscrizione.php'>Iscrizione on-line</a>";
-if ($usa_cms == "SI") link_pagine_box();
-#echo "<a href='./regolamento.php'>Regolamento</a>";
-if (is_file("$percorso_cartella_dati/tornei.php")) echo "<a href='./vedi_tornei.php'>Tornei in corso</a>";
-if ($usa_cms == "SI") link_categorie();
-if ($usa_cms == "SI") echo "<form method='post' class='ricerca' action='index.php'>
-<div id='searchform'>
-<p><input name='testo' class='text' id='testo' type='text' value='' />
-<input name='ricerca' class='button' value='Ricerca' type='submit' /></p>
-</div>
-</form>";
-
-echo "<div id='loginbox'><p align='center'><b><u>Accesso procedura</u></b></p>";
-
-if (@$_GET["fallito"] == 1) echo "<br/><div class='evidenziato'>> Pseudonimo o password errati o mancanti!</div>";
-elseif (@$_GET["fallito"] == 2) echo "<br/><div class='evidenziato'>> Password amministratore errata.<br/>E' stata inviata una mail di notifica.</div>";
-elseif (@$_GET["fallito"] == 3) echo "<br><div class=\"evidenziato\">> Scegli il torneo dal men&ugrave; a tendina</div>";
-elseif (@$_GET["nofile"]) echo "<br/><div class='evidenziato'>> File utenti non trovato!</div>";
-elseif (@$_GET["logout"] == 1) echo "<br/><div class='evidenziato'>> Disconnesso!</div>";
-elseif (@$_GET["logout"] == 2) echo "<br/><div class='evidenziato'>> Accesso riservato!</div>";
-elseif (@$_GET["logout"] == 3) echo "<br/><div class='evidenziato'>> Rieseguire accesso!</div>";
-elseif (@$_GET["nuovo"]) echo "<br/><div class='evidenziato'>> Connesso!</div>";
-elseif (@$_GET["iscritto"]) echo "<br/><div class='evidenziato'>> Utente iscritto! Email inviata!</div>";
-elseif (@$_GET["attesa"]) echo "<br/><div class='evidenziato'>> Utente in attesa di autorizzazione!</div>";
-
-if (isset($_SESSION["valido"]) and $_SESSION['valido'] == "SI") {
-    echo "<br/>Ciao: <b>" . $_SESSION['utente'] . "</b><br/>";
-    include("./inc/online.php");
-} else {
-    $tornei = @file("$percorso_cartella_dati/tornei.php") ?: [];
-    $num_tornei = 0;
-    $conta_tornei = count($tornei);
-    if ($attiva_multi == "SI" and $conta_tornei > 2) {
-        $vedi_tornei_attivi = "<select name='l_torneo'>";
-        $vedi_tornei_attivi .= "<option value=''>Scegli il tuo torneo</option>";
-        #$tornei = @file("$percorso_cartella_dati/tornei.php");
-        #$num_tornei = 0;
-        #$conta_tornei = count($tornei);
-        for ($num1 = 0; $num1 < $conta_tornei; $num1++) {
-            $num_tornei++;
-        }
-
-        for ($num1 = 1; $num1 < $num_tornei; $num1++) {
-            @list($otid, $otdenom) = explode(",", trim($tornei[$num1]));
-            $vedi_tornei_attivi .= "<option value='$otid'>$otdenom</option>";
-        } # fine for $num1
-
-        $vedi_tornei_attivi .= "</select>";
-    } else $vedi_tornei_attivi = "<input type='hidden' name='l_torneo' value='1' />";
-
-    echo "<br/><form method='post' action='./login.php'>
-	username: <input type='text' name='l_utente' class='text' /><br/>
-	password:   <input type='password' name='l_pass' class='text' /><br/>
-	$vedi_tornei_attivi<br>
-	Ricordami <input type=\"checkbox\" name=\"l_ricordami\" value=\"SI\">	<br/><br/>
-	
-	<input type='image' name='login' value='Login' src='immagini/entra.gif'>
-	</form>";
-    echo "<br/><div class='articolo_d'><a href='./recuperopass.php'>recupera password</a></div>";
-    #echo "<br/><div class='articolo_d'><a href='./recuperopass.php'>recupera password</a></div>";
-
-} # fine ----------<input name='login' class='button' value='Login' type='submit' />
-echo "</div>";
-unset ($vedi_tornei_attivi, $tornei);
 ?>
 
-</div>
-<div class="articolo_d">
-    <?php
-    if ($usa_cms == "SI") link_pagine_link();
-    ?>
-    <p align="center">
-        <?php
-        if ($mostra_immagini_in_login == "SI") immagine_casuale("top", 0, 0);
-        ?>
-    </p>
+<?php if ( ! empty( trim( $messaggi[ 5 ] ) ) ): ?>
+    <div class="card mb-4">
+        <div class="card-body">
+            <p class="card-text">
+                <?php echo html_entity_decode( $messaggi[ 5 ] ) ?>
+            </p>
+        </div>
+    </div>
+<?php endif ?>
 
+<nav class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column bg-dark">
+    <ul class="nav flex-column text-white">
+        <?php foreach ( link_pagine_box() as $pagina ): ?>
+            <li class="nav-item border-bottom">
+                <a href="./index.php?paginaid=<?php echo $pagina[ 'id' ] ?>" class="nav-link text-white">
+                    <i class="fa fa-chevron-right"></i>
+                    <span class="ms-3">
+                        <?php echo $pagina[ 'title' ] ?>
+                    </span>
+                </a>
+            </li>
+        <?php endforeach ?>
+
+        <?php if ( $iscrizione_online == "SI" ): ?>
+            <li class="nav-item border-bottom">
+                <a href="./iscrizione.php" class="nav-link text-white">
+                    <i class="fa fa-chevron-right"></i>
+                    <span class="ms-3">
+                        Iscrizione
+                    </span>
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php if ( file_exists( $percorso_cartella_dati . "/tornei.php" ) ): ?>
+            <li class="nav-item border-bottom">
+                <a href="./vedi_tornei.php" class="nav-link text-white">
+                    <i class="fa fa-chevron-right"></i>
+                    <span class="ms-3">
+                        Tornei in corso
+                    </span>
+                </a>
+            </li>
+        <?php endif ?>
+
+        <?php foreach ( link_categorie() as $categoria ): ?>
+            <li class="nav-item border-bottom">
+                <a href="./index.php?categoria=<?php echo $categoria[ 'id' ] ?>" class="nav-link text-white">
+                    <i class="fa fa-chevron-right"></i>
+                    <span class="ms-3">
+                        <?php echo $categoria[ 'title' ] ?>
+                    </span>
+                </a>
+            </li>
+        <?php endforeach ?>
+    </ul>
+</nav>
+
+<div class="card py-2 my-4">
+    <div class="card-title border-bottom">
+        <div class="fs-6 text-uppercase text-center">Accesso</div>
+    </div>
+    <div class="card-body">
+        <?php if ( Utenti::isUserLogged() ): ?>
+            <p>
+                Ciao: <strong><?php echo Utenti::getUtente() ?></strong>
+            </p>
+            <p>
+                <?php include "./inc/online.php" ?>
+            </p>
+        <?php else: ?>
+            <?php if ( ! empty( $login_error ) ): ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php echo $login_error ?>
+                </div>
+            <?php endif ?>
+
+            <form method="post" action="./login.php">
+                <div class="row mb-3">
+                    <label for="l_utente" class="col-md-4 col-form-label">Username</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="l_utente" name="l_utente">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="l_pass" class="col-md-4 col-form-label">Password</label>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control" id="l_pass" name="l_pass">
+                    </div>
+                </div>
+
+                <?php if ( count( $tornei = Tornei::get_tornei() ) < 2 ): ?>
+                    <input type="hidden" name="l_torneo" value="1">
+                <?php else: ?>
+                    <div class="row mb-3">
+                        <label for="l_torneo" class="col-md-4 col-form-label">Torneo</label>
+                        <div class="col-md-8">
+                            <select name="l_torneo" id="l_torneo" class="form-select" aria-label="Torneo">
+                                <option value="">Scegli il tuo torneo</option>
+                                <?php foreach ( $tornei as $torneo ): ?>
+                                    <option value="<?php echo $torneo->id ?>">
+                                        <?php echo $torneo->denom ?>
+                                    </option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                <?php endif ?>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary">Accedi</button>
+                </div>
+
+                <p class="text-center mt-4">
+                    <a href='./recuperopass.php'>Recupera password</a>
+                </p>
+            </form>
+        <?php endif ?>
+    </div>
 </div>
+
+
+<?php if ( ! empty( $links = link_pagine_link() ) ): ?>
+    <nav class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column bg-dark">
+        <ul class="nav flex-column text-white">
+            <?php foreach ( $links as $link ): ?>
+                <li class="nav-item border-bottom">
+                    <a href="./index.php?paginaid=<?php echo $link[ 'id' ] ?>" class="nav-link text-white">
+                        <i class="fa fa-chevron-right"></i>
+                        <span class="ms-3">
+                        <?php echo $link[ 'title' ] ?>
+                    </span>
+                    </a>
+                </li>
+            <?php endforeach ?>
+        </ul>
+    </nav>
+<?php endif ?>
+
+<?php if ( (int)$vedi_notizie === 2 && ! empty( $news = ultime_notizie() ) ): ?>
+    <div class="my-4 border-top pt-2">
+        <p class="text-center fs-5">Ultime news:</p>
+        <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column">
+            <ul class="nav flex-column text-white">
+                <?php foreach ( $news as $idx => $new ): ?>
+                    <li class="nav-item <?php echo $idx == count( $news ) - 1 ? '' : 'border-bottom' ?>">
+                        <a href="./index.php?paginaid=<?php echo $new[ 'id' ] ?>" class="nav-link text-dark">
+
+                            <span>
+                                <small><?php echo $new[ 'date' ] ?></small>
+                                <?php echo $new[ 'title' ] ?>
+                            </span>
+                        </a>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+        </div>
+    </div>
+<?php endif ?>
+
+<?php if ( $mostra_voti_in_login === "SI" && ! empty( $giornate = Giornate::getGiornateGiocate() ) ): ?>
+    <div class="card py-2 my-4">
+        <div class="card-body">
+            <form method="post" name="vedi_voti" action="voti.php">
+                <div class="row mb-3">
+                    <label for="giornata" class="col-md-4 col-form-label">Giornata</label>
+                    <div class="col-md-8">
+                        <select name="giornata" id="giornata" class="form-select" aria-label="Vedi giornata">
+                            <?php foreach ( $giornate as $giornata ): ?>
+                                <option value="<?php echo $giornata ?>">
+                                    n° <?php echo $giornata ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-4">
+                    <div class="form-check mx-2">
+                        <input class="form-check-input" type="radio" name="ruolo_guarda" value="tutti" id="tutti" checked>
+                        <label class="form-check-label" for="tutti">
+                            Tutti
+                        </label>
+                    </div>
+
+                    <div class="form-check mx-2">
+                        <input class="form-check-input" type="radio" name="ruolo_guarda" value="P" id="p">
+                        <label class="form-check-label" for="p">
+                            P
+                        </label>
+                    </div>
+
+                    <div class="form-check mx-2">
+                        <input class="form-check-input" type="radio" name="ruolo_guarda" value="D" id="d">
+                        <label class="form-check-label" for="d">
+                            D
+                        </label>
+                    </div>
+
+                    <div class="form-check mx-2">
+                        <input class="form-check-input" type="radio" name="ruolo_guarda" value="C" id="c">
+                        <label class="form-check-label" for="c">
+                            C
+                        </label>
+                    </div>
+
+                    <?php if ( $considera_fantasisti_come === "F" ): ?>
+                        <div class="form-check mx-2">
+                            <input class="form-check-input" type="radio" name="ruolo_guarda" value="F" id="f">
+                            <label class="form-check-label" for="f">
+                                F
+                            </label>
+                        </div>
+                    <?php else: ?>
+                        <div class="form-check mx-2">
+                            <input class="form-check-input" type="radio" name="ruolo_guarda" value="A" id="a">
+                            <label class="form-check-label" for="a">
+                                A
+                            </label>
+                        </div>
+                    <?php endif ?>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary" name="guarda_voti" value="Voti della giornata">Vedi</button>
+                </div>
+
+                <input type="hidden" name="escludi_controllo" value="SI"/>
+            </form>
+        </div>
+    </div>
+<?php endif ?>
+
+
+<?php if ( $attiva_rss === "SI" && ! empty( $news = latest_feed_news() ) ): ?>
+    <div class="my-2 border-top pt-2">
+        <p class="text-center fs-5">News calcio:</p>
+        <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column">
+            <ul class="nav flex-column text-white">
+                <?php foreach ( $news as $new ): ?>
+                    <li class="nav-item border-bottom">
+                        <a target="_blank" href="<?php echo $new[ 'link' ] ?>" class="nav-link text-dark">
+                            <small><?php echo substr( $new[ 'date' ], 0, 10 ) ?></small>
+                            <span class="ms-1">
+                                - <?php echo $new[ 'title' ] ?>
+                            </span>
+                        </a>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+        </div>
+    </div>
+<?php endif ?>
+
 <?php
-if ($usa_cms == "SI" and $vedi_notizie == "2") echo "<div class='articolo_d'>" . ultime_notizie('') . "</div>";
 
-if ($mostra_voti_in_login == "SI") {
-
-
-    $mostra_voti_vedi = "<div class='articolo_d'><center><form method='post' name='vedi_voti' action='voti.php'>
-	<input type = 'hidden' name = 'escludi_controllo' value = 'SI' />
-	<input type='submit' name='guarda_voti' value='Voti della giornata' /> n. \r\n
-	<select name='giornata' onChange='submit()'>";
-
-    for ($num1 = 1; $num1 < 40; $num1++) {
-        if (strlen($num1) == 1) $num1 = "0" . $num1;
-
-        $percorso = "$prima_parte_pos_file_voti$num1$seconda_parte_pos_file_voti";
-        if (is_file("$percorso")) {
-            $mostra_voti_vedi .= "<option value='$num1' selected>$num1</option>";
-        } # fine if
-        else break;
-    } # fine for $num1
-    $mostra_voti_vedi .= "</select><br/><br/>
-	<input type='radio' name='ruolo_guarda' value='tutti' checked /> Tutti |
-	<input type='radio' name='ruolo_guarda' value='P' /> P |
-	<input type='radio' name='ruolo_guarda' value='D' /> D |
-	<input type='radio' name='ruolo_guarda' value='C' /> C |";
-
-    if ($considera_fantasisti_come == "F") $mostra_voti_vedi .= "<input type='radio' name='ruolo_guarda' value='F' /> F |";
-    $mostra_voti_vedi .= "<input type='radio' name='ruolo_guarda' value='A' /> A
-	</form></center></div>";
-    echo $mostra_voti_vedi;
-} # fine if
-
-if ($mostra_giornate_in_login == "SI") {
-
+if ( $mostra_giornate_in_login == "SI" ) {
     $vedi_tornei_attivi = "<select name='itorneo'>";
-    $tornei = @file("$percorso_cartella_dati/tornei.php");
+    $tornei = @file( "$percorso_cartella_dati/tornei.php" );
     $num_tornei = 0;
-    for ($num1 = 0; $num1 < count($tornei); $num1++) {
+    for ( $num1 = 0; $num1 < count( $tornei ); $num1++ ) {
         $num_tornei++;
     }
 
-    for ($num1 = 1; $num1 < $num_tornei; $num1++) {
-        @list($tid, $tdenom, $tpart, $tserie) = explode(",", trim($tornei[$num1]));
-        $tdenom = preg_replace("/\"/", "", $tdenom);
+    for ( $num1 = 1; $num1 < $num_tornei; $num1++ ) {
+        @list( $tid, $tdenom, $tpart, $tserie ) = explode( ",", trim( $tornei[ $num1 ] ) );
+        $tdenom = preg_replace( "/\"/", "", $tdenom );
 
-        if (isset($torneo_completo) && $torneo_completo != "SI") $vedi_tornei_attivi .= "<option value='$tid'>$tdenom</option>";
-
+        if ( isset( $torneo_completo ) && $torneo_completo != "SI" )
+            $vedi_tornei_attivi .= "<option value='$tid'>$tdenom</option>";
     } # fine for $num1
 
     $vedi_tornei_attivi .= "</select>";
@@ -162,54 +342,20 @@ if ($mostra_giornate_in_login == "SI") {
 	<input type='hidden' name='escludi_controllo' value='SI' />
 	<input type='submit' name='guarda_giornata' value='Vedi' /> giornata n. <select name='giornata' onChange='submit()'>";
 
-    for ($num1 = 1; $num1 < 40; $num1++) {
-        if (strlen($num1) == 1) $num1 = "0" . $num1;
+    for ( $num1 = 1; $num1 < 40; $num1++ ) {
+        if ( strlen( $num1 ) == 1 )
+            $num1 = "0" . $num1;
         $controlla_giornata = "giornata$num1";
-        if (@is_file("$percorso_cartella_dati/$controlla_giornata")) $giormerc .= "<option value='$num1' selected>$num1</option>";
-        else break;
+        if ( @is_file( "$percorso_cartella_dati/$controlla_giornata" ) )
+            $giormerc .= "<option value='$num1' selected>$num1</option>"; else break;
     } # fine for $num1
 
     $giormerc .= "</select><br/>" . $vedi_tornei_attivi . "</form><br/>";
-    if ($num1 > 1) echo "<div class='articolo_d'>
+    if ( $num1 > 1 )
+        echo "<div class='articolo_d'>
 	<div>" . $giormerc . "</div>
 	<div>" . $mostra_voti_vedi . "</div>
 	</div>";
-}
-
-echo "<div class='articolo_d'>
-<p><img src='./immagini/more.gif' alt='' /> <a href='temporeale.php'>Risultati tempo reale</a></p>
-<p><img src='./immagini/more.gif' alt='' /> <a href='televideo.php'>Televideo RAI</a></p>
-</div>";
-
-if ($attiva_shoutbox == "SI") {
-    $db_sb = "./dati/db09.txt";
-    if (isset($_POST['azione']) and isset($_POST['security_code']) and $_POST['security_code'] == $_SESSION['security_code'] and $_POST['azione'] == "aggiungi" and $_POST['messaggio'] != "Messaggio") {
-        if ($_POST['email'] == "Email") $_POST['email'] = "";
-        $nuova_linea = "\r\n" . $_POST['nome'] . "|" . $_POST['email'] . "|" . date("Y/m/d H:i") . "|" . stripslashes(htmlspecialchars($_POST['messaggio']));
-        $fp = fopen($db_sb, "a");
-        if (flock($fp, LOCK_EX)) {
-            fwrite($fp, $nuova_linea);
-            flock($fp, LOCK_UN);
-            fclose($fp);
-        } else {
-            echo "Impossibile utilizzare il file " . $db_sb . "!";
-        }
-        unset($_SESSION['security_code'], $_POST['azione']);
-    }
-    unset($fp, $nuova_linea);
-    mostra_shoutbox();
-}
-
-if ($attiva_rss == "SI") {
-    echo "<div class='articolo_d'><center><b><u>News Calcio</u></b></center><br/>\n";
-
-    if (!trim($url_rss)) $url_rss = "http://www.gazzetta.it/rss/Calcio.xml"; //rss url
-
-    include_once "./inc/rss_fetch.php";
-    $html = "- <a href='#{link}' target='_blank'>#{title}</a><br />\n";
-    #$html .= "      #{description}<br /><font size='-1'>#{pubDate}</font><br />\n";
-    $rss = new rss_parser($url_rss, 10, $html, 1);
-    echo "</div>\n";
 }
 ?>
 </div>

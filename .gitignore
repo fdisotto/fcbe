@@ -16,3 +16,5 @@ dati/copia/*.zip
 dati/giornata*
 immagini/loghi/
 inc/ajax-chat/php/data.txt
+
+/vendor/
