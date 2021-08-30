@@ -22,6 +22,8 @@ use FCBE\Model\UtenteModel;
 use FCBE\Util\Tornei;
 use FCBE\Util\Utenti;
 
+$hide_left_menu = true;
+
 require_once "./dati/dati_gen.php";
 require_once "./inc/funzioni.php";
 require_once "./header.php";

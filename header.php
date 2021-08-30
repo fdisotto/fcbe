@@ -8,6 +8,9 @@ use FCBE\Enum\TipoCalcolo;
 error_reporting( E_ALL );
 ini_set( 'display_errors', 1 );
 
+require_once "./dati/dati_gen.php";
+require_once "./inc/funzioni.php";
+
 global $titolo_sito, $attiva_log, $a_fm;
 
 if ( $attiva_log == "SI" ) {
@@ -162,8 +165,12 @@ if ( $attiva_log == "SI" ) {
 </header>
 
 <div id="wrapper" class="d-block d-md-flex">
-    <?php if ( Utenti::isAdminLogged() && $_SERVER[ 'SCRIPT_NAME' ] != "/index.php" ): ?>
-        <?php require_once "./a_menu.php"; ?>
-    <?php elseif ( Utenti::isUserLogged() && $_SERVER[ 'SCRIPT_NAME' ] != "/index.php" ): ?>
-        <?php require_once "./menu.php"; ?>
+    <?php if ( ! isset( $hide_left_menu ) ): ?>
+        <?php if ( Utenti::isAdminLogged() && $_SERVER[ 'SCRIPT_NAME' ] != "/index.php" ): ?>
+            <?php require_once "./a_menu.php"; ?>
+        <?php elseif ( Utenti::isUserLogged() && $_SERVER[ 'SCRIPT_NAME' ] != "/index.php" ): ?>
+            <?php require_once "./menu.php"; ?>
+        <?php endif ?>
     <?php endif ?>
+
+    <div id="page-content-wrapper">

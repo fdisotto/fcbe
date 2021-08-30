@@ -17,12 +17,133 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
+use FCBE\Util\Giornate;
+use FCBE\Util\Updater;
+use FCBE\Util\Utenti;
+use FCBE\Util\Voti;
+
 require_once "./controlla_pass.php";
+require_once "./inc/funzioni.php";
 require_once "./header.php";
 
-if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
-    require_once "./a_menu.php";
+global $cartella_remota;
 
+if ( ! Utenti::isAdminLogged() ) {
+    header( "location: logout.php?logout=2" );
+}
+
+Updater::check();
+
+$giornata_prossima = Giornate::getProssima();
+$giornata_corrente = Giornate::getCorrente();
+
+$calciatori_update = [];
+$giornata_update = [];
+// Scarica il file calciatori.txt dal repository
+if ( isset( $_POST[ 'carica_calciatori' ] ) ) {
+    if ( Updater::saveCalciatori() ) {
+        $calciatori_update = [
+            "status"  => true,
+            "message" => "File calciatori.txt aggiornato con successo!",
+        ];
+    } else {
+        $calciatori_update = [
+            "status"  => false,
+            "message" => "Errore durante la copia del file calciatori.txt!",
+        ];
+    }
+} elseif ( isset( $_POST[ 'preleva_voti' ] ) ) {
+    if ( Updater::saveGiornata( $giornata_prossima ) ) {
+        $giornata_update = [
+            "status"  => true,
+            "message" => "File MCC$giornata_prossima.txt salvato con successo!!",
+        ];
+    } else {
+        $giornata_update = [
+            "status"  => false,
+            "message" => "Errore durante la copia del file MCC$giornata_prossima.txt",
+        ];
+    }
+}
+
+$giornate_giocate = Giornate::getGiornateGiocate();
+$calciatori_info = Updater::getCalciatoriInfo();
+$giornata_prossima_info = Updater::getGiornataInfo( $giornata_prossima );
+$giornata_corrente_info = Updater::getGiornataInfo( $giornata_corrente );
+?>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="card">
+                    <div class="card-title text-center my-3 border-bottom">
+                        <div class="fs-5">Giornate</div>
+                    </div>
+                    <div class="card-body">
+                        <?php foreach ( $giornate_giocate as $giornata ): ?>
+                            <a href="a_giornata.php?num_giornata=<?php echo $giornata ?>" type="button" class="badge p-2 bg-dark text-white">
+                                <?php echo $giornata ?>
+                            </a>
+                        <?php endforeach ?>
+
+                        <hr>
+
+                        <p class="text-center">
+                            Cartella voti remota: <strong><?php echo $cartella_remota ?></strong>
+                        </p>
+
+                        <?php if ( $calciatori_info[ 'url' ] && $calciatori_info[ 'remote' ] > $calciatori_info[ 'local' ] ): ?>
+                            <div class="alert alert-info text-center">
+                                E' disponibile un aggiornamento del file <strong>calciatori.txt</strong>
+                            </div>
+                        <?php endif ?>
+
+                        <?php if ( $giornata_corrente_info[ 'url' ] && $giornata_corrente_info[ 'remote' ] > $giornata_corrente_info[ 'local' ] ): ?>
+                            <div class="alert alert-info text-center">
+                                E' disponibile un aggiornamento del file <strong>MCC<?php echo $giornata_corrente ?>.txt</strong>
+                            </div>
+                        <?php endif ?>
+
+                        <?php if ( ! empty( $calciatori_update ) ): ?>
+                            <div class="alert alert-<?php echo $calciatori_update[ 'status' ] ? 'info' : 'danger' ?> text-center">
+                                <?php echo $calciatori_update[ 'message' ] ?>
+                            </div>
+                        <?php elseif ( ! empty( $giornata_update ) ): ?>
+                            <div class="alert alert-<?php echo $giornata_update[ 'status' ] ? 'info' : 'danger' ?> text-center">
+                                <?php echo $giornata_update[ 'message' ] ?>
+                            </div>
+                        <?php endif ?>
+
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                <form method='post' action='./a_gestione.php'>
+                                    <input type="submit" class="btn btn-primary" name="preleva_voti" <?php echo Voti::getFileVoti( $giornata_prossima ) ? "disabled" : "" ?> value="Preleva MCC<?php echo $giornata_prossima ?>.txt"/>
+                                </form>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <form method='post' action='./a_crea_giornata.php'>
+                                    <input type="hidden" name="giornata" value="<?php echo $giornata_prossima ?>"/>
+                                    <input type="submit" class="btn btn-primary" name="crea_giornata" <?php echo empty( Voti::getFileVoti( $giornata_prossima ) ) ? "disabled" : "" ?> value="Crea la giornata <?php echo $giornata_prossima ?>"/>
+                                </form>
+                            </div>
+
+                            <?php if ( (int)$giornata_corrente <= 0 ): ?>
+                                <div class="col-12 col-md-4">
+                                    <form method='post' action='./a_gestione.php'>
+                                        <input type="submit" class="btn btn-primary" name="carica_calciatori" <?php echo empty( $calciatori_info[ 'url' ] ) || ( $calciatori_info[ 'remote' ] <= $calciatori_info[ 'local' ] ) ? "disabled" : "" ?> value="Carica calciatori.txt"/>
+                                    </form>
+                                </div>
+                            <?php endif ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php
+
+if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
     if ( isset( $procedi ) && $procedi == "SI" ) {
         $mcc = file_get_contents( $sito_mirror . $cartella_remota . "/MCC$ultima_gio.txt" );
         $mcc_vecchio = fopen( "./" . $prima_parte_pos_file_voti . $ultima_gio . ".txt", "w+" );
@@ -59,7 +180,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
     }
     if ( isset( $ccfv ) && $ccfv == "SI" && isset( $clfv ) ) {
         $calciatori_remote = file_get_contents( $clfv );
-        file_put_contents($percorso_cartella_dati . "/calciatori.txt", $calciatori_remote, LOCK_EX);
+        file_put_contents( $percorso_cartella_dati . "/calciatori.txt", $calciatori_remote, LOCK_EX );
         $errori = error_get_last();
         if ( ! empty( $errori ) ) {
             $messccfv = "Errore nella copia del file: " . $errori[ 'type' ];
@@ -67,7 +188,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
         } else $messccfv = "File calciatori.txt caricato con successo!";
     }
     if ( isset( $blocca_giornata ) && $blocca_giornata == "chiudi" ) {
-        file_put_contents($percorso_cartella_dati . "/chiusura_giornata.txt", "1", LOCK_EX);
+        file_put_contents( $percorso_cartella_dati . "/chiusura_giornata.txt", "1", LOCK_EX );
         echo "<meta http-equiv='refresh' content='0; url=a_gestione.php?messgestutente=60'>";
         exit;
     }
@@ -462,7 +583,10 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
     include( './inc/online.php' );
     include( './inc/flount.php' );
     echo "</div></td></tr></table>";
-} else header( "location: logout.php?logout=2" );
-
-include( "./footer.php" );
+} else {
+}
 ?>
+
+
+<?php
+require_once "./footer.php";

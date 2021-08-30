@@ -3,6 +3,9 @@ global $messaggi;
 ?>
 
 </div>
+<!-- /#page-content-wrapper -->
+
+</div>
 <!-- /#wrapper -->
 
 <footer class="footer bg-dark">

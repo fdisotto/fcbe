@@ -25,7 +25,6 @@ if ( stristr( $_SERVER[ 'SCRIPT_NAME' ], "controlla_pass.php" ) ) {
     exit;
 }
 
-session_start();
 #header ("cache-control: private");
 require_once "./dati/dati_gen.php";
 require_once "./inc/funzioni.php";

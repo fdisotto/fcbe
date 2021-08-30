@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 ##################################################################################
 require_once "./dati/cms.conf.php";
 require_once "./inc/cms.inc.php";

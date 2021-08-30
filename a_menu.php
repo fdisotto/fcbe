@@ -19,9 +19,9 @@
 ##################################################################################
 ?>
 
-<?php use FCBE\Util\Utenti;
+<?php use FCBE\Util\Utenti; ?>
 
-if ( Utenti::isAdminLogged() ): ?>
+<?php if ( Utenti::isAdminLogged() ): ?>
 
     <nav id="sidebar-wrapper" class="bg-dark p-4 d-md-block d-none">
 

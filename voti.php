@@ -34,46 +34,43 @@ $ruolo = $_GET[ 'v_ruolo' ];
 
 $calciatori = Calciatori::getCalciatoriGiornata( $giornata );
 ?>
-
-    <div id="page-content-wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-md-12">
-                    <h1 class="text-center">Voti della giornata <?php echo $giornata ?></h1>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover" id="voti-datatable" data-page-length="100">
-                            <thead>
-                            <tr>
-                                <th class="text-start">Num.</th>
-                                <th class="text-start">Nome</th>
-                                <th class="text-start">Ruolo</th>
-                                <th class="text-start">Voto</th>
-                                <th class="text-start">Voto FC</th>
-                                <th class="text-start">Valore</th>
-                                <th class="text-start">Squadra</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php foreach ( $calciatori as $calciatore ): ?>
-                                <?php if ( $calciatore->ruolo === $ruolo || strtolower( $ruolo ) === "tutti" ): ?>
-                                    <tr>
-                                        <td>
-                                            <a href="./stat_calciatore.php?num_calciatore=<?php echo $calciatore->codice ?>">
-                                                <?php echo $calciatore->codice ?>
-                                            </a>
-                                        </td>
-                                        <td><?php echo $calciatore->nome ?></td>
-                                        <td><?php echo RuoloEnum::RUOLI_EXT[ $calciatore->ruolo ] ?></td>
-                                        <td><?php echo $calciatore->voto ?></td>
-                                        <td><?php echo $calciatore->voto_fc ?></td>
-                                        <td><?php echo $calciatore->valore ?></td>
-                                        <td><?php echo $calciatore->squadra ?></td>
-                                    </tr>
-                                <?php endif ?>
-                            <?php endforeach ?>
-                            </tbody>
-                        </table>
-                    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-12">
+                <h1 class="text-center">Voti della giornata <?php echo $giornata ?></h1>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="voti-datatable" data-page-length="100">
+                        <thead>
+                        <tr>
+                            <th class="text-start">Num.</th>
+                            <th class="text-start">Nome</th>
+                            <th class="text-start">Ruolo</th>
+                            <th class="text-start">Voto</th>
+                            <th class="text-start">Voto FC</th>
+                            <th class="text-start">Valore</th>
+                            <th class="text-start">Squadra</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ( $calciatori as $calciatore ): ?>
+                            <?php if ( $calciatore->ruolo === $ruolo || strtolower( $ruolo ) === "tutti" ): ?>
+                                <tr>
+                                    <td>
+                                        <a href="./stat_calciatore.php?num_calciatore=<?php echo $calciatore->codice ?>">
+                                            <?php echo $calciatore->codice ?>
+                                        </a>
+                                    </td>
+                                    <td><?php echo $calciatore->nome ?></td>
+                                    <td><?php echo RuoloEnum::RUOLI_EXT[ $calciatore->ruolo ] ?></td>
+                                    <td><?php echo $calciatore->voto ?></td>
+                                    <td><?php echo $calciatore->voto_fc ?></td>
+                                    <td><?php echo $calciatore->valore ?></td>
+                                    <td><?php echo $calciatore->squadra ?></td>
+                                </tr>
+                            <?php endif ?>
+                        <?php endforeach ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -21,6 +21,8 @@ use FCBE\Enum\StatoMercato;
 use FCBE\Enum\TipoCalcolo;
 use FCBE\Util\Tornei;
 
+$hide_left_menu = true;
+
 require_once "./dati/dati_gen.php";
 require_once "./inc/funzioni.php";
 require_once "./header.php";
