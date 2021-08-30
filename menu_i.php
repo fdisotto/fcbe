@@ -25,7 +25,7 @@ use FCBE\Util\Tornei;
 require_once "./dati/dati_gen.php";
 require_once "./inc/funzioni.php";
 
-global $messaggi, $percorso_cartella_dati, $iscrizione_online, $vedi_notizie, $attiva_rss, $mostra_voti_in_login, $considera_fantasisti_come;
+global $messaggi, $percorso_cartella_dati, $iscrizione_online, $vedi_notizie, $attiva_rss, $mostra_voti_in_login, $considera_fantasisti_come, $mostra_giornate_in_login;
 
 $login_error = "";
 
@@ -98,7 +98,7 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
             </li>
         <?php endif ?>
 
-        <?php if ( file_exists( $percorso_cartella_dati . "/tornei.php" ) ): ?>
+        <?php if ( ! empty( Tornei::getTornei() ) ): ?>
             <li class="nav-item border-bottom">
                 <a href="./vedi_tornei.php" class="nav-link text-white">
                     <i class="fa fa-chevron-right"></i>
@@ -155,7 +155,7 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
                     </div>
                 </div>
 
-                <?php if ( count( $tornei = Tornei::get_tornei() ) < 2 ): ?>
+                <?php if ( count( $tornei = Tornei::getTornei() ) < 2 ): ?>
                     <input type="hidden" name="l_torneo" value="1">
                 <?php else: ?>
                     <div class="row mb-3">
@@ -194,8 +194,8 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
                     <a href="./index.php?paginaid=<?php echo $link[ 'id' ] ?>" class="nav-link text-white">
                         <i class="fa fa-chevron-right"></i>
                         <span class="ms-3">
-                        <?php echo $link[ 'title' ] ?>
-                    </span>
+                            <?php echo $link[ 'title' ] ?>
+                        </span>
                     </a>
                 </li>
             <?php endforeach ?>
@@ -204,34 +204,42 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
 <?php endif ?>
 
 <?php if ( (int)$vedi_notizie === 2 && ! empty( $news = ultime_notizie() ) ): ?>
-    <div class="my-4 border-top pt-2">
-        <p class="text-center fs-5">Ultime news:</p>
-        <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column">
-            <ul class="nav flex-column text-white">
-                <?php foreach ( $news as $idx => $new ): ?>
-                    <li class="nav-item <?php echo $idx == count( $news ) - 1 ? '' : 'border-bottom' ?>">
-                        <a href="./index.php?paginaid=<?php echo $new[ 'id' ] ?>" class="nav-link text-dark">
+    <div class="card py-2 my-4">
+        <div class="card-title border-bottom">
+            <div class="fs-6 text-uppercase text-center">Ultime news:</div>
+        </div>
+        <div class="card-body">
+            <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column">
+                <ul class="nav flex-column text-white">
+                    <?php foreach ( $news as $idx => $new ): ?>
+                        <li class="nav-item <?php echo $idx == count( $news ) - 1 ? '' : 'border-bottom' ?>">
+                            <a href="./index.php?paginaid=<?php echo $new[ 'id' ] ?>" class="nav-link text-dark ps-0">
 
                             <span>
+                                <i class="fa fa-chevron-right me-2"></i>
                                 <small><?php echo $new[ 'date' ] ?></small>
                                 <?php echo $new[ 'title' ] ?>
                             </span>
-                        </a>
-                    </li>
-                <?php endforeach ?>
-            </ul>
+                            </a>
+                        </li>
+                    <?php endforeach ?>
+                </ul>
+            </div>
         </div>
     </div>
 <?php endif ?>
 
 <?php if ( $mostra_voti_in_login === "SI" && ! empty( $giornate = Giornate::getGiornateGiocate() ) ): ?>
     <div class="card py-2 my-4">
+        <div class="card-title border-bottom">
+            <div class="fs-6 text-uppercase text-center">Voti calciatori:</div>
+        </div>
         <div class="card-body">
-            <form method="post" name="vedi_voti" action="voti.php">
+            <form method="get" name="vedi_voti" action="voti.php">
                 <div class="row mb-3">
-                    <label for="giornata" class="col-md-4 col-form-label">Giornata</label>
+                    <label for="v_giornata" class="col-md-4 col-form-label">Giornata</label>
                     <div class="col-md-8">
-                        <select name="giornata" id="giornata" class="form-select" aria-label="Vedi giornata">
+                        <select name="v_giornata" id="v_giornata" class="form-select" aria-label="Vedi giornata">
                             <?php foreach ( $giornate as $giornata ): ?>
                                 <option value="<?php echo $giornata ?>">
                                     n° <?php echo $giornata ?>
@@ -243,28 +251,28 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
 
                 <div class="d-flex justify-content-center mt-4">
                     <div class="form-check mx-2">
-                        <input class="form-check-input" type="radio" name="ruolo_guarda" value="tutti" id="tutti" checked>
+                        <input class="form-check-input" type="radio" name="v_ruolo" value="tutti" id="tutti" checked>
                         <label class="form-check-label" for="tutti">
                             Tutti
                         </label>
                     </div>
 
                     <div class="form-check mx-2">
-                        <input class="form-check-input" type="radio" name="ruolo_guarda" value="P" id="p">
+                        <input class="form-check-input" type="radio" name="v_ruolo" value="P" id="p">
                         <label class="form-check-label" for="p">
                             P
                         </label>
                     </div>
 
                     <div class="form-check mx-2">
-                        <input class="form-check-input" type="radio" name="ruolo_guarda" value="D" id="d">
+                        <input class="form-check-input" type="radio" name="v_ruolo" value="D" id="d">
                         <label class="form-check-label" for="d">
                             D
                         </label>
                     </div>
 
                     <div class="form-check mx-2">
-                        <input class="form-check-input" type="radio" name="ruolo_guarda" value="C" id="c">
+                        <input class="form-check-input" type="radio" name="v_ruolo" value="C" id="c">
                         <label class="form-check-label" for="c">
                             C
                         </label>
@@ -272,14 +280,14 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
 
                     <?php if ( $considera_fantasisti_come === "F" ): ?>
                         <div class="form-check mx-2">
-                            <input class="form-check-input" type="radio" name="ruolo_guarda" value="F" id="f">
+                            <input class="form-check-input" type="radio" name="v_ruolo" value="F" id="f">
                             <label class="form-check-label" for="f">
                                 F
                             </label>
                         </div>
                     <?php else: ?>
                         <div class="form-check mx-2">
-                            <input class="form-check-input" type="radio" name="ruolo_guarda" value="A" id="a">
+                            <input class="form-check-input" type="radio" name="v_ruolo" value="A" id="a">
                             <label class="form-check-label" for="a">
                                 A
                             </label>
@@ -288,10 +296,51 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
                 </div>
 
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary" name="guarda_voti" value="Voti della giornata">Vedi</button>
+                    <button type="submit" class="btn btn-primary">Vedi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+<?php endif ?>
+
+<?php if ( $mostra_giornate_in_login === "SI" && ! empty( $giornate = Giornate::getGiornateGiocate() ) && ! empty( $tornei = Tornei::getTornei() ) ): ?>
+    <div class="card py-2 my-4">
+        <div class="card-title border-bottom">
+            <div class="fs-6 text-uppercase text-center">Voti tornei:</div>
+        </div>
+
+        <div class="card-body">
+            <form action="guarda_giornata.php" method="get" name="vedi_giornate">
+
+                <div class="row mb-3">
+                    <label for="v_torneo" class="col-md-4 col-form-label">Torneo</label>
+                    <div class="col-md-8">
+                        <select name="v_torneo" id="v_torneo" class="form-select" aria-label="Scegli torneo">
+                            <?php foreach ( $tornei as $torneo ): ?>
+                                <option value="<?php echo $torneo->id ?>">
+                                    <?php echo $torneo->denom ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
                 </div>
 
-                <input type="hidden" name="escludi_controllo" value="SI"/>
+                <div class="row mb-3">
+                    <label for="v_giornata" class="col-md-4 col-form-label">Giornata</label>
+                    <div class="col-md-8">
+                        <select name="v_giornata" id="v_giornata" class="form-select" aria-label="Scegli giornata">
+                            <?php foreach ( $giornate as $giornata ): ?>
+                                <option value="<?php echo $giornata ?>">
+                                    n° <?php echo $giornata ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary">Vedi</button>
+                </div>
             </form>
         </div>
     </div>
@@ -299,63 +348,27 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
 
 
 <?php if ( $attiva_rss === "SI" && ! empty( $news = latest_feed_news() ) ): ?>
-    <div class="my-2 border-top pt-2">
-        <p class="text-center fs-5">News calcio:</p>
-        <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column">
-            <ul class="nav flex-column text-white">
-                <?php foreach ( $news as $new ): ?>
-                    <li class="nav-item border-bottom">
-                        <a target="_blank" href="<?php echo $new[ 'link' ] ?>" class="nav-link text-dark">
-                            <small><?php echo substr( $new[ 'date' ], 0, 10 ) ?></small>
-                            <span class="ms-1">
-                                - <?php echo $new[ 'title' ] ?>
+    <div class="card py-2 my-4">
+        <div class="card-title border-bottom">
+            <div class="fs-6 text-uppercase text-center">News calcio:</div>
+        </div>
+        <div class="card-body">
+            <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column">
+                <ul class="nav flex-column text-white">
+                    <?php foreach ( $news as $idx => $new ): ?>
+                        <li class="nav-item <?php echo $idx == count( $news ) - 1 ? '' : 'border-bottom' ?>">
+                            <a href="<?php echo $new[ 'link' ] ?>" class="nav-link text-dark ps-0">
+
+                            <span>
+                                <i class="fa fa-chevron-right me-2"></i>
+                                <small><?php echo substr( $new[ 'date' ], 0, 10 ) ?></small>
+                                <?php echo $new[ 'title' ] ?>
                             </span>
-                        </a>
-                    </li>
-                <?php endforeach ?>
-            </ul>
+                            </a>
+                        </li>
+                    <?php endforeach ?>
+                </ul>
+            </div>
         </div>
     </div>
 <?php endif ?>
-
-<?php
-
-if ( $mostra_giornate_in_login == "SI" ) {
-    $vedi_tornei_attivi = "<select name='itorneo'>";
-    $tornei = @file( "$percorso_cartella_dati/tornei.php" );
-    $num_tornei = 0;
-    for ( $num1 = 0; $num1 < count( $tornei ); $num1++ ) {
-        $num_tornei++;
-    }
-
-    for ( $num1 = 1; $num1 < $num_tornei; $num1++ ) {
-        @list( $tid, $tdenom, $tpart, $tserie ) = explode( ",", trim( $tornei[ $num1 ] ) );
-        $tdenom = preg_replace( "/\"/", "", $tdenom );
-
-        if ( isset( $torneo_completo ) && $torneo_completo != "SI" )
-            $vedi_tornei_attivi .= "<option value='$tid'>$tdenom</option>";
-    } # fine for $num1
-
-    $vedi_tornei_attivi .= "</select>";
-
-    $giormerc = "<form method='post' action='guarda_giornata.php'>
-	<input type='hidden' name='escludi_controllo' value='SI' />
-	<input type='submit' name='guarda_giornata' value='Vedi' /> giornata n. <select name='giornata' onChange='submit()'>";
-
-    for ( $num1 = 1; $num1 < 40; $num1++ ) {
-        if ( strlen( $num1 ) == 1 )
-            $num1 = "0" . $num1;
-        $controlla_giornata = "giornata$num1";
-        if ( @is_file( "$percorso_cartella_dati/$controlla_giornata" ) )
-            $giormerc .= "<option value='$num1' selected>$num1</option>"; else break;
-    } # fine for $num1
-
-    $giormerc .= "</select><br/>" . $vedi_tornei_attivi . "</form><br/>";
-    if ( $num1 > 1 )
-        echo "<div class='articolo_d'>
-	<div>" . $giormerc . "</div>
-	<div>" . $mostra_voti_vedi . "</div>
-	</div>";
-}
-?>
-</div>

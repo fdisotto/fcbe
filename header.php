@@ -1,30 +1,29 @@
 <?php
 
+use FCBE\Util\Logger;
 use FCBE\Util\Utenti;
 use FCBE\Enum\StatoMercato;
 use FCBE\Enum\TipoCalcolo;
 
-//error_reporting( E_ALL ^ E_NOTICE );
 error_reporting( E_ALL );
 ini_set( 'display_errors', 1 );
 
-if ( isset( $attiva_log ) && $attiva_log == "SI" ) {
-    $xx1 = $_SERVER[ 'SERVER_PORT' ];
-    $giorno = date( "d", time() );
-    $mese = date( "m", time() );
-    $anno = date( "Y", time() );
-    $ora = date( "H", time() );
-    $minuto = date( "i", time() );
-    $visitatore_info = $_SERVER[ 'REMOTE_ADDR' ];
-    $base = "https://" . $_SERVER[ 'SERVER_NAME' ] . $_SERVER[ 'REQUEST_URI' ];
-    $x1 = "host $visitatore_info";
-    $x2 = $_SERVER[ 'REMOTE_PORT' ];
-    $date = "$giorno-$mese-$anno $ora:$minuto";
+global $titolo_sito, $attiva_log, $a_fm;
+
+if ( $attiva_log == "SI" ) {
+    $ip = $_SERVER[ 'REMOTE_ADDR' ];
+    $url = ( isset( $_SERVER[ 'HTTPS' ] ) && $_SERVER[ 'HTTPS' ] === 'on' ? "https" : "http" ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
     $infonome = $_SESSION[ 'utente' ] ?? "Visitatore";
 
-    $torneo = $_SESSION[ 'torneo' ] ?? '';
-    file_put_contents( $percorso_cartella_dati . "/log" . $torneo . ".txt", "$date - $infonome - $base:$xx1 - $visitatore_info\n", FILE_APPEND | LOCK_EX );
+    $torneo = $_SESSION[ 'torneo' ] ?? 0;
+
+    Logger::info( "Visita", [
+        "utente" => $infonome,
+        "ip"     => $ip,
+        "url"    => $url,
+        "torneo" => $torneo,
+    ] );
 }
 ?>
 <!doctype html>
@@ -33,58 +32,21 @@ if ( isset( $attiva_log ) && $attiva_log == "SI" ) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Description" content="FantacalcioBazar | Il migliore gestore di Fantacalcio on line"/>
-    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" type="text/css" media="all" href="./immagini/style.css"/>
-    <style type="text/css">
-        caption {
-            background-color: <?php echo $sfondo_tab2 ?>
-        }
 
-        .menu_s a {
-            background: <?php echo $sfondo_tab3 ?> url(immagini/vmenuarrow.gif) no-repeat center left;
-        }
-    </style>
+    <link rel="stylesheet" href="./assets/vendor/bootstrap/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="./assets/vendor/font-awesome/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="./assets/vendor/datatables/datatables.min.css">
+    <link rel="stylesheet" href="./assets/vendor/datatables/DataTables-1.11.0/css/dataTables.bootstrap5.min.css">
+
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" type="text/css" media="all" href="./immagini/style.css"/>
 
     <?php
-    if ( isset( $a_fm ) && $a_fm == "SI" )
+    if ( $a_fm == "SI" )
         echo "<link rel='stylesheet' type='text/css' href='./inc/fm_style.css' />";
     ?>
-    <!--[if lt IE 9]>
-    <script src="./inc/js/jquery-1.10.2.min.js"></script>
-    <![endif]-->
-    <!--[if gte IE 9]><!-->
-    <script src="./inc/js/jquery-2.0.3.min.js"></script>
-    <!--<![endif]-->
-    <script type="text/javascript">
-        /* <![CDATA[ */
-        $(document).ready(function () {
-            /* CONFIG */
-            /* set start (sY) and finish (fY) heights for the list items */
-            sY = 24;
-            fY = 375;
-            /* end CONFIG */
-
-            /* open first list item */
-            animate(fY)
-
-            $("#slide .top").click(function () {
-                if (this.className.indexOf('clicked') == -1) {
-                    animate(sY)
-                    $('.clicked').removeClass('clicked');
-                    $(this).addClass('clicked');
-                    animate(fY)
-                }
-            });
-
-            function animate(pY) {
-                $('.clicked').animate({"height": pY + "px"}, 500);
-            }
-
-        });
-        /* ]]> */
-    </script>
 
     <title><?php echo $titolo_sito; ?></title>
 </head>
@@ -92,8 +54,7 @@ if ( isset( $attiva_log ) && $attiva_log == "SI" ) {
 
 <a id="top"></a>
 
-
-<nav class="py-2 bg-dark fixed-top navbar-expand">
+<nav class="py-2 bg-dark navbar-expand">
     <div class="container d-flex flex-wrap">
         <ul class="nav me-auto">
             <li class="nav-item">
@@ -186,16 +147,23 @@ if ( isset( $attiva_log ) && $attiva_log == "SI" ) {
     </div>
 </nav>
 
-<header class="py-3 mb-4 border-bottom bg-white">
-    <div class="container d-flex flex-wrap justify-content-center">
-        <a href="./index.php" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-decoration-none text-dark">
-            <span class="fs-4">
+<header class="py-3 border-bottom bg-white">
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <button class="navbar-toggle btn btn-outline-dark d-md-none d-block" id="navbar-toggler">
+                <span class="fa fa-bars" aria-hidden="true"></span>
+            </button>
+
+            <span class="fs-4 ms-3">
                 <?php echo $titolo_sito; ?>
             </span>
-        </a>
+        </div>
     </div>
 </header>
 
-<table width='100%' cellpadding='5' summary='Tabella principale'>
-    <tr>
-        <td valign='top'>
+<div id="wrapper" class="d-block d-md-flex">
+    <?php if ( Utenti::isAdminLogged() && $_SERVER[ 'SCRIPT_NAME' ] != "/index.php" ): ?>
+        <?php require_once "./a_menu.php"; ?>
+    <?php elseif ( Utenti::isUserLogged() && $_SERVER[ 'SCRIPT_NAME' ] != "/index.php" ): ?>
+        <?php require_once "./menu.php"; ?>
+    <?php endif ?>

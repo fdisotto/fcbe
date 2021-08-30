@@ -17,41 +17,85 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
+?>
 
-# Menu amministrazione
+<?php use FCBE\Util\Utenti;
 
-if ($_SESSION['permessi'] == 5) {
-	echo "<div class='testa1' style='padding:3px; margin: 1px'>G E S T I O N E</div>
-	<div class='menu_s' style='text-align:left; background-color: $sfondo_tab3; color: $carattere_colore_chiaro'>
-	<a href='./a_gestione.php'>Pannello iniziale</a>
-	<a href='./a_configura.php'>Configurazione</a>
-	<a href='./a_torneo.php'>Gestione tornei</a>
-	<a href='./a_aggUtente.php'>Aggiungi utenti</a>
-	<a href='./a_appUtente.php'>Approvazione utenti</a>
-	<a href='./a_verifiche.php'>Verifiche TODO</a>
-	<a href='./logout.php'>Disconnessione</a>
-	</div>
-	<div class='testa1' style='padding:3px; margin: 1px'>V O T I</div>
-	<div class='menu_s' style='text-align:left; background-color: $sfondo_tab3; color: $carattere_colore_chiaro'>
-	<a href='./a_upload.php'>Upload voti</a>
-	<a href='./a_invia_voti.php'>Invia formazioni</a>
-	<a href='./a_invia_risultati.php'>Invia risultati</a>
-	</div>
-	<div class='testa1' style='padding:3px; margin: 1px'>C O N T E N U T I</div>
-	<div class='menu_s' style='text-align:left; background-color: $sfondo_tab3; color: $carattere_colore_chiaro'>
-	<a href='./a_sito.php'>Gestione CMS</a>
-	<a href='./a_testi.php'>Gestione testi</a>
-	<a href='./messaggi.php'>Gestione messaggi</a>
-	<a href='./a_nlUtente.php'>Newsletter a utenti</a>
-	<a href='./a_crea_sondaggio.php'>Sondaggi e votazioni</a>
-	<a href='javascript:void(0)' onclick='window.open(\"chat.php?utente=".$_SESSION['utente']."\",\"CHAT\",\"width=526,height=380,left=150,top=150,status=no,toolbar=no,menubar=no,location=no\");'>Chat</a> 
-	</div>
-	<div class='testa1' style='padding:3px; margin: 1px'>O F F I C I N A</div>
-	<div class='menu_s' style='text-align:left; background-color: $sfondo_tab3; color: $carattere_colore_chiaro'>
-	<a href='./a_fm.php'>File manager</a>
-	<a href='./a_backup.php'>Backup dati</a>
-	<a href='./a_b2mail.php'>Backup per mail</a>
-	<a href='./a_edita_file.php?mod_file=$percorso_cartella_dati/cms.conf.php'>Config CMS</a>
-	</div>
-	</td><td valign='top' width='80%' align='center'>";
-}
+if ( Utenti::isAdminLogged() ): ?>
+
+    <nav id="sidebar-wrapper" class="bg-dark p-4 d-md-block d-none">
+
+        <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+            <li class="nav-item border-bottom">
+                <span class="fs-4 text-uppercase menu-title text-white d-flex justify-content-end">gestione</span>
+            </li>
+
+            <li class="nav-item">
+                <a href="./a_gestione.php" class="nav-link text-white">Pannello iniziale</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_configura.php" class="nav-link text-white">Configurazione</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_torneo.php" class="nav-link text-white">Gestione tornei</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_aggUtente.php" class="nav-link text-white">Aggiungi utenti</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_appUtente.php" class="nav-link text-white">Approvazione utenti</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_verifiche.php" class="nav-link text-white">Verifiche</a>
+            </li>
+
+            <li class="nav-item border-bottom mt-3">
+                <span class="fs-4 text-uppercase text-center menu-title text-white d-flex justify-content-end">voti</span>
+            </li>
+
+            <li class="nav-item">
+                <a href="./a_upload.php" class="nav-link text-white">Upload voti</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_invia_voti.php" class="nav-link text-white">Invia formazioni</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_invia_risultati.php" class="nav-link text-white">Invia risultati</a>
+            </li>
+
+            <li class="nav-item border-bottom mt-3">
+                <span class="fs-4 text-uppercase text-center menu-title text-white d-flex justify-content-end">contenuti</span>
+            </li>
+
+            <li class="nav-item">
+                <a href="./a_sito.php" class="nav-link text-white">Gestione CMS</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_testi.php" class="nav-link text-white">Gestione testi</a>
+            </li>
+            <li class="nav-item">
+                <a href="./messaggi.php" class="nav-link text-white">Gestione messaggi</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_nlUtente.php" class="nav-link text-white">Newsletter a utenti</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_crea_sondaggio.php" class="nav-link text-white">Sondaggi e votazioni</a>
+            </li>
+
+            <li class="nav-item border-bottom mt-3">
+                <span class="fs-4 text-uppercase text-center menu-title text-white d-flex justify-content-end">officina</span>
+            </li>
+
+            <li class="nav-item">
+                <a href="./a_fm.php" class="nav-link text-white">File manager</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_backup.php" class="nav-link text-white">Backup dati</a>
+            </li>
+            <li class="nav-item">
+                <a href="./a_b2mail.php" class="nav-link text-white">Backup per mail</a>
+            </li>
+        </ul>
+    </nav>
+<?php endif ?>

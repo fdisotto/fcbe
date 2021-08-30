@@ -41,7 +41,6 @@ if ( $attiva_multi == "SI" ) {
 }
 
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 4 ) {
-    require_once "./menu.php";
 
     if ( $gestione_email == "mail_anteprima" or $gestione_email == "mail_OK" ) {
         for ( $num1 = "01"; $num1 < 40; $num1++ ) {
@@ -399,7 +398,6 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 4 ) {
 }
 ########################################################
 if ( $_SESSION[ 'permessi' ] == 5 ) {
-    require_once "./a_menu.php";
 
     $storneo = '';
     if ( isset( $_POST[ "l_torneo" ] ) ) {

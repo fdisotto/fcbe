@@ -1,6 +1,11 @@
-</td></tr></table>
+<?php
+global $messaggi;
+?>
 
-<footer class="footer mt-5">
+</div>
+<!-- /#wrapper -->
+
+<footer class="footer bg-dark">
     <?php if ( ! empty( trim( $messaggi[ 7 ] ) ) ): ?>
         <div class="row mb-4">
             <div class="col-12 text-center text-white">
@@ -26,6 +31,10 @@
     </div>
 </footer>
 
-<script type="application/javascript" src="assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="./assets/vendor/jquery/jquery.min.js"></script>
+<script src="./assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="./assets/vendor/datatables/datatables.min.js"></script>
+<script src="./assets/vendor/datatables/DataTables-1.11.0/js/dataTables.bootstrap5.min.js"></script>
+<script src="./assets/js/main.js"></script>
 </body>
 </html>

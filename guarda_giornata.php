@@ -17,38 +17,13 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
-$escludi_controllo = $_POST[ 'escludi_controllo' ];
 
-if ( $escludi_controllo != "SI" ) {
-    require_once "./controlla_pass.php";
-    require_once "./inc/funzioni.php";
-    require_once "./header.php";
-    require_once "./menu.php";
-} else {
-    require_once "./dati/dati_gen.php";
-    require_once "./inc/funzioni.php";
-    require_once "./header.php";
+require_once "./dati/dati_gen.php";
+require_once "./inc/funzioni.php";
+require_once "./header.php";
 
-    $ca = explode( ';', $_POST[ 'itorneo' ] );
-    $_SESSION[ 'torneo' ] = $ca[ 0 ];
-    $_SESSION[ 'serie' ] = "0";
-    $range_campionato = $_POST[ 'range' ];
-    $campionato[ $range_campionato ] = $_POST[ 'otipo' ];
-    $otdenom = $ca[ 1 ];
-    $giornata = $_POST[ 'giornata' ];
-}
-
-$giornata_ultima = "";
-for ( $num1 = "01"; $num1 < 40; $num1++ ) {
-    if ( strlen( $num1 ) == 1 )
-        $num1 = "0" . $num1;
-    $giornata_controlla = "giornata$num1";
-    if ( ! @is_file( $percorso_cartella_dati . "/" . $giornata_controlla . "_" . $_SESSION[ 'torneo' ] . "_" . $_SESSION[ 'serie' ] ) )
-        break; else $giornata_ultima = $num1;
-} # fine for $num1
-
-if ( ! isset( $giornata ) or $giornata > $giornata_ultima )
-    $giornata = "$giornata_ultima";
+$ca = (int)$_GET[ 'v_torneo' ];
+$giornata = (int)$_GET[ 'v_giornata' ];
 
 $tab_formazioni = "<tr>";
 $num_colonne = 0;
@@ -62,8 +37,7 @@ $leggendo_voti = "NO";
 $leggendo_scontri = "NO";
 $voti_esistenti = "NO";
 
-if ( $giornata_ultima )
-    $file_giornata = @file( $percorso_cartella_dati . "/giornata" . $giornata . "_" . $_SESSION[ 'torneo' ] . "_" . $_SESSION[ 'serie' ] );
+$file_giornata = @file( $percorso_cartella_dati . "/giornata" . $giornata . "_" . $_SESSION[ 'torneo' ] . "_" . $_SESSION[ 'serie' ] );
 $num_linee_file_giornata = count( $file_giornata );
 
 for ( $num1 = 0; $num1 < $num_linee_file_giornata; $num1++ ) {
@@ -332,5 +306,4 @@ echo "<table align='center' width='100%' bgcolor='$sfondo_tab' border='1' cellpa
 <caption>Giornata $giornata</caption>
 $tab_formazioni</table>";
 
-include( "./footer.php" );
-?>
+require_once "./footer.php";

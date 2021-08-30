@@ -21,7 +21,6 @@ require_once "./controlla_pass.php";
 require_once "./header.php";
 
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
-    require_once "./a_menu.php";
     $path = preg_replace( "/a_upload.php/", $uploaddir . "/", $_SERVER[ "SCRIPT_FILENAME" ] );
 
     if ( ! is_writable( $uploaddir ) )

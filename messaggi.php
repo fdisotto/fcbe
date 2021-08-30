@@ -383,12 +383,6 @@ if ( $_SESSION[ 'valido' ] == "SI" ) {
     ### fine funzioni messaggi
     ############################################################
 
-    if ( $_SESSION[ "permessi" ] <= 4 ) {
-        require_once "./menu.php";
-    } elseif ( $_SESSION[ "permessi" ] == 5 ) {
-        require_once "./a_menu.php";
-    }
-
     echo "<table summary='' width='100%' align='center' style='background-color: $sfondo_tab; padding: 5px; border: 1px solid $sfondo_tab2'>
 	<caption>MESSAGGERIA UTENTI</caption>
 	<tr><td align='left'>Si prega di utilizzare un linguaggio consono allo spirito sportivo;<br />

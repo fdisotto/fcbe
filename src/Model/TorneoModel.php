@@ -4,10 +4,10 @@ namespace FCBE\Model;
 
 class TorneoModel extends BaseModel
 {
-    public $id;
-    public $denom;
-    public $part;
-    public $serie;
+    public int $id;
+    public string $denom;
+    public int $part;
+    public int $serie;
     public $mercato_libero;
     public $tipo_calcolo;
     public $giornate_totali;
@@ -32,9 +32,9 @@ class TorneoModel extends BaseModel
     public $rip_cambi_numero;
     public $rip_cambi_giornate;
     public $rip_cambi_durata;
-    public $aspetta_giorni;
-    public $aspetta_ore;
-    public $aspetta_minuti;
+    public int $aspetta_giorni;
+    public int $aspetta_ore;
+    public int $aspetta_minuti;
     public $num_calciatori_scambiabili;
     public $scambio_con_soldi;
     public $vendi_costo;
@@ -51,4 +51,5 @@ class TorneoModel extends BaseModel
     public $punti_pareggio;
     public $punti_pos;
     public $reset_scadenz;
+    public int $num_giocatori;
 }

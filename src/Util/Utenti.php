@@ -2,27 +2,43 @@
 
 namespace FCBE\Util;
 
+use Exception;
 use FCBE\Model\UtenteModel;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Utenti
 {
+    /**
+     * @return bool
+     */
     public static function isAdminLogged(): bool
     {
         global $admin_user, $admin_pass;
 
-        return self::isUserLogged() && $_SESSION[ 'utente' ] === $admin_user && $_SESSION[ 'pass' ] === $admin_pass;
+        return self::isUserLogged() && $_SESSION[ 'utente' ] === $admin_user && $_SESSION[ 'pass' ] === $admin_pass && $_SESSION[ 'permessi' ] >= 5;
     }
 
+    /**
+     * @return bool
+     */
     public static function isUserLogged(): bool
     {
         return isset( $_SESSION[ 'valido' ] ) && isset( $_SESSION[ 'utente' ] ) && $_SESSION[ 'valido' ] === "SI";
     }
 
+    /**
+     * @return string|null
+     */
     public static function getUtente(): ?string
     {
         return self::isUserLogged() ? $_SESSION[ 'utente' ] : null;
     }
 
+    /**
+     * @param string $utente
+     * @param int $id_torneo
+     * @return UtenteModel|null
+     */
     public static function existUtenteInTorneo( string $utente, int $id_torneo ): ?UtenteModel
     {
         $utenti = self::getUtentiInTorneo( $id_torneo );
@@ -37,7 +53,7 @@ class Utenti
     }
 
     /**
-     * @param $id_torneo
+     * @param int $id_torneo
      * @return UtenteModel[]
      */
     public static function getUtentiInTorneo( int $id_torneo ): iterable
@@ -80,16 +96,8 @@ class Utenti
                     'reg'        => $temp[ 12 ],
                     'titolari'   => $temp[ 13 ],
                     'panchina'   => $temp[ 14 ],
-                    'temp1'      => $temp[ 15 ],
-                    'temp2'      => $temp[ 16 ],
-                    'temp3'      => $temp[ 17 ],
-                    'temp4'      => $temp[ 18 ],
-                    'temp5'      => $temp[ 19 ],
-                    'temp6'      => $temp[ 20 ],
-                    'temp7'      => $temp[ 21 ],
-                    'temp8'      => $temp[ 22 ],
-                    'temp9'      => $temp[ 23 ],
-                    'temp0'      => $temp[ 24 ],
+                    'nome'       => $temp[ 15 ],
+                    'cognome'    => $temp[ 16 ],
                 ] );
             }
 
@@ -97,5 +105,76 @@ class Utenti
         }
 
         return $utenti;
+    }
+
+    /**
+     * @param string $email
+     * @param int $id_torneo
+     * @return UtenteModel|null
+     */
+    public static function existEmailInTorneo( string $email, int $id_torneo ): ?UtenteModel
+    {
+        $utenti = self::getUtentiInTorneo( $id_torneo );
+
+        foreach ( $utenti as $u ) {
+            if ( $u->email === $email && $u->torneo === $id_torneo ) {
+                return $u;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $squadra
+     * @param int $id_torneo
+     * @return UtenteModel|null
+     */
+    public static function existSquadraInTorneo( string $squadra, int $id_torneo ): ?UtenteModel
+    {
+        $utenti = self::getUtentiInTorneo( $id_torneo );
+
+        foreach ( $utenti as $u ) {
+            if ( $u->squadra === $squadra && $u->torneo === $id_torneo ) {
+                return $u;
+            }
+        }
+
+        return null;
+    }
+
+    public static function saveUtente( UtenteModel $utente )
+    {
+        global $percorso_cartella_dati;
+
+        if ( $utente->torneo <= 0 ) {
+            return false;
+        }
+
+        $filesystem = new Filesystem();
+
+        $percorso_file = $percorso_cartella_dati . "/utenti_" . $utente->torneo . ".php";
+
+        try {
+            if ( ! $filesystem->exists( $percorso_file ) ) {
+                $filesystem->touch( $percorso_file );
+                $filesystem->chmod( $percorso_file, 0664 );
+                $filesystem->appendToFile( $percorso_file, "<?php die('ACCESSO VIETATO');?>\n" );
+            }
+
+            $stringa = $utente->utente . "<del>" . md5( $utente->pass ) . "<del>" . $utente->permessi . "<del>" . $utente->email . "<del>" . $utente->url . "<del>" . $utente->squadra . "<del>" . $utente->torneo . "<del>" . $utente->serie . "<del>" . $utente->citta . "<del>" . $utente->crediti . "<del>" . $utente->variazioni . "<del>" . $utente->cambi . "<del>" . $utente->reg . "<del>0<del>0<del>" . $utente->nome . "<del>" . $utente->cognome . "<del>0<del>0<del>0<del>0<del>0<del>0<del>0<del>0\n";
+
+            $filesystem->appendToFile( $percorso_file, $stringa );
+
+            Cache::delete( sprintf( "utenti_%u", $utente->torneo ) );
+
+            Logger::info( "User succesfully registered", $utente->toArray() );
+        } catch ( Exception $e ) {
+            Logger::error( "Error during user registration", $e );
+
+            return $e->getMessage();
+        }
+
+        return true;
     }
 }

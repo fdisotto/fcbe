@@ -18,3 +18,6 @@ immagini/loghi/
 inc/ajax-chat/php/data.txt
 
 /vendor/
+cache/data/*
+cache/feed/*
+logs/*

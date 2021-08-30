@@ -21,10 +21,6 @@ require_once "./controlla_pass.php";
 require_once "./header.php";
 ########2345
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
-    if ( $_SESSION[ 'permessi' ] == 4 )
-        require( "./menu.php" );
-    if ( $_SESSION[ 'permessi' ] == 5 )
-        require( "./a_menu.php" );
 
     if ( ! isset( $_POST[ 'inserimento' ] ) || $_POST[ 'inserimento' ] != "ok" ) {
         $vedi_tornei_attivi = "<select name='itorneo'>";

@@ -31,7 +31,7 @@ $index_date = 5; // Posizione della data in una riga (parte da 0)
 $index_value = 3; // Posizione dell'importo della busta in una riga (parte da 0)
 $index_id = 0; //posizione dell'ID dell'oggetto
 //
-$lista_offerte_identiche = array();  
+$lista_offerte_identiche = array();
 $lista_calciatori = array();
 $box_data->data = "";
 $box_data->valore = 0;
@@ -45,10 +45,10 @@ while ( !feof ( $fd ) )
 {
     // Legge la riga corrente
     $line = fgets ( $fd );
-    
+
     // Splitta la riga in un array a seconda del separatore
     $list_line_data = explode ( $sep, $line );
-    
+
     // Estrae i dati interessanti
     $cur_date = $list_line_data[$index_date];
     $cur_value = $list_line_data[$index_value];
@@ -82,13 +82,13 @@ fclose ($fd);
 
 ############## Copia di mercato.txt in buste_chiuse.txt
 
-        
+
         $newfile = "$percorso_cartella_dati/buste_chiuse.txt";
         $aperte = "$percorso_cartella_dati/buste_aperte.txt";
         copy($filename, $newfile);
         unlink($filename);
         copy($aperte, $filename);
-        
+
 #########################################################
 
 require ("./a_menu.php");

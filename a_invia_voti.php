@@ -40,7 +40,6 @@ if ( $attiva_multi == "SI" ) {
     $vedi_tornei_attivi = "<input type='hidden' name='l_torneo' value='1' />";
 
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] <= 4 ) {
-    require( "./menu.php" );
 
     ##################################
     # Invio email
@@ -359,7 +358,6 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] <= 4 ) {
 #########################################################
 
 if ( $_SESSION[ 'permessi' ] == 5 ) {
-    require_once "./a_menu.php";
 
     if ( isset( $_POST[ "l_torneo" ] ) ) {
         $storneo = $_POST[ "l_torneo" ];

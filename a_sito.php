@@ -21,11 +21,6 @@ require_once "./controlla_pass.php";
 require_once "./header.php";
 
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 2 ) {
-    if ( $_SESSION[ 'permessi' ] == 5 ) {
-        require_once "./a_menu.php";
-    } else {
-        require_once "./menu.php";
-    }
 
     if ( $usa_tinyMCE == "SI" )
         echo '<script language="javascript" type="text/javascript" src="./inc/tiny_mce/tiny_mce.js"></script>

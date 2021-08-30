@@ -8,7 +8,7 @@ class Tornei
 {
     public static function getTorneo( $id_torneo )
     {
-        $tornei = self::get_tornei();
+        $tornei = self::getTornei();
 
         return array_search( $id_torneo, array_column( $tornei, 'id' ) );
     }
@@ -16,7 +16,7 @@ class Tornei
     /**
      * @return TorneoModel[]
      */
-    public static function get_tornei(): iterable
+    public static function getTornei(): iterable
     {
         global $percorso_cartella_dati;
 
@@ -66,10 +66,10 @@ class Tornei
                     'rip_cambi_numero'                           => $temp[ 25 ],
                     'rip_cambi_giornate'                         => $temp[ 26 ],
                     'rip_cambi_durata'                           => $temp[ 27 ],
-                    'aspetta_giorni'                             => $temp[ 28 ],
-                    'aspetta_ore'                                => $temp[ 29 ],
-                    'aspetta_minuti'                             => $temp[ 30 ],
-                    'num_calciatori_scambiabili'                 => $temp[ 31 ],
+                    'aspetta_giorni'                             => (int)$temp[ 28 ],
+                    'aspetta_ore'                                => (int)$temp[ 29 ],
+                    'aspetta_minuti'                             => (int)$temp[ 30 ],
+                    'num_calciatori_scambiabili'                 => (int)$temp[ 31 ],
                     'scambio_con_soldi'                          => $temp[ 32 ],
                     'vendi_costo'                                => $temp[ 33 ],
                     'percentuale_vendita'                        => $temp[ 34 ],
@@ -85,6 +85,7 @@ class Tornei
                     'punti_pareggio'                             => $temp[ 44 ],
                     'punti_pos'                                  => $temp[ 45 ],
                     'reset_scadenz'                              => $temp[ 46 ],
+                    'num_giocatori'                              => count( Utenti::getUtentiInTorneo( $temp[ 0 ] ) ),
                 ] );
             }
 

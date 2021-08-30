@@ -21,13 +21,6 @@ require_once( "./controlla_pass.php" );
 include( "./header.php" );
 
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
-    if ( $_SESSION[ 'permessi' ] == 4 ) {
-        require( "./menu.php" );
-    }
-    if ( $_SESSION[ 'permessi' ] == 5 ) {
-        require( "./a_menu.php" );
-    }
-
     echo " <table bgcolor='$sfondo_tab' width='100%'><caption>SONDAGGI E VOTAZIONI</caption><tr><td align=left>";
 
     if ( ! @is_file( $percorso_cartella_dati . "/sondaggio.php" ) ) {

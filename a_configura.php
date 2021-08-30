@@ -22,7 +22,6 @@ include("./header.php");
 
 if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] == 5) {
     echo "<script type='text/javascript' src='./inc/js/picker.js'></script>";
-    require("./a_menu.php");
 
     if (isset($verifiche_config) && $verifiche_config == 2) {
         $n_contenuto_dati = "<?php

@@ -21,7 +21,6 @@ require_once "./controlla_pass.php";
 require_once "./header.php";
 
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
-require_once "./a_menu.php";
 
 if ( isset( $inserimento ) && $inserimento != "scrivi" && isset( $azione ) && $azione == "cancella" ) {
     $id = $_POST[ "itorneo" ];

@@ -22,7 +22,6 @@ require_once "./controlla_pass.php";
 require_once "./header.php";
 
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] = 5 ) {
-    require_once "./a_menu.php";
     require_once "./inc/fm_class.php";
 
     // Aggiungere il nome dei files in questo array da proteggere

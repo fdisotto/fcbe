@@ -11,11 +11,15 @@
     "tedivm/stash": "^0.16.0",
     "nette/caching": "^3.1",
     "ext-json": "*",
-    "simplepie/simplepie": "^1.5"
+    "simplepie/simplepie": "^1.5",
+    "symfony/filesystem": "^5.3"
   },
   "autoload": {
     "psr-4": {
       "FCBE\\": "src/"
     }
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^5.3"
   }
 }

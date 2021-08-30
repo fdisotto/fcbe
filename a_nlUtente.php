@@ -82,8 +82,6 @@ if($attiva_multi == "SI") {
 else $vedi_tornei_attivi = "<input type='hidden' name='l_torneo' value='1' />";
 
 if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 3) {
-	if ($_SESSION['permessi'] == 3 or $_SESSION['permessi'] == 4 ) require ("./menu.php");
-	if ($_SESSION['permessi'] == 5) require ("./a_menu.php");
 
 	#########################################
 	if ($_SESSION['permessi'] == 3 or $_SESSION['permessi'] == 4 ) {

@@ -18,85 +18,66 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
-session_start();
-if ($_POST['escludi_controllo'] == 'SI') $_SESSION['ec'] = "SI"; else $_SESSION['ec'] = "NO";
 
-include("./controlla_pass.php");
-include("./header.php");
+use FCBE\Enum\RuoloEnum;
+use FCBE\Util\Calciatori;
+use FCBE\Util\Utenti;
 
-if ($_SESSION['valido'] == "SI") include ("./menu.php");
-else echo "<div class='contenuto'>
-<div id='articoli'>
-<div id='sinistra'>
-<div class='articoli_s'>";
+require_once "./dati/dati_gen.php";
+require_once "./inc/funzioni.php";
+require_once "./header.php";
 
-$percorso = "$prima_parte_pos_file_voti$giornata$seconda_parte_pos_file_voti";
-$calciatori = file("$percorso");
-$num_calciatori = count($calciatori);
+global $prima_parte_pos_file_voti, $seconda_parte_pos_file_voti;
 
-$tabella = "<table width='100%' cellspacing='0' cellpadding='2' align='center'>
-<caption>Guarda voti giornata $giornata</caption><tr>
-<td class='testa1'>Num.</td>
-<td class='testa1'>Nome</td>
-<td class='testa1'>Ruolo</td>
-<td class='testa1'>Voto</td>
-<td class='testa1'>Voto FC</td>
-<td class='testa1'>Valore</td>
-<td class='testa1'>Squadra</td></tr>";
+$giornata = (int)$_GET[ 'v_giornata' ];
+$ruolo = $_GET[ 'v_ruolo' ];
 
-for ($num1 = 0 ; $num1 < $num_calciatori ; $num1++) {
-
-	if ($num1 % 2) $color="white";
-	else $color=$colore_riga_alt;
-
-	$dati_calciatore = explode($separatore_campi_file_calciatori, $calciatori[$num1]);
-	$numero = $dati_calciatore[($num_colonna_numcalciatore_file_calciatori-1)];
-	$numero = trim($numero);
-	$nome = $dati_calciatore[($num_colonna_nome_file_calciatori-1)];
-	$nome = trim($nome);
-	$nome = preg_replace("/\"/","",$nome);
-	$s_ruolo = $dati_calciatore[($num_colonna_ruolo_file_calciatori-1)];
-	$s_ruolo = trim($s_ruolo);
-	$ruolo = $s_ruolo;
-	$valore = $dati_calciatore[($num_colonna_valore_calciatori-1)];
-	$valore = trim($valore);
-	$voto = $dati_calciatore[($num_colonna_votogiornale_file_voti-1)];
-	$voto = trim($voto);
-	$votoFC = $dati_calciatore[($num_colonna_vototot_file_voti-1)];
-	$votoFC = trim($votoFC);
-
-	$xsquadra = $dati_calciatore[($num_colonna_squadra_file_calciatori-1)];
-	$xsquadra = trim($xsquadra);
-	$xsquadra = preg_replace("/\"/","",$xsquadra);
-	if ($considera_fantasisti_come != "P" and $considera_fantasisti_come != "D" and $considera_fantasisti_come != "C" and $considera_fantasisti_come != "A") $considera_fantasisti_come = "F";
-	if ($s_ruolo == $simbolo_fantasista_file_calciatori) $ruolo = $considera_fantasisti_come;
-	if ($s_ruolo == $simbolo_portiere_file_calciatori) $ruolo = "P";
-	if ($s_ruolo == $simbolo_difensore_file_calciatori) $ruolo = "D";
-	if ($s_ruolo == $simbolo_centrocampista_file_calciatori) $ruolo = "C";
-	if ($s_ruolo == $simbolo_attaccante_file_calciatori) $ruolo = "A";
-
-	if ($ruolo == $ruolo_guarda or $ruolo_guarda == "tutti") {
-		$tabella .= "<tr bgcolor='$color'><td align='center'><a href='stat_calciatore.php?num_calciatore=$numero&amp;ruolo_guarda=$ruolo_guarda' class='user'>$numero</a></td>
-		<td align='left'>$nome</td>
-		<td align='center'>$ruolo</td>
-		<td align='center'>$voto</td>
-		<td align='center'>$votoFC</td>
-		<td align='center'>$valore</td>
-		<td align='center'><a href='tab_squadre.php?vedi_squadra=$xsquadra' class='user'>$xsquadra</a></td></tr>";
-	} # fine if ($ruolo == $ruolo_guarda or ...)
-
-} # fine for $num1
-$tabella .=  "</table>";
-
-echo $tabella;
-
-if ($_SESSION['valido'] != "SI") {
-	echo "</div>
-			</div>
-			<div id='destra'>";
-	include("./menu_i.php");
-	echo "</div>";
-}
-
-include("./footer.php");
+$calciatori = Calciatori::getCalciatoriGiornata( $giornata );
 ?>
+
+    <div id="page-content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <h1 class="text-center">Voti della giornata <?php echo $giornata ?></h1>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="voti-datatable" data-page-length="100">
+                            <thead>
+                            <tr>
+                                <th class="text-start">Num.</th>
+                                <th class="text-start">Nome</th>
+                                <th class="text-start">Ruolo</th>
+                                <th class="text-start">Voto</th>
+                                <th class="text-start">Voto FC</th>
+                                <th class="text-start">Valore</th>
+                                <th class="text-start">Squadra</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ( $calciatori as $calciatore ): ?>
+                                <?php if ( $calciatore->ruolo === $ruolo || strtolower( $ruolo ) === "tutti" ): ?>
+                                    <tr>
+                                        <td>
+                                            <a href="./stat_calciatore.php?num_calciatore=<?php echo $calciatore->codice ?>">
+                                                <?php echo $calciatore->codice ?>
+                                            </a>
+                                        </td>
+                                        <td><?php echo $calciatore->nome ?></td>
+                                        <td><?php echo RuoloEnum::RUOLI_EXT[ $calciatore->ruolo ] ?></td>
+                                        <td><?php echo $calciatore->voto ?></td>
+                                        <td><?php echo $calciatore->voto_fc ?></td>
+                                        <td><?php echo $calciatore->valore ?></td>
+                                        <td><?php echo $calciatore->squadra ?></td>
+                                    </tr>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php
+require_once "./footer.php";

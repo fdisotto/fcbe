@@ -87,9 +87,6 @@ global $messaggi, $vedi_notizie;
                         </div>
 
                     <?php endif ?>
-                    <?php if ( $vedi_notizie >= 1 ): ?>
-                        <?php notizie(); ?>
-                    <?php endif ?>
                 <?php endif ?>
             </div>
 

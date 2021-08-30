@@ -23,8 +23,6 @@ include("./header.php");
 if (!isset($nome_file_bck_zip)) $nome_file_bck_zip = "./dati/copia/dati.zip";
 
 if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] >= 3) {
-	if ($_SESSION['permessi'] == 5) require ("./a_menu.php");
-	elseif ($_SESSION['permessi'] <= 4) require ("./menu.php");
 
 
 	function stampa_info_zip($p_lista,$file,$colore_riga_alt) {

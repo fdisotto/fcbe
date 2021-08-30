@@ -17,107 +17,313 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
+use FCBE\Enum\StatoMercato;
+use FCBE\Enum\TipoCalcolo;
+use FCBE\Util\Tornei;
+
 require_once "./dati/dati_gen.php";
 require_once "./inc/funzioni.php";
+require_once "./header.php";
 
-$tornei = @file( $percorso_cartella_dati . "/tornei.php" );
-$num_tornei = count( $tornei );
-$layout = "<table cellpadding='20'><caption>Tornei in corso</caption>
-<tr><th colspan='2'>Sono di seguito elencati i tornei in corso di svolgimento, con i dettagli di gioco.</th></tr>";
-
-for ( $num1 = 1; $num1 < $num_tornei; $num1++ ) {
-    @list( $otid, $otdenom, $otpart, $otserie, $otmercato_libero, $ottipo_calcolo, $otgiornate_totali, $otritardo_torneo, $otcrediti_iniziali, $otnumcalciatori, $otcomposizione_squadra, $temp1, $temp2, $temp3, $temp4, $otstato, $otmodificatore_difesa, $otschemi, $otmax_in_panchina, $otpanchina_fissa, $otmax_entrate_dalla_panchina, $otsostituisci_per_ruolo, $otsostituisci_per_schema, $otsostituisci_fantasisti_come_centrocampisti, $otnumero_cambi_max, $otrip_cambi_numero, $otrip_cambi_giornate, $otrip_cambi_durata, $otaspetta_giorni, $otaspetta_ore, $otaspetta_minuti, $otnum_calciatori_scambiabili, $otscambio_con_soldi, $otvendi_costo, $otpercentuale_vendita, $otsoglia_voti_primo_gol, $otincremento_voti_gol_successivi, $otvoti_bonus_in_casa, $otpunti_partita_vinta, $otpunti_partita_pareggiata, $otpunti_partita_persa, $otdifferenza_punti_a_parita_gol, $otdifferenza_punti_zero_a_zero, $otmin_num_titolari_in_formazione, $otpunti_pareggio, $otpunti_pos, $otreset_scadenza ) = explode( ",", $tornei[ $num1 ] );
-
-    $file = @file( $percorso_cartella_dati . "/utenti_" . $otid . ".php" ) ?: [];
-    $linee = count( $file );
-    $num_giocatori = 0;
-
-    for ( $numx = 1; $numx < $linee; $numx++ ) {
-        @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $numx ] );
-        if ( $otorneo == $otid )
-            $num_giocatori++;
-    }
-    if ( $otpart == 0 )
-        ( $otpart = "nessun limite" );
-    if ( $otstato != "Z" ) {
-        $layout .= "<tr><td valign='top'><b>ID torneo: $otid<br/>
-		Denominazione: $otdenom</b><br/>
-		Numero partecipanti: $otpart<br/>
-		Giocatori attualmente iscritti: $num_giocatori<br/>
-		Numero serie $otserie<br/>
-		Mercato libero: $otmercato_libero<br/>
-		Tipo calcolo: $ottipo_calcolo<br/>
-		Giornate totali: $otgiornate_totali<br/>
-		Ritardo inizio: $otritardo_torneo<br/>
-		Crediti iniziali: $otcrediti_iniziali<br/>
-		Composizione rosa: $otnumcalciatori<br/>
-		Composizione rosa: $otcomposizione_squadra<br/>
-		Stato mercato: $otstato<br/>
-		Modificatore difesa: $otmodificatore_difesa<br/>
-		Schemi applicabili: $otschemi<br/> 
-		Giocatori in panchina: $otmax_in_panchina<br/> 
-		Panchina fissa: $otpanchina_fissa<br/> 
-		Max sostituzioni: $otmax_entrate_dalla_panchina<br/> 
-		Sostituzioni per ruolo: $otsostituisci_per_ruolo<br/> 
-		Sostituzioni per schema: $otsostituisci_per_schema<br/>  
-		Fantasisti per centrocampisti: $otsostituisci_fantasisti_come_centrocampisti<br/> 
-		Da definire: $temp1,$temp2,$temp3,$temp4
-		</td><td valign='top'>";
-
-        if ( $otmercato_libero == "SI" ) {
-            $layout .= "ID torneo: $otid<br/>
-			<u>Mercato libero: giocatori condivisi e cambi stile magiccampionato</u>.<br/>
-			Numero massimo di cambi:$otnumero_cambi_max<br/> 
-			Cambi in riparazione: $otrip_cambi_numero<br/> 
-			Giornate di riparazione: $otrip_cambi_giornate<br/> 
-			Durata riparazione: $otrip_cambi_durata<br/>
-			<br /><u>Dati utili per gli scontri diretti</u><br/>
-			Soglia voti primo gol: $otsoglia_voti_primo_gol<br/> 
-			Incremento voti gol successivo: $otincremento_voti_gol_successivi<br/> 
-			Bonus in casa: $otvoti_bonus_in_casa<br/> 
-			Punti partita vinta: $otpunti_partita_vinta<br/> 
-			Punti partita pareggiata: $otpunti_partita_pareggiata<br/> 
-			Punti partita persa: $otpunti_partita_persa<br/> 
-			Differenza punti a parita gol: $otdifferenza_punti_a_parita_gol<br/> 
-			Differenza punti zero a zero: $otdifferenza_punti_zero_a_zero<br/> 
-			Titolari minimi a referto: $otmin_num_titolari_in_formazione<br/><br/> 
-			<u>Dati per i campionati a punti per posizione di giornata.</u><br/>
-			Punti pareggio: $otpunti_pareggio<br/> 
-			Punti per posizione: $otpunti_pos";
-        } elseif ( $otmercato_libero == "NO" ) {
-            $layout .= "ID torneo: $otid<br/>
-			<u>Asta iniziale, e scambio, acquisti e vendite secondo il classico modo di gioco</u><br/>
-			Tempo attesta asta: giorni $otaspetta_giorni<br/> 
-			Tempo attesta asta: ore $otaspetta_ore<br/> 
-			Tempo attesta asta: minuti $otaspetta_minuti<br/> 
-			Max scambi: $otnum_calciatori_scambiabili<br/> 
-			Scambi con crediti: $otscambio_con_soldi<br/> 
-			Vendita al costo: $otvendi_costo<br/> 
-			Percentuale di vendita: $otpercentuale_vendita<br/>
-			<br /><u>Dati utili per gli scontri diretti</u><br/>
-			Soglia voti primo gol: $otsoglia_voti_primo_gol<br/> 
-			Incremento voti gol successivo: $otincremento_voti_gol_successivi<br/> 
-			Bonus in casa: $otvoti_bonus_in_casa<br/> 
-			Punti partita vinta: $otpunti_partita_vinta<br/> 
-			Punti partita pareggiata: $otpunti_partita_pareggiata<br/> 
-			Punti partita persa: $otpunti_partita_persa<br/> 
-			Differenza punti a parita gol: $otdifferenza_punti_a_parita_gol<br/> 
-			Differenza punti zero a zero: $otdifferenza_punti_zero_a_zero<br/> 
-			Titolari minimi a referto: $otmin_num_titolari_in_formazione<br/><br/> 
-			<u>Dati per i campionati a punti per posizione di giornata.</u><br/>
-			Punti pareggio: $otpunti_pareggio<br/> 
-			Punti per posizione: $otpunti_pos";
-        } else $layout .= "<b>Torneo non ancora definito</b>";
-        $layout .= "</td></tr>";
-    } # fineif ($otstato != "Z")
-} # fine for $num1
-$layout .= "</table>";
-include( "./header.php" );
-echo "
-<div class='contenuto'>
-	<div id='articoli'>
-	$layout
-	</div>
-</div>";
-include( "./footer.php" );
+$tornei = Tornei::getTornei();
 ?>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-title text-center mb-0 py-2">
+                                <div class="fs-4">Tornei in corso</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <?php foreach ( $tornei as $torneo ): ?>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-title text-center mb-0 py-2 border-bottom">
+                                    <div class="fs-5 text-uppercase"><?php echo $torneo->denom ?></div>
+                                </div>
+                                <div class="card-body">
+                                    <?php if ( $torneo->stato != StatoMercato::TORNEO_NON_ATTIVO ): ?>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <table class="table">
+                                                    <tbody>
+                                                    <tr>
+                                                        <th class="text-uppercase align-bottom text-start">Numero partecipanti:</th>
+                                                        <td class="text-start"><?php echo $torneo->part <= 0 ? 'Nessun limite' : $torneo->part ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-bottom text-start">Giocatori attualmente iscritti:</th>
+                                                        <td class="text-start"><?php echo $torneo->num_giocatori ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-bottom text-start">Mercato libero:</th>
+                                                        <td class="text-start"><?php echo $torneo->mercato_libero ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-bottom text-start">Tipo calcolo:</th>
+                                                        <td class="text-start"><?php echo TipoCalcolo::TIPO_EXT[ $torneo->tipo_calcolo ] ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-bottom text-start">Giornate totali:</th>
+                                                        <td class="text-start"><?php echo $torneo->giornate_totali ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-bottom text-start">Ritardo inizio:</th>
+                                                        <td class="text-start"><?php echo $torneo->ritardo_torneo ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-bottom text-start">Crediti iniziali:</th>
+                                                        <td class="text-start"><?php echo $torneo->crediti_iniziali ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-bottom text-start">Composizione rosa:</th>
+                                                        <td class="text-start"><?php echo $torneo->numcalciatori ?> (<?php echo $torneo->composizione_squadra ?>)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-bottom text-start">Stato mercato:</th>
+                                                        <td class="text-start"><?php echo StatoMercato::STATO_EXT[ $torneo->stato ] ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-bottom text-start">Modificatore difesa:</th>
+                                                        <td class="text-start"><?php echo $torneo->modificatore_difesa ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-middle text-start">Schemi applicabili:</th>
+                                                        <td class="text-start text-wrap"><?php echo $torneo->schemi ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-middle text-start">Giocatori in panchina:</th>
+                                                        <td class="text-start"><?php echo $torneo->max_in_panchina ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-middle text-start">Panchina fissa:</th>
+                                                        <td class="text-start"><?php echo $torneo->panchina_fissa ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-middle text-start">Max sostituzioni:</th>
+                                                        <td class="text-start"><?php echo $torneo->max_entrate_dalla_panchina ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-middle text-start">Sostituzioni per ruolo:</th>
+                                                        <td class="text-start"><?php echo $torneo->sostituisci_per_ruolo ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-middle text-start">Sostituzioni per schema:</th>
+                                                        <td class="text-start"><?php echo $torneo->sostituisci_per_schema ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-uppercase align-middle text-start">Fantasisti per centrocampisti:</th>
+                                                        <td class="text-start"><?php echo $torneo->sostituisci_fantasisti_come_centrocampisti ?></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <?php if ( $torneo->mercato_libero == "SI" ): ?>
+                                                    <table class="table">
+                                                        <tbody>
+                                                        <tr>
+                                                            <th>
+                                                                Mercato libero: giocatori condivisi e cambi stile magiccampionato.
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Numero massimo di cambi:</th>
+                                                            <td class="text-start"><?php echo $torneo->numero_cambi_max ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Cambi in riparazione:</th>
+                                                            <td class="text-start"><?php echo $torneo->rip_cambi_numero ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Giornate di riparazione:</th>
+                                                            <td class="text-start"><?php echo $torneo->rip_cambi_giornate ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Durata riparazione:</th>
+                                                            <td class="text-start"><?php echo $torneo->rip_cambi_durata ?></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th colspan="2">
+                                                                Dati utili per gli scontri diretti
+                                                            </th>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Soglia voti primo gol:</th>
+                                                            <td class="text-start"><?php echo $torneo->soglia_voti_primo_gol ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Incremento voti gol successivo:</th>
+                                                            <td class="text-start"><?php echo $torneo->incremento_voti_gol_successivi ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Bonus in casa:</th>
+                                                            <td class="text-start"><?php echo $torneo->voti_bonus_in_casa ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Punti partita vinta:</th>
+                                                            <td class="text-start"><?php echo $torneo->punti_partita_vinta ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Punti partita pareggiata:</th>
+                                                            <td class="text-start"><?php echo $torneo->punti_partita_pareggiata ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Punti partita persa:</th>
+                                                            <td class="text-start"><?php echo $torneo->punti_partita_persa ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Differenza punti a parita gol:</th>
+                                                            <td class="text-start"><?php echo $torneo->differenza_punti_a_parita_gol ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Differenza punti zero a zero:</th>
+                                                            <td class="text-start"><?php echo $torneo->differenza_punti_zero_a_zero ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Titolari minimi a referto:</th>
+                                                            <td class="text-start"><?php echo $torneo->min_num_titolari_in_formazione ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="2">
+                                                                Dati per i campionati a punti per posizione di giornata.
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Punti pareggio:</th>
+                                                            <td class="text-start"><?php echo $torneo->punti_pareggio ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Punti per posizione:</th>
+                                                            <td class="text-start"><?php echo $torneo->punti_pos ?></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                <?php else: ?>
+                                                    <table class="table">
+                                                        <tbody>
+                                                        <tr>
+                                                            <th colspan="2">
+                                                                Asta iniziale, e scambio, acquisti e vendite secondo il classico modo di gioco
+                                                            </th>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Tempo attesta asta:</th>
+                                                            <td class="text-start">giorni <?php echo $torneo->aspetta_giorni ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Tempo attesta asta:</th>
+                                                            <td class="text-start">ore <?php echo $torneo->aspetta_ore ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Tempo attesta asta:</th>
+                                                            <td class="text-start">minuti <?php echo $torneo->aspetta_minuti ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Max scambi:</th>
+                                                            <td class="text-start"><?php echo $torneo->num_calciatori_scambiabili ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Scambi con crediti:</th>
+                                                            <td class="text-start"><?php echo $torneo->num_calciatori_scambiabili ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Vendita al costo:</th>
+                                                            <td class="text-start"><?php echo $torneo->vendi_costo ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Percentuale di vendita:</th>
+                                                            <td class="text-start"><?php echo $torneo->percentuale_vendita ?></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th colspan="2">
+                                                                Dati utili per gli scontri diretti
+                                                            </th>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Soglia voti primo gol:</th>
+                                                            <td class="text-start"><?php echo $torneo->soglia_voti_primo_gol ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Incremento voti gol successivo:</th>
+                                                            <td class="text-start"><?php echo $torneo->incremento_voti_gol_successivi ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Bonus in casa:</th>
+                                                            <td class="text-start"><?php echo $torneo->voti_bonus_in_casa ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Punti partita vinta:</th>
+                                                            <td class="text-start"><?php echo $torneo->punti_partita_vinta ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Punti partita pareggiata:</th>
+                                                            <td class="text-start"><?php echo $torneo->punti_partita_pareggiata ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Punti partita persa:</th>
+                                                            <td class="text-start"><?php echo $torneo->punti_partita_persa ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Differenza punti a parita gol:</th>
+                                                            <td class="text-start"><?php echo $torneo->differenza_punti_a_parita_gol ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Differenza punti zero a zero:</th>
+                                                            <td class="text-start"><?php echo $torneo->differenza_punti_zero_a_zero ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Titolari minimi a referto:</th>
+                                                            <td class="text-start"><?php echo $torneo->min_num_titolari_in_formazione ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="2">
+                                                                Dati per i campionati a punti per posizione di giornata.
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Punti pareggio:</th>
+                                                            <td class="text-start"><?php echo $torneo->punti_pareggio ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-uppercase align-bottom text-start">Punti per posizione:</th>
+                                                            <td class="text-start"><?php echo $torneo->punti_pos ?></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="alert alert-info text-center">
+                                            <p class="fs-4">Torneo non ancora definito</p>
+                                        </div>
+                                    <?php endif ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach ?>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <?php require_once "./menu_i.php"; ?>
+            </div>
+        </div>
+    </div>
+
+
+<?php
+require_once "./footer.php";
