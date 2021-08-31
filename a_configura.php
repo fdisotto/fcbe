@@ -114,7 +114,6 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] == 5) {
         $n_contenuto_dati .= "# corripondeza alla giornata utilizzare anche la 2�,3�,4� e 5� variabile.\n";
         $n_contenuto_dati .= "\$prima_parte_pos_file_voti = '$N_prima_parte_pos_file_voti';\n";
         $n_contenuto_dati .= "\$cartella_remota ='$N_cartella_remota';\n";
-        $n_contenuto_dati .= "\$abilita_stat ='$N_abilita_stat';\n";
         $n_contenuto_dati .= "\$risparmia_risorse ='$N_risparmia_risorse';\n";
         $n_contenuto_dati .= "\$num_giornata_file_voti = 'SI';\n";
         $n_contenuto_dati .= "\$num_giornata_file_voti_doppio = 'SI';\n";
@@ -224,17 +223,6 @@ if ($_SESSION['valido'] == "SI" and $_SESSION['permessi'] == 5) {
         else $checkNO = "checked";
 
         echo "<tr><td>Cambia trasferiti</td><td align='center'>SI&nbsp;<input type='radio' name='N_trasferiti_ok' value='SI' $checkSI />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO&nbsp;<input type='radio' name='N_trasferiti_ok' value='NO' $checkNO /></td><td>Consente di abilitare la procedura per il cambio dei trasferiti, senza che questi vengano conteggiati nel totale dei cambi.</td></tr>";
-
-        $ATT1 = "";
-        $ATT2 = "";
-        $ATT3 = "";
-        $ATT4 = "";
-        if ($abilita_stat == "AUTO") $ATT1 = "selected";
-        if ($abilita_stat == "PRINCIPALE") $ATT2 = "selected";
-        if ($abilita_stat == "MIRROR") $ATT3 = "selected";
-        if ($abilita_stat == "OFF") $ATT4 = "selected";
-
-        echo "<tr><td>Server esterno</td><td align='center'><select name='N_abilita_stat'><option value='AUTO' $ATT1>AUTOMATICO</option><option value='PRINCIPALE' $ATT2>PRINCIPALE</option><option value='MIRROR' $ATT3>MIRROR</option><option value='OFF'$ATT4>OFF</option></select></td><td>Seleziona da quale server esterno caricare le risorse.</td></tr>";
 
         $checkSI = "";
         $checkNO = "";

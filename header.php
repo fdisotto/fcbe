@@ -40,8 +40,12 @@ if ( $attiva_log == "SI" ) {
 
     <link rel="stylesheet" href="./assets/vendor/font-awesome/css/font-awesome.min.css">
 
+    <!-- Datatables -->
     <link rel="stylesheet" href="./assets/vendor/datatables/datatables.min.css">
     <link rel="stylesheet" href="./assets/vendor/datatables/DataTables-1.11.0/css/dataTables.bootstrap5.min.css">
+
+    <!-- Datetimepicker -->
+    <link rel="stylesheet" href="./assets/vendor/datetimepicker/jquery.datetimepicker.min.css">
 
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" type="text/css" media="all" href="./immagini/style.css"/>

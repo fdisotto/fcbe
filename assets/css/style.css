@@ -83,9 +83,37 @@ aside#a_menu .nav-item:hover {
     padding: 2rem 1rem;
 }
 
+
+/** Datetime picker **/
+.xdsoft_datetimepicker .xdsoft_timepicker {
+    width: 80px;
+}
+
+.xdsoft_datetimepicker .xdsoft_datepicker {
+    width: 300px;
+}
+
+.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_prev,
+.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_next {
+    margin-left: 25px;
+}
+/** /Datetime picker/ **/
+
 @media (max-width: 767px) {
+    #page-content-wrapper {
+        padding: 2rem 0;
+    }
+
     #sidebar-wrapper {
         width: 100%;
+    }
+
+    .xdsoft_datetimepicker .xdsoft_timepicker {
+        width: 50px;
+    }
+
+    .xdsoft_datetimepicker .xdsoft_datepicker {
+        width: 250px;
     }
 }
 

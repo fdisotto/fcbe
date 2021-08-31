@@ -18,7 +18,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
 
-use FCBE\Util\Giornate;
+use FCBE\Util\Giornata;
 use FCBE\Util\Utenti;
 use FCBE\Util\Tornei;
 
@@ -229,7 +229,7 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
     </div>
 <?php endif ?>
 
-<?php if ( $mostra_voti_in_login === "SI" && ! empty( $giornate = Giornate::getGiornateGiocate() ) ): ?>
+<?php if ( $mostra_voti_in_login === "SI" && ! empty( $giornate = Giornata::getGiornateGiocate() ) ): ?>
     <div class="card py-2 my-4">
         <div class="card-title border-bottom">
             <div class="fs-6 text-uppercase text-center">Voti calciatori:</div>
@@ -303,7 +303,7 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
     </div>
 <?php endif ?>
 
-<?php if ( $mostra_giornate_in_login === "SI" && ! empty( $giornate = Giornate::getGiornateGiocate() ) && ! empty( $tornei = Tornei::getTornei() ) ): ?>
+<?php if ( $mostra_giornate_in_login === "SI" && ! empty( $giornate = Giornata::getGiornateGiocate() ) && ! empty( $tornei = Tornei::getTornei() ) ): ?>
     <div class="card py-2 my-4">
         <div class="card-title border-bottom">
             <div class="fs-6 text-uppercase text-center">Voti tornei:</div>

@@ -38,6 +38,8 @@ global $messaggi;
 <script src="./assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
 <script src="./assets/vendor/datatables/datatables.min.js"></script>
 <script src="./assets/vendor/datatables/DataTables-1.11.0/js/dataTables.bootstrap5.min.js"></script>
+<script src="./assets/vendor/momentjs/moment-with-locales.min.js"></script>
+<script src="./assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js"></script>
 <script src="./assets/js/main.js"></script>
 </body>
 </html>
