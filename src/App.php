@@ -4,5 +4,5 @@ namespace FCBE;
 
 class App
 {
-    const VERSION = "2.1.22-dev";
+    const VERSION = "2.2.0-dev";
 }

@@ -135,7 +135,7 @@ class Utenti
         return null;
     }
 
-    public static function creaUtente( UtenteModel $utente )
+    public static function creaUtente( UtenteModel $utente ): bool
     {
         global $percorso_cartella_dati;
 
@@ -159,13 +159,13 @@ class Utenti
             $filesystem->appendToFile( $percorso_file, $stringa );
 
             Logger::info( "User succesfully registered", $utente->toArray() );
+
+            return true;
         } catch ( Exception $e ) {
             Logger::error( "Error during user registration", $e );
-
-            return $e->getMessage();
         }
 
-        return true;
+        return false;
     }
 
     public static function approva( int $id_utente, int $id_torneo ): bool
