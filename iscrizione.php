@@ -128,7 +128,7 @@ if ( isset( $_POST[ 'inserimento' ] ) && $_POST[ 'inserimento' ] == "ok" ) {
         $utente->nome = $inome;
         $utente->cognome = $icognome;
 
-        if ( ( $errors[] = Utenti::saveUtente( $utente ) ) === true ) {
+        if ( ( $errors[] = Utenti::creaUtente( $utente ) ) === true ) {
             $registrato = true;
 
             $email_inviata = false;

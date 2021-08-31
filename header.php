@@ -1,6 +1,7 @@
 <?php
 
 use FCBE\App;
+use FCBE\Util\Flash;
 use FCBE\Util\Logger;
 use FCBE\Util\Utenti;
 use FCBE\Enum\StatoMercato;
@@ -179,3 +180,15 @@ if ( $attiva_log == "SI" ) {
     <?php endif ?>
 
     <div id="page-content-wrapper">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <?php if ( ! empty( $message = Flash::display( "messaggio" ) ) ): ?>
+                        <div class="alert alert-<?php echo $message[ 'type' ] ?> text-center">
+                            <?php echo $message[ 'message' ] ?>
+                        </div>
+                    <?php endif ?>
+                </div>
+            </div>
+        </div>

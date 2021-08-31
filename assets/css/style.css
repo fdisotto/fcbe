@@ -99,6 +99,10 @@ aside#a_menu .nav-item:hover {
 }
 /** /Datetime picker/ **/
 
+tbody.collapse.in {
+    display: table-row-group;
+}
+
 @media (max-width: 767px) {
     #page-content-wrapper {
         padding: 2rem 0;

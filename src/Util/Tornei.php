@@ -20,10 +20,6 @@ class Tornei
     {
         global $percorso_cartella_dati;
 
-        if ( $tornei = Cache::get( "tornei" ) ) {
-            return $tornei;
-        }
-
         $percorso_file = $percorso_cartella_dati . "/tornei.php";
 
         $tornei = [];
@@ -88,8 +84,6 @@ class Tornei
                     'num_giocatori'                              => count( Utenti::getUtentiInTorneo( $temp[ 0 ] ) ),
                 ] );
             }
-
-            Cache::save( "tornei", $tornei );
         }
 
         return $tornei;

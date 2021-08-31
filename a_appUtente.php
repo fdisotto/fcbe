@@ -17,155 +17,114 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
+use FCBE\Util\Flash;
+use FCBE\Util\Tornei;
+use FCBE\Util\Utenti;
+
 require_once "./controlla_pass.php";
+require_once "./inc/funzioni.php";
 require_once "./header.php";
 
-if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 3 ) {
+if ( ! Utenti::isAdminLogged() ) {
+    header( "location: logout.php?logout=2" );
+}
 
-    $url_sito = 'http://' . $_SERVER['HTTP_HOST'];
+$tornei = Tornei::getTornei();
 
-    if ( isset( $_GET[ 'cambia' ] ) && $_GET[ 'cambia' ] ) {
-        if ( isset( $go ) ) {
-            $id = strip_tags( $_GET[ 'cambia' ] );
-
-            if ( $id == 0 ) {
-                echo "<center><h3>Impossibile modificare questo utente</h3></td></tr></table>";
-                echo "<meta http-equiv='refresh' content='1; url=a_appUtente.php?messgestutente=26'>";
-                require_once "./footer.php";
-                exit;
-            } else {
-                if ( $_SESSION[ 'permessi' ] == 3 or $_SESSION[ 'permessi' ] == 4 )
-                    $percorso_file = $percorso_cartella_dati . "/utenti_" . $_SESSION[ 'torneo' ] . ".php"; elseif ( $_SESSION[ 'permessi' ] == 5 )
-                    $percorso_file = $percorso_cartella_dati . "/utenti_" . $itorneo . ".php";
-                $fileo = file( $percorso_file );
-                list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg, $otitolari, $opanchina, $onome, $ocognome ) = explode( "<del>", trim( $fileo[ $id ] ) );
-                $linee = count( $fileo );
-                $Npermessi = "0";
-
-                $stringa = "$outente<del>$opass<del>$Npermessi<del>$oemail<del>$ourl<del>$osquadra<del>$otorneo<del>$oserie<del>$ocitta<del>$ocrediti<del>$ovariazioni<del>$ocambi<del>$oreg<del>0<del>0<del>$onome<del>$ocognome<del>0<del>0<del>0<del>0<del>0<del>0<del>0<del>0\n";
-
-                $fileo[ $id ] = $stringa;
-                $nuovo_file = implode( "", $fileo );
-
-                file_put_contents( $percorso_cartella_dati . "/utenti_" . $itorneo . ".php", $nuovo_file, LOCK_EX );
-                $oggetto = "Iscrizione Torneo Fantacalcio\n";
-
-                $messaggio = "Benvenuto in $titolo_sito!
-				La tua iscrizione dal torneo &egrave; stata accettata. <br /><br />Nella mail precedente ti sono stati inviati i dati di accesso.<br /><br />
-				Leggi attentamente il regolamento di gioco e ogni messaggio che sar&agrave; pubblicato sul sito.<br /><br />
-				Puoi connetterti e acquistare i tuoi calciatori, schierare la formazione e modificare alcuni tuoi dati nella pagina relativa alla squadra. <br /><br />
-				Segui con attenzione le fasi di gioco, sarai guidato dai messaggi del Presidente di Lega, e potrai utilizzare la funzione di messaggistica per ogni ed eventuale comunicazione.<br /><br />
-				Cordiali saluti!<br />$admin_nome<br /><br /><a href=$url_sito>$url_sito</a><br /><br />\n";
-
-                $intestazioni = "MIME-Version: 1.0\n";
-                $intestazioni .= "Content-type: text/html; charset=iso-8859-1\n";
-                #$intestazioni .= "X-Priority: 3\n";
-                #$intestazioni .= "X-MSMail-Priority: Normal\n";
-                #$intestazioni .= "X-Mailer: php\n";
-                $intestazioni .= "From: $admin_nome <$email_mittente>\n";
-                $intestazioni .= "Bcc: $admin_nome <$email_mittente>\n";
-
-                $destinatario = "$outente <$oemail>\n";
-
-                if ( ! @mail( $destinatario, $oggetto, $messaggio, $intestazioni ) ) {
-                    echo "Il messaggio non &egrave; stato spedito.";
-                    exit;
-                }
-
-                echo "<center><h3>Utente <u>$outente</u> approvato</h3></td></tr></table>";
-                echo "<meta http-equiv='refresh' content='0; url=a_appUtente.php?messgestutente=25'>";
-                include( "./footer.php" );
-                exit;
-            }
-        } else {
-            $id = $cambia;
-            if ( $_SESSION[ 'permessi' ] == 4 )
-                $percorso_file = $percorso_cartella_dati . "/utenti_" . $_SESSION[ 'torneo' ] . ".php"; elseif ( $_SESSION[ 'permessi' ] == 5 )
-                $percorso_file = $percorso_cartella_dati . "/utenti_" . $itorneo . ".php";
-
-            $filei = file( $percorso_file );
-            @list( $iutente, $ipass, $ipermessi, $iemail, $iurl, $isquadra, $itorneo, $iserie, $icitta, $icrediti, $ivariazioni, $icambi, $ireg ) = explode( "<del>", trim( $filei[ $id ] ) );
-            echo "<center><h4>Vuoi approvare la richiesta di questo utente ($id - $cambia)?</h4></center>
-		<form method = 'post' action = 'a_appUtente.php?cambia=$id&amp;itorneo=$itorneo&amp;go=1'>
-		<table bgcolor='$sfondo_tab' width = '90%'>
-			<tr align=left><td>Pseudonimo: </td><td>$iutente</td></tr>
-			<tr align=left><td>Squadra: </td><td>$isquadra</td></tr>
-			<tr align=left><td>Torneo: </td><td>$itorneo</td></tr>
-			<tr align=left><td>Serie: </td><td>$iserie</td></tr>
-			<tr align=left><td>Password: </td><td>$ipass</td></tr>
-			<tr align=left><td>Email: </td><td>$iemail</td></tr>
-			<tr align=left><td>Sito web: </td><td>$iurl</td></tr>
-			<tr align=left><td>Citt&agrave;: </td><td>$icitta</td></tr>
-
-			<tr align=left>
-				<td width = '30%' height = '10' valign = 'bottom'>approvazione:</td>
-				<td width = '70%' height = '10' valign = 'bottom'>
-				<input type = 'image' src = 'immagini/next.gif' width  = '16' height = '16' name = 'submit' alt = 'Approva utente' border = '0' align = 'top' /></td>
-			</tr>
-		</table>
-		</form>";
-        }
+if ( isset( $_POST[ 'approva_utente' ] ) ) {
+    $id_utente = (int)$_POST[ 'utente' ];
+    $id_torneo = (int)$_POST[ 'torneo' ];
+    if ( Utenti::approva( $id_utente, $id_torneo ) ) {
+        Flash::add( "messaggio", "Utente approvato!", Flash::FLASH_SUCCESS );
     } else {
-        if ( $_SESSION[ 'permessi' ] == 4 or $_SESSION[ 'permessi' ] == 3 ) {
-            echo "<table bgcolor='$sfondo_tab' cellpadding='10' width='100%' align='center'>
-		<caption>Approvazione utenti</caption><tr align='left'>
-			<td valign='top' style='border: 1px solid #888888;'>";
-
-            $fileo = @file( $percorso_cartella_dati . "/utenti_" . $_SESSION[ 'torneo' ] . ".php" );
-            $linee = count( $fileo );
-            $tot = 0;
-
-            for ( $numx = 1; $numx < $linee; $numx++ ) {
-                @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", trim( $fileo[ $numx ] ) );
-
-                if ( $opermessi == -1 ) {
-                    echo "<a href = 'a_appUtente.php?cambia=" . $numx . "&amp;itorneo=" . $otorneo . "' class='user'>" . $outente . " </a><br />";
-                    echo "email: " . $oemail . " - ";
-                    echo "torneo: " . $otorneo . " - ";
-                    echo "serie: " . $oserie . " - ";
-                    echo "squadra: " . $osquadra . " - ";
-                    echo "citt&agrave;: " . $ocitta . "<hr size='1' noshade='noshade' />";
-                    $tot++;
-                }
-            }
-            if ( $tot == 0 )
-                echo "<center><b>Nessun utente in attesa di approvazione</b></center>";
-            echo "</td></tr></table>";
-        } elseif ( $_SESSION[ 'permessi' ] == 5 ) {
-            echo "<table bgcolor='$sfondo_tab' cellpadding='10' width='100%' align='center'>
-		<caption>Approvazione utenti</caption><tr align='left'>
-		<td valign='top' style='border: 1px solid #888888;'>";
-
-            $tornei = @file( $percorso_cartella_dati . "/tornei.php" );
-            $num_tornei = count( $tornei );
-
-            for ( $num1 = 1; $num1 < $num_tornei; $num1++ ) {
-                @list( $otid, $otdenom, $otpart, $otserie, $otmercato_libero, $ottipo_calcolo, $otgiornate_totali, $otritardo_torneo, $otcrediti_iniziali, $otnumcalciatori, $otcomposizione_squadra, $temp1, $temp2, $temp3, $temp4, $otstato, $otmodificatore_difesa, $otschemi, $otmax_in_panchina, $otpanchina_fissa, $otmax_entrate_dalla_panchina, $otsostituisci_per_ruolo, $otsostituisci_per_schema, $otsostituisci_fantasisti_come_centrocampisti, $otnumero_cambi_max, $otrip_cambi_numero, $otrip_cambi_giornate, $otrip_cambi_durata, $otaspetta_giorni, $otaspetta_ore, $otaspetta_minuti, $otnum_calciatori_scambiabili, $otscambio_con_soldi, $otvendi_costo, $otpercentuale_vendita, $otsoglia_voti_primo_gol, $otincremento_voti_gol_successivi, $otvoti_bonus_in_casa, $otpunti_partita_vinta, $otpunti_partita_pareggiata, $otpunti_partita_persa, $otdifferenza_punti_a_parita_gol, $otdifferenza_punti_zero_a_zero, $otmin_num_titolari_in_formazione, $otpunti_pareggio, $otpunti_pos, $otreset_scadenza ) = explode( ",", $tornei[ $num1 ] );
-
-                $fileo = @file( $percorso_cartella_dati . "/utenti_" . $otid . ".php" );
-                $linee = count( $fileo );
-                $tot = 0;
-
-                for ( $numx = 1; $numx < $linee; $numx++ ) {
-                    @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $fileo[ $numx ] );
-
-                    if ( $opermessi == -1 ) {
-                        echo "<a href = 'a_appUtente.php?cambia=" . $numx . "&amp;itorneo=" . $otorneo . "' class='user'>" . $outente . " </a><br />";
-                        echo "email: " . $oemail . " - ";
-                        echo "torneo: " . $otorneo . " - ";
-                        echo "serie: " . $oserie . " - ";
-                        echo "squadra: " . $osquadra . " - ";
-                        echo "citt&agrave;: " . $ocitta . "<hr size='1' noshade='noshade' />";
-                        $tot++;
-                    }
-                }
-            }
-            if ( $tot == 0 )
-                echo "<center><b>Nessun utente in attesa di approvazione</b></center>";
-            echo "</td></tr></table>";
-        }
+        Flash::add( "messaggio", "Errore durante l'approvazione dell'utente", Flash::FLASH_ERROR );
     }
-} # fine if ($_SESSION["valido"] == "SI" $_SESSION["utente"] =="admin") {
 
-else header( "location: index.php?fallito=1" );
+    echo "<meta http-equiv='refresh' content='0; url=a_appUtente.php'>";
+    exit;
+}
+?>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-title text-center my-3 border-bottom">
+                        <div class="fs-5">Approvazione utenti</div>
+                    </div>
+                    <div class="card-body">
+                        <?php foreach ( $tornei as $torneo ): ?>
+                            <table class="table table-condensed table-striped caption-top mb-5">
+                                <caption>Torneo: <?php echo $torneo->denom ?></caption>
+                                <thead>
+                                <tr>
+                                    <th scope="col">Utente</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Squadra</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ( Utenti::getUtentiInTorneo( $torneo->id ) as $utente ): ?>
+                                    <?php if ( $utente->permessi <= -1 ): ?>
+                                        <tr>
+                                            <td><?php echo $utente->utente ?></td>
+                                            <td><?php echo $utente->email ?></td>
+                                            <td><?php echo $utente->squadra ?></td>
+                                            <td>
+                                                <a class="btn btn-info btn-sm text-white" data-bs-toggle="collapse" href="#utente-<?php echo $utente->utente ?>" role="button" aria-expanded="false" aria-controls="utente-<?php echo $utente->utente ?>">
+                                                    <i class="fa fa-eye"></i> Vedi
+                                                </a>
+
+                                                <form method="post" action="./a_appUtente.php" class="d-inline">
+                                                    <input type="hidden" name="utente" value="<?php echo $utente->id ?>">
+                                                    <input type="hidden" name="torneo" value="<?php echo $utente->torneo ?>">
+                                                    <button type="submit" name="approva_utente" class="btn btn-success btn-sm text-white">
+                                                        <i class="fa fa-check"></i> Approva
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="collapse" id="utente-<?php echo $utente->utente ?>">
+                                            <td colspan="4">
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Username</th>
+                                                        <th>Squadra</th>
+                                                        <th>Torneo</th>
+                                                        <th>Serie</th>
+                                                        <th>Email</th>
+                                                        <th>Sito web</th>
+                                                        <th>Città</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td><?php echo $utente->utente ?></td>
+                                                        <td><?php echo $utente->squadra ?></td>
+                                                        <td>
+                                                            <?php echo $torneo->denom ?> (ID: <?php echo $utente->torneo ?>)
+                                                        </td>
+                                                        <td><?php echo $utente->serie ?></td>
+                                                        <td><?php echo $utente->email ?></td>
+                                                        <td><?php echo $utente->url ?></td>
+                                                        <td><?php echo $utente->citta ?></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    <?php endif ?>
+                                <?php endforeach ?>
+                                </tbody>
+                            </table>
+                        <?php endforeach ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php
 require_once "./footer.php";

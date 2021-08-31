@@ -60,12 +60,6 @@ class Utenti
     {
         global $percorso_cartella_dati;
 
-        $cacheKey = sprintf( "utenti_%s", $id_torneo );
-
-        if ( $utenti = Cache::get( $cacheKey ) ) {
-            return $utenti;
-        }
-
         $percorso_file = $percorso_cartella_dati . "/utenti_" . $id_torneo . ".php";
 
         $utenti = [];
@@ -100,8 +94,6 @@ class Utenti
                     'cognome'    => $temp[ 16 ],
                 ] );
             }
-
-            Cache::save( $cacheKey, $utenti );
         }
 
         return $utenti;
@@ -143,7 +135,7 @@ class Utenti
         return null;
     }
 
-    public static function saveUtente( UtenteModel $utente )
+    public static function creaUtente( UtenteModel $utente )
     {
         global $percorso_cartella_dati;
 
@@ -166,8 +158,6 @@ class Utenti
 
             $filesystem->appendToFile( $percorso_file, $stringa );
 
-            Cache::delete( sprintf( "utenti_%u", $utente->torneo ) );
-
             Logger::info( "User succesfully registered", $utente->toArray() );
         } catch ( Exception $e ) {
             Logger::error( "Error during user registration", $e );
@@ -176,5 +166,65 @@ class Utenti
         }
 
         return true;
+    }
+
+    public static function approva( int $id_utente, int $id_torneo ): bool
+    {
+        try {
+            $utente = self::getUtenteById( $id_utente, $id_torneo );
+            $utente->permessi = 0;
+
+            return self::aggiornaUtente( $utente, $id_torneo );
+        } catch ( Exception $e ) {
+            Logger::error( "Errore durante l'approvazione dell'utente" );
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int $id_utente
+     * @param int $id_torneo
+     * @return UtenteModel|null
+     */
+    public static function getUtenteById( int $id_utente, int $id_torneo ): ?UtenteModel
+    {
+        $utenti = self::getUtentiInTorneo( $id_torneo );
+
+        foreach ( $utenti as $utente ) {
+            if ( $utente->id === $id_utente ) {
+                return $utente;
+            }
+        }
+
+        return null;
+    }
+
+    public static function aggiornaUtente( UtenteModel $utente, int $id_torneo ): bool
+    {
+        global $percorso_cartella_dati;
+
+        try {
+            $percorso_file = sprintf( "%s/utenti_%u.php", $percorso_cartella_dati, $id_torneo );
+
+            if ( ! file_exists( $percorso_file ) ) {
+                return false;
+            }
+
+            $utenti = file( $percorso_file );
+
+            $stringa = $utente->utente . "<del>" . $utente->pass . "<del>" . $utente->permessi . "<del>" . $utente->email . "<del>" . $utente->url . "<del>" . $utente->squadra . "<del>" . $utente->torneo . "<del>" . $utente->serie . "<del>" . $utente->citta . "<del>" . $utente->crediti . "<del>" . $utente->variazioni . "<del>" . $utente->cambi . "<del>" . $utente->reg . "<del>0<del>0<del>" . $utente->nome . "<del>" . $utente->cognome . "<del>0<del>0<del>0<del>0<del>0<del>0<del>0<del>0\n";
+
+            $utenti[ $utente->id ] = $stringa;
+            $nuovo_file = implode( "", $utenti );
+
+            file_put_contents( $percorso_file, $nuovo_file, LOCK_EX );
+
+            return true;
+        } catch ( Exception $e ) {
+            Logger::error( "Errore durante l'aggiornamento dell'utente", (array)$e );
+        }
+
+        return false;
     }
 }

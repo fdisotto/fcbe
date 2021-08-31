@@ -123,12 +123,6 @@ $ora_chiusura_giornata = date( "H:i", strtotime( $chiusura_giornata ) );
                         <?php echo $status_update[ 'message' ] ?>
                     </div>
                 <?php endif ?>
-
-                <?php if ( ! empty( $message = Flash::display( "messaggio" ) ) ): ?>
-                    <div class="alert alert-<?php echo $message[ 'type' ] ?> text-center">
-                        <?php echo $message[ 'message' ] ?>
-                    </div>
-                <?php endif ?>
             </div>
         </div>
         <div class="row">
