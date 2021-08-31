@@ -4,7 +4,7 @@ namespace FCBE;
 
 class App
 {
-    const VERSION = "1.6.22-dev";
+    const VERSION = "2.0.22-dev";
 
     public static function getVersion(): string
     {

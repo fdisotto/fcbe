@@ -18,6 +18,7 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
 use FCBE\Enum\StatoGiornata;
+use FCBE\Util\Flash;
 use FCBE\Util\Giornata;
 use FCBE\Util\Updater;
 use FCBE\Util\Utenti;
@@ -122,6 +123,12 @@ $ora_chiusura_giornata = date( "H:i", strtotime( $chiusura_giornata ) );
                         <?php echo $status_update[ 'message' ] ?>
                     </div>
                 <?php endif ?>
+
+                <?php if ( ! empty( $message = Flash::display( "messaggio" ) ) ): ?>
+                    <div class="alert alert-<?php echo $message[ 'type' ] ?> text-center">
+                        <?php echo $message[ 'message' ] ?>
+                    </div>
+                <?php endif ?>
             </div>
         </div>
         <div class="row">
@@ -218,10 +225,8 @@ $ora_chiusura_giornata = date( "H:i", strtotime( $chiusura_giornata ) );
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row mt-4">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6 mt-4">
                 <div class="card">
                     <div class="card-title text-center my-3 border-bottom">
                         <div class="fs-5">Statistiche</div>
