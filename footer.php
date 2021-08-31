@@ -9,7 +9,9 @@ global $messaggi;
 <!-- /#wrapper -->
 
 <footer class="footer bg-dark">
-    <?php if ( ! empty( trim( $messaggi[ 7 ] ) ) ): ?>
+    <?php use FCBE\App;
+
+    if ( ! empty( trim( $messaggi[ 7 ] ) ) ): ?>
         <div class="row mb-4">
             <div class="col-12 text-center text-white">
                 <?php echo html_entity_decode( $messaggi[ 7 ] ) ?>
@@ -27,7 +29,7 @@ global $messaggi;
                     Pagina generata in <?php echo number_format( microtime( true ) - $_SERVER[ "REQUEST_TIME_FLOAT" ], 5, '.', '' ); ?> secondi.
                 </li>
                 <li class="list-group-item">
-                    Versione <?php echo file_get_contents( 'version.txt' ) ?>
+                    Versione <?php echo App::VERSION ?>
                 </li>
             </ul>
         </div>
@@ -40,6 +42,6 @@ global $messaggi;
 <script src="./assets/vendor/datatables/DataTables-1.11.0/js/dataTables.bootstrap5.min.js"></script>
 <script src="./assets/vendor/momentjs/moment-with-locales.min.js"></script>
 <script src="./assets/vendor/datetimepicker/jquery.datetimepicker.full.min.js"></script>
-<script src="./assets/js/main.js"></script>
+<script src="./assets/js/main.js?v=<?php echo App::VERSION ?>"></script>
 </body>
 </html>

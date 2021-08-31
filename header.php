@@ -1,5 +1,6 @@
 <?php
 
+use FCBE\App;
 use FCBE\Util\Logger;
 use FCBE\Util\Utenti;
 use FCBE\Enum\StatoMercato;
@@ -47,8 +48,8 @@ if ( $attiva_log == "SI" ) {
     <!-- Datetimepicker -->
     <link rel="stylesheet" href="./assets/vendor/datetimepicker/jquery.datetimepicker.min.css">
 
-    <link rel="stylesheet" href="./assets/css/style.css">
-    <link rel="stylesheet" type="text/css" media="all" href="./immagini/style.css"/>
+    <link rel="stylesheet" href="./assets/css/style.css?v=<?php echo App::VERSION ?>">
+    <link rel="stylesheet" type="text/css" media="all" href="./immagini/style.css?v=<?php echo App::VERSION ?>"/>
 
     <?php
     if ( $a_fm == "SI" )
