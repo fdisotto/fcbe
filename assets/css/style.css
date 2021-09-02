@@ -11,7 +11,11 @@ body {
     overflow-x: hidden;
 }
 
-a:not(.btn) {
+/*a:not(.btn) {
+    color: #6c757d;
+}*/
+
+a.link-dark:hover {
     color: #6c757d;
 }
 

@@ -17,16 +17,99 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
+
+use FCBE\Enum\StatoMercato;
+use FCBE\Enum\TipoCalcolo;
+use FCBE\Util\Response;
+use FCBE\Util\Tornei;
+
 require_once "./controlla_pass.php";
-
-if ( ! $itorneo )
-    header( "Location: ./a_torneo.php" );
-
+require_once "./inc/funzioni.php";
 require_once "./header.php";
 
-if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
-    require_once "./a_menu.php";
+if ( ! isset( $_GET[ 'id' ] ) || ! is_numeric( $_GET[ 'id' ] ) ) {
+    Response::redirect( "a_torneo.php" );
+}
 
+$action = $_GET[ 'action' ] ?? "";
+$id = (int)$_GET[ 'id' ];
+$torneo = Tornei::getTorneo( $id );
+?>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-title text-center my-3 border-bottom">
+                        <div class="fs-5">Gestione <span class="text-uppercase"><?php echo $action ?></span> torneo `<strong><?php echo $torneo->nome ?></strong>`</div>
+                    </div>
+
+                    <div class="card-body">
+                        <?php if ( $action === "" ): ?>
+                            <div class="row mb-4">
+                                <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&action=utenti" class="col-12 col-md-3 text-center link-dark text-decoration-none">
+                                    <i class="fa fa-users fa-3x"></i>
+                                    <div class="fw-bold mt-3">Utenti</div>
+                                </a>
+                                <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&action=cassa" class="col-12 col-md-3 text-center link-dark text-decoration-none">
+                                    <i class="fa fa-usd fa-3x"></i>
+                                    <div class="fw-bold mt-3">Cassa</div>
+                                </a>
+                                <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&action=squadre" class="col-12 col-md-3 text-center link-dark text-decoration-none">
+                                    <i class="fa fa-cubes fa-3x"></i>
+                                    <div class="fw-bold mt-3">Squadre</div>
+                                </a>
+                                <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&action=giornate" class="col-12 col-md-3 text-center link-dark text-decoration-none">
+                                    <i class="fa fa-calendar fa-3x"></i>
+                                    <div class="fw-bold mt-3">Giornate</div>
+                                </a>
+                            </div>
+
+                            <hr>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <p class="text-decoration-underline">
+                                        <strong>Riepilogo informazioni:</strong>
+                                    </p>
+                                    <p>
+                                        Ci sono <strong><?php echo $torneo->giocatori_registrati ?></strong> utenti registrati.
+                                    </p>
+                                    <p>
+                                        <?php if ( $torneo->mercato_libero === "SI" ): ?>
+                                            Il torneo si volge a mercato libero, che significa che tutti i giocatori possono acquistare qualsiasi calciatore, indipendentemente dal fatto che possa essere stato acquistato da altri giocatori.<br/>
+                                            Si dispongono di <strong><?php echo $torneo->numero_cambi_max ?></strong> cambi di calciatore per tutte la stagione, oltre alle eventuali giornate di riparazione.
+                                        <?php elseif ( $torneo->mercato_libero === "NO" ): ?>
+                                            Il torneo si volge con una asta iniziale, durante la quale vendono assegnati i calciatori al maggior offerente.
+                                        <?php else: ?>
+                                            <span class="alert alert-warning">
+                                            ERRORE: il tipo di mercato non è valido.
+                                        </span>
+                                        <?php endif ?>
+                                    </p>
+
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item px-0">
+                                            Tipo calcolo: <strong><?php echo TipoCalcolo::TIPO_EXT[ $torneo->tipo_calcolo ] ?></strong>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            Stato mercato: <strong><?php echo StatoMercato::STATO_EXT[ $torneo->stato_mercato ] ?></strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        <?php elseif ( $action === "utenti" ): ?>
+                        utenti
+                        <?php endif ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php
+
+if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
     unset ( $tabella_msg );
 
     if ( isset( $messgestutente ) ) {
@@ -74,7 +157,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
             $a_mercato[ trim( $d[ 4 ] ) ][ 'nome' ][] = trim( $d[ 1 ] );        # nome
             $a_mercato[ trim( $d[ 4 ] ) ][ 'ruolo' ][] = trim( $d[ 2 ] );        # ruolo
             $a_mercato[ trim( $d[ 4 ] ) ][ 'val' ][] = trim( $d[ 3 ] );            # valutazione
-            $a_mercato[ trim( $d[ 4 ] ) ][ 'valagg' ][] = isset($a_fvm[ trim( $d[ 0 ] ) ]) ? $a_fvm[ trim( $d[ 0 ] ) ] : 0;    # valore aggiornato
+            $a_mercato[ trim( $d[ 4 ] ) ][ 'valagg' ][] = isset( $a_fvm[ trim( $d[ 0 ] ) ] ) ? $a_fvm[ trim( $d[ 0 ] ) ] : 0;    # valore aggiornato
         }
         unset ( $d, $dati );
         ksort( $a_mercato );
@@ -109,7 +192,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
 
     echo "<table bgcolor='$sfondo_tab' width='100%' border='0' cellspacing='0' cellpadding='5'>
 	<caption>
-	Gestione torneo <b>$otdenom</b>" . ($tabella_msg ?? '') . "
+	Gestione torneo <b>$otdenom</b>" . ( $tabella_msg ?? '' ) . "
 	</caption>
 	<tr align='center' valign='middle'>
 	<td><img src='immagini/1175.gif' alt='Utenti' width='32' height='32' /></td>
@@ -266,9 +349,12 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
                     $num_calciatori_posseduti++;
                     if ( $ruolo == "P" )
                         $np++; elseif ( $ruolo == "D" )
-                        $nd++; elseif ( $ruolo == "C" )
-                        $nc++; elseif ( $ruolo == "F" )
-                        $nf++; elseif ( $ruolo == "A" )
+                        $nd++;
+                    elseif ( $ruolo == "C" )
+                        $nc++;
+                    elseif ( $ruolo == "F" )
+                        $nf++;
+                    elseif ( $ruolo == "A" )
                         $na++;
 
                     $nome = stripslashes( $dati_calciatore[ 1 ] );
@@ -989,9 +1075,12 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
                         $num_calciatori_posseduti++;
                         if ( $ruolo == "P" )
                             $np++; elseif ( $ruolo == "D" )
-                            $nd++; elseif ( $ruolo == "C" )
-                            $nc++; elseif ( $ruolo == "F" )
-                            $nf++; elseif ( $ruolo == "A" )
+                            $nd++;
+                        elseif ( $ruolo == "C" )
+                            $nc++;
+                        elseif ( $ruolo == "F" )
+                            $nf++;
+                        elseif ( $ruolo == "A" )
                             $na++;
 
                         $nome = stripslashes( $dati_calciatore[ 1 ] );
