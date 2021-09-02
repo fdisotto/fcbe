@@ -45,6 +45,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
     $mess2 = "Tipo calcolo: $ottipo_calcolo";
     $mess3 = "Stato: $otstato";
 
+    $dati_mercato = [];
     if ( file_exists( $percorso_cartella_dati . "/mercato_" . $otid . "_" . $otserie . ".txt" ) )
         $dati_mercato = @file( $percorso_cartella_dati . "/mercato_" . $otid . "_" . $otserie . ".txt" ); else unset( $dati_mercato );
 
@@ -82,7 +83,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] == 5 ) {
 
     $dati_utenti = @file( $percorso_cartella_dati . "/utenti_" . $itorneo . ".php" );
 
-    if ( isset( $dati_utenti ) ) {
+    if ( !empty( $dati_utenti ) ) {
         $dati_utenti = array_slice( $dati_utenti, 1 );
         $a_utenti = array();
         foreach ( $dati_utenti as $dati ) {
