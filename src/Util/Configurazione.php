@@ -25,6 +25,7 @@ class Configurazione
 \$mostra_giornate_in_login = "{$configurazione['mostra_giornate_in_login']}";
 \$mostra_giornate_in_mercato = "{$configurazione['mostra_giornate_in_mercato']}";
 \$file_voti_fonte = "Gazzetta dello Sport";
+\$attiva_multi = "SI";
 \$statistiche = "SI";
 \$menu_lato = "SI";
 \$foto_calciatori = "SI";

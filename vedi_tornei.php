@@ -48,21 +48,21 @@ $tornei = Tornei::getTornei();
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-title text-center mb-0 py-2 border-bottom">
-                                    <div class="fs-5 text-uppercase"><?php echo $torneo->denom ?></div>
+                                    <div class="fs-5 text-uppercase"><?php echo $torneo->nome ?></div>
                                 </div>
                                 <div class="card-body">
-                                    <?php if ( $torneo->stato != StatoMercato::TORNEO_NON_ATTIVO ): ?>
+                                    <?php if ( $torneo->stato_mercato != StatoMercato::TORNEO_NON_ATTIVO ): ?>
                                         <div class="row">
                                             <div class="col-12 col-md-6">
                                                 <table class="table">
                                                     <tbody>
                                                     <tr>
                                                         <th class="text-uppercase align-bottom text-start">Numero partecipanti:</th>
-                                                        <td class="text-start"><?php echo $torneo->part <= 0 ? 'Nessun limite' : $torneo->part ?></td>
+                                                        <td class="text-start"><?php echo $torneo->partecipanti <= 0 ? 'Nessun limite' : $torneo->partecipanti ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th class="text-uppercase align-bottom text-start">Giocatori attualmente iscritti:</th>
-                                                        <td class="text-start"><?php echo $torneo->num_giocatori ?></td>
+                                                        <td class="text-start"><?php echo $torneo->giocatori_registrati ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th class="text-uppercase align-bottom text-start">Mercato libero:</th>
@@ -86,11 +86,11 @@ $tornei = Tornei::getTornei();
                                                     </tr>
                                                     <tr>
                                                         <th class="text-uppercase align-bottom text-start">Composizione rosa:</th>
-                                                        <td class="text-start"><?php echo $torneo->numcalciatori ?> (<?php echo $torneo->composizione_squadra ?>)</td>
+                                                        <td class="text-start"><?php echo $torneo->numero_calciatori ?> (<?php echo $torneo->composizione_squadra ?>)</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="text-uppercase align-bottom text-start">Stato mercato:</th>
-                                                        <td class="text-start"><?php echo StatoMercato::STATO_EXT[ $torneo->stato ] ?></td>
+                                                        <td class="text-start"><?php echo StatoMercato::STATO_EXT[ $torneo->stato_mercato ] ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th class="text-uppercase align-bottom text-start">Modificatore difesa:</th>

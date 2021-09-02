@@ -49,13 +49,13 @@ if ( isset( $_POST[ 'salva_configurazione' ] ) ) {
     ];
 
     if ( Configurazione::saveConfigurazione( $configurazione ) ) {
-        Flash::add( "messaggio", "Configurazione salvata con successo", Flash::FLASH_SUCCESS );
-    } else {
-        Flash::add( "messaggio", "Erorre durante il salvataggio della configurazione", Flash::FLASH_ERROR );
-    }
+        Flash::add( "success", "Configurazione salvata con successo" );
 
-    echo "<meta http-equiv='refresh' content='0; url=a_gestione.php'>";
-    exit;
+        echo "<meta http-equiv='refresh' content='0; url=a_gestione.php'>";
+        exit;
+    } else {
+        Flash::add( "error", "Erorre durante il salvataggio della configurazione" );
+    }
 }
 ?>
 

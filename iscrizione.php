@@ -220,9 +220,9 @@ if ( isset( $_POST[ 'inserimento' ] ) && $_POST[ 'inserimento' ] == "ok" ) {
                                     <select name="itorneo" id="itorneo" class="form-select" required>
                                         <option value="">Scegli il torneo</option>
                                         <?php foreach ( $tornei as $torneo ): ?>
-                                            <?php $full = ( $torneo->part > 0 && $torneo->num_giocatori >= $torneo->part ); ?>
+                                            <?php $full = ( $torneo->partecipanti > 0 && $torneo->giocatori_registrati >= $torneo->partecipanti ); ?>
                                             <option <?php echo $torneo->id === ( $itorneo ?? 0 ) ? 'selected' : '' ?> value="<?php echo $torneo->id ?>" <?php echo ! $full ?: "disabled" ?>>
-                                                <?php echo $torneo->denom . ( ! $full ?: "( Il torneo è pieno )" ) ?>
+                                                <?php echo $torneo->nome . ( ! $full ?: "( Il torneo è pieno )" ) ?>
                                             </option>
                                         <?php endforeach ?>
                                     </select>

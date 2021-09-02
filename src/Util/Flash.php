@@ -4,18 +4,14 @@ namespace FCBE\Util;
 
 class Flash
 {
-    const FLASH         = 'FLASH_MESSAGES';
-    const FLASH_ERROR   = 'danger';
-    const FLASH_WARNING = 'warning';
-    const FLASH_INFO    = 'info';
-    const FLASH_SUCCESS = 'success';
+    const FLASH = 'FLASH_MESSAGES';
 
-    public static function add( string $name, string $message, string $type )
+    public static function add( string $name, string $message )
     {
         if ( isset( $_SESSION[ self::FLASH ][ $name ] ) ) {
             unset( $_SESSION[ self::FLASH ][ $name ] );
         }
-        $_SESSION[ self::FLASH ][ $name ] = [ 'message' => $message, 'type' => $type ];
+        $_SESSION[ self::FLASH ][ $name ] = [ 'message' => $message ];
     }
 
     public static function display( string $name ): ?array

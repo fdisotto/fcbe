@@ -19,7 +19,11 @@
 ##################################################################################
 ?>
 
-<?php use FCBE\Util\Utenti; ?>
+<?php
+use FCBE\Util\Utenti;
+
+$current_url = basename( $_SERVER[ "SCRIPT_FILENAME" ], '.php' );
+?>
 
 <?php if ( Utenti::isAdminLogged() ): ?>
 
@@ -31,22 +35,22 @@
             </li>
 
             <li class="nav-item">
-                <a href="./a_gestione.php" class="nav-link text-white">Pannello iniziale</a>
+                <a href="./a_gestione.php" class="nav-link text-white <?php echo $current_url == "a_gestione" ? "active" : "" ?>">Pannello iniziale</a>
             </li>
             <li class="nav-item">
-                <a href="./a_configura.php" class="nav-link text-white">Configurazione</a>
+                <a href="./a_configura.php" class="nav-link text-white <?php echo $current_url == "a_configura" ? "active" : "" ?>">Configurazione</a>
             </li>
             <li class="nav-item">
-                <a href="./a_torneo.php" class="nav-link text-white">Gestione tornei</a>
+                <a href="./a_torneo.php" class="nav-link text-white <?php echo $current_url == "a_torneo" ? "active" : "" ?>">Gestione tornei</a>
             </li>
             <li class="nav-item">
-                <a href="./a_aggUtente.php" class="nav-link text-white">Aggiungi utenti</a>
+                <a href="./a_aggUtente.php" class="nav-link text-white <?php echo $current_url == "a_aggUtente" ? "active" : "" ?>">Aggiungi utenti</a>
             </li>
             <li class="nav-item">
-                <a href="./a_appUtente.php" class="nav-link text-white">Approvazione utenti</a>
+                <a href="./a_appUtente.php" class="nav-link text-white <?php echo $current_url == "a_appUtente" ? "active" : "" ?>">Approvazione utenti</a>
             </li>
             <li class="nav-item">
-                <a href="./a_verifiche.php" class="nav-link text-white">Verifiche</a>
+                <a href="./a_verifiche.php" class="nav-link text-white <?php echo $current_url == "a_verifiche" ? "active" : "" ?>">Verifiche</a>
             </li>
 
             <li class="nav-item border-bottom mt-3">

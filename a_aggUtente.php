@@ -120,13 +120,13 @@ if ( isset( $_POST[ 'registra_utente' ] ) ) {
         $utente->cognome = $icognome;
 
         if ( Utenti::creaUtente( $utente ) ) {
-            Flash::add( "messaggio", "Utente registrato!", Flash::FLASH_SUCCESS );
-        } else {
-            Flash::add( "messaggio", "Errore durante la registrazione dell'utente", Flash::FLASH_ERROR );
-        }
+            Flash::add( "success", "Utente registrato!" );
 
-        echo "<meta http-equiv='refresh' content='0; url=a_aggUtente.php'>";
-        exit;
+            echo "<meta http-equiv='refresh' content='0; url=a_aggUtente.php'>";
+            exit;
+        } else {
+            Flash::add( "error", "Errore durante la registrazione dell'utente" );
+        }
     }
 }
 ?>
@@ -168,9 +168,9 @@ if ( isset( $_POST[ 'registra_utente' ] ) ) {
                                 <select name="itorneo" id="itorneo" class="form-select" required>
                                     <option value="">Scegli il torneo</option>
                                     <?php foreach ( $tornei as $torneo ): ?>
-                                        <?php $full = ( $torneo->part > 0 && $torneo->num_giocatori >= $torneo->part ); ?>
+                                        <?php $full = ( $torneo->partecipanti > 0 && $torneo->giocatori_registrati >= $torneo->partecipanti ); ?>
                                         <option <?php echo $torneo->id === ( $itorneo ?? 0 ) ? 'selected' : '' ?> value="<?php echo $torneo->id ?>" <?php echo ! $full ?: "disabled" ?>>
-                                            <?php echo $torneo->denom . ( ! $full ?: "( Il torneo è pieno )" ) ?>
+                                            <?php echo $torneo->nome . ( ! $full ?: "( Il torneo è pieno )" ) ?>
                                         </option>
                                     <?php endforeach ?>
                                 </select>

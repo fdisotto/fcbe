@@ -35,9 +35,9 @@ if ( isset( $_POST[ 'approva_utente' ] ) ) {
     $id_utente = (int)$_POST[ 'utente' ];
     $id_torneo = (int)$_POST[ 'torneo' ];
     if ( Utenti::approva( $id_utente, $id_torneo ) ) {
-        Flash::add( "messaggio", "Utente approvato!", Flash::FLASH_SUCCESS );
+        Flash::add( "success", "Utente approvato!" );
     } else {
-        Flash::add( "messaggio", "Errore durante l'approvazione dell'utente", Flash::FLASH_ERROR );
+        Flash::add( "error", "Errore durante l'approvazione dell'utente" );
     }
 
     echo "<meta http-equiv='refresh' content='0; url=a_appUtente.php'>";
@@ -55,7 +55,7 @@ if ( isset( $_POST[ 'approva_utente' ] ) ) {
                     <div class="card-body">
                         <?php foreach ( $tornei as $torneo ): ?>
                             <table class="table table-condensed table-striped caption-top mb-5">
-                                <caption>Torneo: <?php echo $torneo->denom ?></caption>
+                                <caption>Torneo: <?php echo $torneo->nome ?></caption>
                                 <thead>
                                 <tr>
                                     <th scope="col">Utente</th>
@@ -104,7 +104,7 @@ if ( isset( $_POST[ 'approva_utente' ] ) ) {
                                                         <td><?php echo $utente->utente ?></td>
                                                         <td><?php echo $utente->squadra ?></td>
                                                         <td>
-                                                            <?php echo $torneo->denom ?> (ID: <?php echo $utente->torneo ?>)
+                                                            <?php echo $torneo->nome ?> (ID: <?php echo $utente->torneo ?>)
                                                         </td>
                                                         <td><?php echo $utente->serie ?></td>
                                                         <td><?php echo $utente->email ?></td>

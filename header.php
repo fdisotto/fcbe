@@ -184,8 +184,13 @@ if ( $attiva_log == "SI" ) {
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <?php if ( ! empty( $message = Flash::display( "messaggio" ) ) ): ?>
-                        <div class="alert alert-<?php echo $message[ 'type' ] ?> text-center">
+                    <?php if ( ! empty( $message = Flash::display( "success" ) ) ): ?>
+                        <div class="alert alert-success text-center">
+                            <?php echo $message[ 'message' ] ?>
+                        </div>
+                    <?php endif ?>
+                    <?php if ( ! empty( $message = Flash::display( "error" ) ) ): ?>
+                        <div class="alert alert-danger text-center">
                             <?php echo $message[ 'message' ] ?>
                         </div>
                     <?php endif ?>

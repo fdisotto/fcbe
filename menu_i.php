@@ -165,7 +165,7 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
                                 <option value="">Scegli il tuo torneo</option>
                                 <?php foreach ( $tornei as $torneo ): ?>
                                     <option value="<?php echo $torneo->id ?>">
-                                        <?php echo $torneo->denom ?>
+                                        <?php echo $torneo->nome ?>
                                     </option>
                                 <?php endforeach ?>
                             </select>
@@ -318,7 +318,7 @@ if ( isset( $_GET[ 'fallito' ] ) ) {
                         <select name="v_torneo" id="v_torneo" class="form-select" aria-label="Scegli torneo">
                             <?php foreach ( $tornei as $torneo ): ?>
                                 <option value="<?php echo $torneo->id ?>">
-                                    <?php echo $torneo->denom ?>
+                                    <?php echo $torneo->nome ?>
                                 </option>
                             <?php endforeach ?>
                         </select>
