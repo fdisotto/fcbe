@@ -5,6 +5,8 @@ namespace FCBE\Util;
 use DateTime;
 use Exception;
 use FCBE\Enum\StatoGiornata;
+use FCBE\Model\SquadraModel;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Giornata
 {
@@ -12,7 +14,7 @@ class Giornata
     {
         $giornate = self::getGiornateGiocate();
 
-        return ! empty( $giornate ) ? str_pad( $giornate[ count( $giornate ) - 1 ] + 1, 2, "0", STR_PAD_LEFT ) : "01";
+        return ! empty( $giornate ) ? self::format( $giornate[ count( $giornate ) - 1 ] + 1 ) : "01";
     }
 
     /**
@@ -21,23 +23,30 @@ class Giornata
     public static function getGiornateGiocate(): array
     {
         global $percorso_cartella_dati;
-        $files = glob( $percorso_cartella_dati . "/*_*_0" );
+        $files = glob( $percorso_cartella_dati . "/giornata*_*_0" );
 
         $giornate = [];
         foreach ( $files as $file ) {
-            preg_match( "/\/giornata(.*)_(.*)_(.*)/i", $file, $tmp );
+            preg_match( "/\/giornata(.*)_(.*)_0/i", $file, $tmp );
 
-            $giornate[] = $tmp[ 1 ];
+            if ( ! empty( $tmp ) ) {
+                $giornate[] = $tmp[ 1 ];
+            }
         }
 
         return $giornate;
+    }
+
+    public static function format( int $giornata ): string
+    {
+        return str_pad( $giornata, 2, "0", STR_PAD_LEFT );
     }
 
     public static function getCorrente(): string
     {
         $giornate = self::getGiornateGiocate();
 
-        return ! empty( $giornate ) ? str_pad( $giornate[ count( $giornate ) - 1 ], 2, "0", STR_PAD_LEFT ) : "00";
+        return ! empty( $giornate ) ? self::format( $giornate[ count( $giornate ) - 1 ] ) : "00";
     }
 
     public static function getStatoGiornata(): string
@@ -111,6 +120,49 @@ class Giornata
             return true;
         } catch ( Exception $e ) {
             Logger::error( "Errore durante l'apertura della giornata", (array)$e );
+        }
+
+        return false;
+    }
+
+    public static function esiste( int $giornata, int $torneo, int $serie ): bool
+    {
+        global $percorso_cartella_dati;
+
+        $percorso_file = sprintf( "%s/giornata%s_%u_%u", $percorso_cartella_dati, self::format( $giornata ), $torneo, $serie );
+
+        return file_exists( $percorso_file );
+    }
+
+    public static function scriviGiornata( int $giornata, string $formazioni, int $id_torneo, int $id_serie ): bool
+    {
+        global $percorso_cartella_dati;
+
+        try {
+            $filesystem = new Filesystem();
+
+            $percorso_file = sprintf( "%s/giornata%s_%u_%u", $percorso_cartella_dati, self::format( $giornata ), $id_torneo, $id_serie );
+            $percorso_file_iniziale = sprintf( "%s/giornata%s_%u_%u_iniziale", $percorso_cartella_dati, self::format( $giornata ), $id_torneo, $id_serie );
+
+            $stringa_formazioni = sprintf( "#@& formazioni #@&\n%s#@& fine formazioni #@&", $formazioni );
+
+            if ( ! $filesystem->exists( $percorso_file ) ) {
+                $filesystem->touch( $percorso_file );
+                $filesystem->chmod( $percorso_file, 0664 );
+            }
+            if ( ! $filesystem->exists( $percorso_file_iniziale ) ) {
+                $filesystem->touch( $percorso_file_iniziale );
+                $filesystem->chmod( $percorso_file_iniziale, 0664 );
+            }
+
+            $filesystem->dumpFile( $percorso_file, $stringa_formazioni );
+            $filesystem->dumpFile( $percorso_file_iniziale, $stringa_formazioni );
+
+            Logger::info( "Formazioni salvate!", [ "giornata" => $giornata, "formazioni" => $stringa_formazioni ] );
+
+            return true;
+        } catch ( Exception $e ) {
+            Logger::error( "Errore durante il salvataggio delle formazioni", (array)$e );
         }
 
         return false;

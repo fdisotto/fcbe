@@ -17,10 +17,169 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ##################################################################################
-require_once "./controlla_pass.php";
-require_once "./header.php";
-$debub = 0;
+use FCBE\Enum\StatoMercato;
+use FCBE\Enum\TipoCalcolo;
+use FCBE\Util\Flash;
+use FCBE\Util\Giornata;
+use FCBE\Util\Squadra;
+use FCBE\Util\Tornei;
+use FCBE\Util\Utenti;
 
+require_once "./controlla_pass.php";
+require_once "./inc/funzioni.php";
+require_once "./header.php";
+
+error_reporting( E_ALL );
+ini_set( "display_errors", 1 );
+
+if ( ! Utenti::isAdminLogged() ) {
+    header( "location: logout.php?logout=2" );
+}
+
+$gid = (int)$_GET[ 'gid' ];
+
+$tornei = Tornei::getTornei();
+
+$errori = [];
+foreach ( $tornei as $torneo ) {
+    $giornata = $gid - $torneo->ritardo_torneo;
+
+    if ( Giornata::esiste( $gid, $torneo->id, $torneo->serie ) ) {
+        $errori[ $torneo->id ][] = sprintf( "La giornata %s per il torneo %s (id: %u) già esiste!", Giornata::format( $giornata ), $torneo->nome, $torneo->id );
+    }
+
+    if ( $giornata < 1 ) {
+        $inizio_torneo = $torneo->ritardo_torneo + 1;
+        $errori[ $torneo->id ][] = sprintf( "Il torneo inizia alla giornata %u!", Giornata::format( $inizio_torneo ) );
+    }
+
+    if ( $torneo->stato_mercato === StatoMercato::FASE_INIZIALE || $torneo->stato_mercato === StatoMercato::MERCATO_RIPARAZIONE || $torneo->stato_mercato === StatoMercato::BUSTE_CHIUSE ) {
+        $errori[ $torneo->id ][] = sprintf( "Lo stato del torneo è ancora in <strong>%s</strong>", StatoMercato::STATO_EXT[ $torneo->stato_mercato ] );
+    }
+
+    if ( $torneo->giocatori_registrati < 1 ) {
+        $errori[ $torneo->id ][] = "Ancora non ci sono giocatori iscritti!";
+    }
+
+    if ( $torneo->tipo_calcolo === TipoCalcolo::SCONTRI_DIRETTI ) {
+        if ( ! in_array( $torneo->giocatori_registrati, [ 4, 6, 8, 10, 12, 14, 16, 18, 20 ] ) ) {
+            $errori[ $torneo->id ][] = "Per attivare gli scontri diretti il numero di partecipanti deve essere di 4, 6, 8, 10, 12, 14, 16, 18 o 20.";
+        }
+    }
+
+    if ( empty( $errori ) ) {
+        $utenti = Utenti::getUtentiInTorneo( $torneo->id );
+
+        $formazioni = "";
+        foreach ( $utenti as $utente ) {
+            $squadra = Squadra::getSquadra( $utente->username, $torneo->id, $torneo->serie );
+
+            $titolari = "";
+            foreach ( $squadra->titolari as $t ) {
+                $titolari .= sprintf( "%u,%s,%s\n", $t->codice, $t->nome, $t->ruolo );
+            }
+
+            $panchinari = "";
+            foreach ( $squadra->panchinari as $t ) {
+                $panchinari .= sprintf( "%u,%s,%s\n", $t->codice, $t->nome, $t->ruolo );
+            }
+
+            $formazioni .= "#@& formazione #@&\n" . $utente->username . "\n" . $titolari . "\n" . $panchinari . "\n";
+        }
+
+        if ( Giornata::scriviGiornata( $giornata, $formazioni, $torneo->id, $torneo->serie ) ) {
+            $percorso_file = sprintf( "%s/chiusura_giornata.txt", $percorso_cartella_dati );
+            if ( file_exists( $percorso_file ) ) {
+                unlink( $percorso_file );
+            }
+
+            Flash::add( "messaggio", sprintf( "La giornata %s è stata creata", Giornata::format( $giornata ) ) );
+        } else {
+            Flash::add( "errore", sprintf( "Errore durante la creazione della giornata %s!", Giornata::format( $giornata ) ) );
+        }
+    }
+}
+?>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-title text-center my-3 border-bottom">
+                        <div class="fs-5">
+                            Creazione giornata <strong><?php echo Giornata::format( $gid ) ?></strong>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <?php foreach ( $tornei as $torneo ): ?>
+                            <div class="mb-4">
+                                <p class="border-bottom text-uppercase">
+                                    Torneo <strong><?php echo $torneo->nome ?></strong> (id: <?php echo $torneo->id ?>, serie: <?php echo $torneo->serie ?>)
+                                </p>
+
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                Giornata: <strong><?php echo Giornata::format( $gid - $torneo->ritardo_torneo ) ?> (<?php echo Giornata::format( $gid ) ?>)</strong>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                Stato mercato: <strong><?php echo StatoMercato::STATO_EXT[ $torneo->stato_mercato ] ?></strong>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                Numero giocatori: <strong><?php echo $torneo->giocatori_registrati ?></strong>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                Numero giornate: <strong><?php echo $torneo->giornate_totali ?></strong>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                Ritardo inizio: <strong><?php echo $torneo->ritardo_torneo ?></strong>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                Tipo campionato: <strong><?php echo TipoCalcolo::TIPO_EXT[ $torneo->tipo_calcolo ] ?></strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <?php if ( ! empty( $errori[ $torneo->id ] ) ): ?>
+                                    <div class="alert alert-danger text-center">
+                                        <ul class="list-group list-group-flush">
+                                            <?php foreach ( $errori[ $torneo->id ] as $errore ): ?>
+                                                <li class="list-group-item bg-transparent">
+                                                    <strong><?php echo $errore ?></strong>
+                                                </li>
+                                            <?php endforeach ?>
+                                        </ul>
+                                    </div>
+                                <?php endif ?>
+
+                                <?php if ( ! empty( $messaggio = Flash::display( "messaggio" ) ) ): ?>
+                                    <div class="alert alert-success text-center">
+                                        <strong><?php echo $messaggio[ 'message' ] ?></strong>
+                                    </div>
+                                <?php endif ?>
+
+                                <?php if ( ! empty( $errore = Flash::display( "errore" ) ) ): ?>
+                                    <div class="alert alert-danger text-center">
+                                        <strong><?php echo $errore[ 'message' ] ?></strong>
+                                    </div>
+                                <?php endif ?>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php
+/*
 if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
     if ( $_SESSION[ 'permessi' ] == 4 ) {
         require_once "./menu.php";
@@ -29,6 +188,7 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
         require_once "./a_menu.php";
     }
 
+    $errore = [];
     #################################################################################################
     ### Carica dati tornei
 
@@ -127,11 +287,11 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
 		Attiva SD: $attiva_scontri_diretti</center>";
 
         if ( $creare != "NO" ) {
-            $filegiornata = "";
+            $filegiornata = [];
             $proprietario = [];
             $ruolo = [];
             $nome = [];
-
+            $formazioni = "";
             for ( $num4 = 1; $num4 < $linee; $num4++ ) {
                 @list( $outente, $opass, $opermessi, $oemail, $ourl, $osquadra, $otorneo, $oserie, $ocitta, $ocrediti, $ovariazioni, $ocambi, $oreg ) = explode( "<del>", $file[ $num4 ] );
 
@@ -199,7 +359,6 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
                         $panchinari_veri = "";
                     } # fine if ($num_titolari_veri < $min_num_titolari_in_formazione)
 
-                    $formazioni = "";
                     if ( $num_panchinari_veri > $max_in_panchina )
                         $panchinari_veri = "";
                     $formazioni .= "#@& formazione #@&\r\n" . $outente . "\r\n" . $titolari_veri . "\r\n" . $panchinari_veri . "\r\n";
@@ -430,4 +589,6 @@ if ( $_SESSION[ 'valido' ] == "SI" and $_SESSION[ 'permessi' ] >= 4 ) {
 else {
     header( "location: logout.php?logout=2" );
 }
+*/
+
 require_once "./footer.php";

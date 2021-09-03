@@ -15,12 +15,6 @@ class Calciatori
     {
         global $prima_parte_pos_file_voti, $seconda_parte_pos_file_voti, $separatore_campi_file_calciatori;
 
-        $cacheKey = sprintf( "mcc_%s", $giornata );
-
-        if ( $calciatori = Cache::get( $cacheKey ) ) {
-            return $calciatori;
-        }
-
         $percorso_file = sprintf( "%s%s%s", $prima_parte_pos_file_voti, str_pad( $giornata, 2, "0", STR_PAD_LEFT ), $seconda_parte_pos_file_voti );
 
         $calciatori = [];
@@ -65,8 +59,6 @@ class Calciatori
                     "valore"           => (int)$temp[ 27 ],
                 ] );
             }
-
-            Cache::save( $cacheKey, $calciatori );
         }
 
         return $calciatori;

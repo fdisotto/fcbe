@@ -157,20 +157,19 @@ $ora_chiusura_giornata = date( "H:i", strtotime( $chiusura_giornata ) );
                         <?php endif ?>
 
                         <div class="row">
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-6">
                                 <form method='post' action='./a_gestione.php'>
-                                    <input type="submit" class="btn btn-primary" name="preleva_voti" <?php echo Voti::getFileVoti( $giornata_prossima ) ? "disabled" : "" ?> value="Preleva MCC<?php echo $giornata_prossima ?>.txt"/>
+                                    <input type="submit" class="btn btn-primary" name="preleva_voti" <?php echo ! Updater::getGiornataInfo( $giornata_prossima )[ 'url' ] ? "disabled" : "" ?> value="Preleva MCC<?php echo $giornata_prossima ?>.txt"/>
                                 </form>
                             </div>
-                            <div class="col-12 col-md-4">
-                                <form method='post' action='./a_crea_giornata.php'>
-                                    <input type="hidden" name="giornata" value="<?php echo $giornata_prossima ?>"/>
-                                    <input type="submit" class="btn btn-primary" name="crea_giornata" <?php echo empty( Voti::getFileVoti( $giornata_prossima ) ) ? "disabled" : "" ?> value="Crea la giornata <?php echo $giornata_prossima ?>"/>
-                                </form>
+                            <div class="col-12 col-md-6">
+                                <a type="button" href="./a_crea_giornata.php?gid=<?php echo $giornata_prossima ?>" class="btn btn-primary <?php echo ! Voti::getFileVoti( $giornata_prossima ) ? "disabled" : "" ?>">
+                                    Crea la giornata <?php echo $giornata_prossima ?>
+                                </a>
                             </div>
 
                             <?php if ( (int)$giornata_corrente <= 0 ): ?>
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-6">
                                     <form method='post' action='./a_gestione.php'>
                                         <input type="submit" class="btn btn-primary" name="carica_calciatori" <?php echo empty( $calciatori_info[ 'url' ] ) || ( $calciatori_info[ 'remote' ] <= $calciatori_info[ 'local' ] ) ? "disabled" : "" ?> value="Carica calciatori.txt"/>
                                     </form>

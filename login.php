@@ -52,11 +52,11 @@ if ( empty( $login_utente ) || empty( $login_pass ) ) {
             exit;
         } elseif ( $login_utente !== $admin_user ) {
             if ( $utente = Utenti::existUtenteInTorneo( $login_utente, $login_torneo ) ) {
-                if ( $utente->pass === md5( $login_pass ) ) {
+                if ( $utente->password === md5( $login_pass ) ) {
                     if ( $utente->permessi >= 0 ) {
                         $_SESSION[ 'uid' ] = $utente->id;
-                        $_SESSION[ 'utente' ] = $utente->utente;
-                        $_SESSION[ 'pass' ] = $utente->pass;
+                        $_SESSION[ 'utente' ] = $utente->username;
+                        $_SESSION[ 'pass' ] = $utente->password;
                         $_SESSION[ 'permessi' ] = $utente->permessi;
                         $_SESSION[ 'email' ] = $utente->permessi;
                         $_SESSION[ 'url' ] = $utente->url;
@@ -65,7 +65,7 @@ if ( empty( $login_utente ) || empty( $login_pass ) ) {
                         $_SESSION[ 'torneo' ] = $utente->torneo;
                         $_SESSION[ 'serie' ] = $utente->serie;
                         $_SESSION[ 'valido' ] = "SI";
-                        $_SESSION[ 'reg' ] = trim( $utente->reg );
+                        $_SESSION[ 'reg' ] = trim( $utente->data_registrazione );
                         $_SESSION[ 'titolari' ] = $utente->titolari;
                         $_SESSION[ 'panchina' ] = $utente->panchina;
                         $_SESSION[ 'temp1' ] = $utente->temp1;

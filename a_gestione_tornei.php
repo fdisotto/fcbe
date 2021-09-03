@@ -20,20 +20,38 @@
 
 use FCBE\Enum\StatoMercato;
 use FCBE\Enum\TipoCalcolo;
+use FCBE\Util\Flash;
 use FCBE\Util\Response;
 use FCBE\Util\Tornei;
+use FCBE\Util\Utenti;
 
 require_once "./controlla_pass.php";
 require_once "./inc/funzioni.php";
 require_once "./header.php";
 
 if ( ! isset( $_GET[ 'id' ] ) || ! is_numeric( $_GET[ 'id' ] ) ) {
-    Response::redirect( "a_torneo.php" );
+    //Response::redirect( "a_torneo.php" );
 }
 
+$page = $_GET[ 'page' ] ?? "";
 $action = $_GET[ 'action' ] ?? "";
 $id = (int)$_GET[ 'id' ];
 $torneo = Tornei::getTorneo( $id );
+
+$utenti = Utenti::getUtentiInTorneo( $id );
+if ( $page === "utenti" ) {
+    if ( $action === "elimina" ) {
+        $uid = (int)$_GET[ 'uid' ];
+
+        if ( Utenti::eliminaUtente( $uid, $id ) ) {
+            Flash::add( "success", "Utente eliminato con successo" );
+        } else {
+            Flash::add( "success", "Errore durante l'eliminazione dell'utente" );
+        }
+
+        Response::redirect( sprintf( "a_gestione_tornei.php?id=%u&page=%s", $id, $page ) );
+    }
+}
 ?>
 
     <div class="container">
@@ -41,66 +59,121 @@ $torneo = Tornei::getTorneo( $id );
             <div class="col-12">
                 <div class="card">
                     <div class="card-title text-center my-3 border-bottom">
-                        <div class="fs-5">Gestione <span class="text-uppercase"><?php echo $action ?></span> torneo `<strong><?php echo $torneo->nome ?></strong>`</div>
+                        <div class="fs-5">Gestione <span class="text-uppercase"><?php echo $page ?></span> torneo `<strong><?php echo $torneo->nome ?></strong>`</div>
                     </div>
 
                     <div class="card-body">
-                        <?php if ( $action === "" ): ?>
-                            <div class="row mb-4">
-                                <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&action=utenti" class="col-12 col-md-3 text-center link-dark text-decoration-none">
-                                    <i class="fa fa-users fa-3x"></i>
-                                    <div class="fw-bold mt-3">Utenti</div>
-                                </a>
-                                <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&action=cassa" class="col-12 col-md-3 text-center link-dark text-decoration-none">
-                                    <i class="fa fa-usd fa-3x"></i>
-                                    <div class="fw-bold mt-3">Cassa</div>
-                                </a>
-                                <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&action=squadre" class="col-12 col-md-3 text-center link-dark text-decoration-none">
-                                    <i class="fa fa-cubes fa-3x"></i>
-                                    <div class="fw-bold mt-3">Squadre</div>
-                                </a>
-                                <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&action=giornate" class="col-12 col-md-3 text-center link-dark text-decoration-none">
-                                    <i class="fa fa-calendar fa-3x"></i>
-                                    <div class="fw-bold mt-3">Giornate</div>
-                                </a>
-                            </div>
+                        <div class="row mb-4">
+                            <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&page=utenti" class="col-12 col-md-4 text-center link-dark text-decoration-none">
+                                <i class="fa fa-users fa-3x"></i>
+                                <div class="fw-bold mt-3">Utenti</div>
+                            </a>
+                            <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&page=squadre" class="col-12 col-md-4 text-center link-dark text-decoration-none">
+                                <i class="fa fa-cubes fa-3x"></i>
+                                <div class="fw-bold mt-3">Squadre</div>
+                            </a>
+                            <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&page=giornate" class="col-12 col-md-4 text-center link-dark text-decoration-none">
+                                <i class="fa fa-calendar fa-3x"></i>
+                                <div class="fw-bold mt-3">Giornate</div>
+                            </a>
+                        </div>
 
-                            <hr>
+                        <hr>
 
-                            <div class="row mt-4">
+                        <?php if ( $page === "utenti" ): ?>
+                            <div class="row">
                                 <div class="col-12">
-                                    <p class="text-decoration-underline">
-                                        <strong>Riepilogo informazioni:</strong>
-                                    </p>
-                                    <p>
-                                        Ci sono <strong><?php echo $torneo->giocatori_registrati ?></strong> utenti registrati.
-                                    </p>
-                                    <p>
-                                        <?php if ( $torneo->mercato_libero === "SI" ): ?>
-                                            Il torneo si volge a mercato libero, che significa che tutti i giocatori possono acquistare qualsiasi calciatore, indipendentemente dal fatto che possa essere stato acquistato da altri giocatori.<br/>
-                                            Si dispongono di <strong><?php echo $torneo->numero_cambi_max ?></strong> cambi di calciatore per tutte la stagione, oltre alle eventuali giornate di riparazione.
-                                        <?php elseif ( $torneo->mercato_libero === "NO" ): ?>
-                                            Il torneo si volge con una asta iniziale, durante la quale vendono assegnati i calciatori al maggior offerente.
-                                        <?php else: ?>
-                                            <span class="alert alert-warning">
-                                            ERRORE: il tipo di mercato non è valido.
-                                        </span>
-                                        <?php endif ?>
-                                    </p>
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Username</th>
+                                            <th>Squadra</th>
+                                            <th>Crediti</th>
+                                            <th>Cambi</th>
+                                            <th>Registrato il</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php foreach ( $utenti as $utente ): ?>
+                                            <tr>
+                                                <td class="align-middle">
+                                                    #<?php echo $utente->id ?>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <?php echo $utente->username ?>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <?php echo $utente->squadra ?>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <?php echo $utente->crediti ?>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <?php echo $utente->cambi ?>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <?php echo $utente->data_registrazione ?>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <a href="./a_invia_mail.php?uid=<?php echo $utente->id ?>&tid=<?php echo $utente->torneo ?>" class="btn btn-warning btn-sm" title="Invia email">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </a>
 
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0">
-                                            Tipo calcolo: <strong><?php echo TipoCalcolo::TIPO_EXT[ $torneo->tipo_calcolo ] ?></strong>
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Stato mercato: <strong><?php echo StatoMercato::STATO_EXT[ $torneo->stato_mercato ] ?></strong>
-                                        </li>
-                                    </ul>
+                                                    <a href="<?php echo $_SERVER[ 'REQUEST_URI' ] ?>&action=elimina&uid=<?php echo $utente->id ?>" class="btn btn-danger btn-sm" title="Elimina utente" onclick="return confirm('Vuoi davvero eliminare l\'utente?');">
+                                                        <i class="fa fa-remove"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                        <?php elseif ( $action === "utenti" ): ?>
-                        utenti
+                        <?php elseif ( $page === "squadre" ): ?>
+                            <div class="row">
+                                <div class="col-12">
+
+                                </div>
+                            </div>
+
                         <?php endif ?>
+
+                        <hr>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <p class="text-decoration-underline">
+                                    <strong>Riepilogo informazioni:</strong>
+                                </p>
+                                <p>
+                                    Ci sono <strong><?php echo $torneo->giocatori_registrati ?></strong> utenti registrati.
+                                </p>
+                                <p>
+                                    <?php if ( $torneo->mercato_libero === "SI" ): ?>
+                                        Il torneo si volge a mercato libero, che significa che tutti i giocatori possono acquistare qualsiasi calciatore, indipendentemente dal fatto che possa essere stato acquistato da altri giocatori.<br/>
+                                        Si dispongono di <strong><?php echo $torneo->numero_cambi_max ?></strong> cambi di calciatore per tutte la stagione, oltre alle eventuali giornate di riparazione.
+                                    <?php elseif ( $torneo->mercato_libero === "NO" ): ?>
+                                        Il torneo si volge con una asta iniziale, durante la quale vendono assegnati i calciatori al maggior offerente.
+                                    <?php else: ?>
+                                        <span class="alert alert-warning">
+                                            ERRORE: il tipo di mercato non è valido.
+                                        </span>
+                                    <?php endif ?>
+                                </p>
+
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item px-0">
+                                        Tipo calcolo: <strong><?php echo TipoCalcolo::TIPO_EXT[ $torneo->tipo_calcolo ] ?></strong>
+                                    </li>
+                                    <li class="list-group-item px-0">
+                                        Stato mercato: <strong><?php echo StatoMercato::STATO_EXT[ $torneo->stato_mercato ] ?></strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

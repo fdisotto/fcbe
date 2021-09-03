@@ -49,9 +49,6 @@ $current_url = basename( $_SERVER[ "SCRIPT_FILENAME" ], '.php' );
             <li class="nav-item">
                 <a href="./a_appUtente.php" class="nav-link text-white <?php echo $current_url == "a_appUtente" ? "active" : "" ?>">Approvazione utenti</a>
             </li>
-            <li class="nav-item">
-                <a href="./a_verifiche.php" class="nav-link text-white <?php echo $current_url == "a_verifiche" ? "active" : "" ?>">Verifiche</a>
-            </li>
 
             <li class="nav-item border-bottom mt-3">
                 <span class="fs-4 text-uppercase text-center menu-title text-white d-flex justify-content-end">voti</span>

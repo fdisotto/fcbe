@@ -19,6 +19,7 @@
 ##################################################################################
 use FCBE\Model\UtenteModel;
 use FCBE\Util\Flash;
+use FCBE\Util\Response;
 use FCBE\Util\Tornei;
 use FCBE\Util\Utenti;
 
@@ -47,7 +48,7 @@ if ( isset( $_POST[ 'registra_utente' ] ) ) {
     $icrediti = 0;
     $ivariazioni = 0;
     $icambi = 0;
-    $ireg = $_POST[ 'ireg' ];
+    $ireg = date( "d-m-Y H:i:s" );
     $errors = [];
 
     if ( ! preg_match( "/^[a-z0-9][_\.a-z0-9-]+@([a-z0-9][0-9a-z-]+\.)+([a-z]{2,4})/", $_POST[ 'iemail' ] ) ) {
@@ -102,9 +103,9 @@ if ( isset( $_POST[ 'registra_utente' ] ) ) {
 
     if ( empty( $errors ) ) {
         $utente = new UtenteModel();
-        $utente->utente = $iutente;
-        $utente->pass = $ipass;
-        $utente->utente = $iutente;
+        $utente->username = $iutente;
+        $utente->password = $ipass;
+        $utente->username = $iutente;
         $utente->permessi = $ipermessi;
         $utente->email = $iemail;
         $utente->url = $iurl;
@@ -115,15 +116,14 @@ if ( isset( $_POST[ 'registra_utente' ] ) ) {
         $utente->crediti = $icrediti;
         $utente->variazioni = $ivariazioni;
         $utente->cambi = $icambi;
-        $utente->reg = $ireg;
+        $utente->data_registrazione = $ireg;
         $utente->nome = $inome;
         $utente->cognome = $icognome;
 
         if ( Utenti::creaUtente( $utente ) ) {
             Flash::add( "success", "Utente registrato!" );
 
-            echo "<meta http-equiv='refresh' content='0; url=a_aggUtente.php'>";
-            exit;
+            Response::redirect( "a_aggUtente.php" );
         } else {
             Flash::add( "error", "Errore durante la registrazione dell'utente" );
         }
@@ -170,7 +170,7 @@ if ( isset( $_POST[ 'registra_utente' ] ) ) {
                                     <?php foreach ( $tornei as $torneo ): ?>
                                         <?php $full = ( $torneo->partecipanti > 0 && $torneo->giocatori_registrati >= $torneo->partecipanti ); ?>
                                         <option <?php echo $torneo->id === ( $itorneo ?? 0 ) ? 'selected' : '' ?> value="<?php echo $torneo->id ?>" <?php echo ! $full ?: "disabled" ?>>
-                                            <?php echo $torneo->nome . ( ! $full ?: "( Il torneo è pieno )" ) ?>
+                                            <?php echo $torneo->nome ?> <?php echo $full ? "( Il torneo è pieno )" : "" ?>
                                         </option>
                                     <?php endforeach ?>
                                 </select>
@@ -217,7 +217,6 @@ if ( isset( $_POST[ 'registra_utente' ] ) ) {
                                 <button type="submit" class="btn btn-primary" name="registra_utente">Registra utente</button>
                             </div>
 
-                            <input type="hidden" name="ireg" value="<?php echo date( "d.m.Y H:i:s" ); ?>"/>
                         </form>
                     </div>
                 </div>

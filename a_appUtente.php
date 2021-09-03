@@ -68,11 +68,11 @@ if ( isset( $_POST[ 'approva_utente' ] ) ) {
                                 <?php foreach ( Utenti::getUtentiInTorneo( $torneo->id ) as $utente ): ?>
                                     <?php if ( $utente->permessi <= -1 ): ?>
                                         <tr>
-                                            <td><?php echo $utente->utente ?></td>
+                                            <td><?php echo $utente->username ?></td>
                                             <td><?php echo $utente->email ?></td>
                                             <td><?php echo $utente->squadra ?></td>
                                             <td>
-                                                <a class="btn btn-info btn-sm text-white" data-bs-toggle="collapse" href="#utente-<?php echo $utente->utente ?>" role="button" aria-expanded="false" aria-controls="utente-<?php echo $utente->utente ?>">
+                                                <a class="btn btn-info btn-sm text-white" data-bs-toggle="collapse" href="#utente-<?php echo $utente->username ?>" role="button" aria-expanded="false" aria-controls="utente-<?php echo $utente->username ?>">
                                                     <i class="fa fa-eye"></i> Vedi
                                                 </a>
 
@@ -85,7 +85,7 @@ if ( isset( $_POST[ 'approva_utente' ] ) ) {
                                                 </form>
                                             </td>
                                         </tr>
-                                        <tr class="collapse" id="utente-<?php echo $utente->utente ?>">
+                                        <tr class="collapse" id="utente-<?php echo $utente->username ?>">
                                             <td colspan="4">
                                                 <table class="table">
                                                     <thead>
@@ -101,7 +101,7 @@ if ( isset( $_POST[ 'approva_utente' ] ) ) {
                                                     </thead>
                                                     <tbody>
                                                     <tr>
-                                                        <td><?php echo $utente->utente ?></td>
+                                                        <td><?php echo $utente->username ?></td>
                                                         <td><?php echo $utente->squadra ?></td>
                                                         <td>
                                                             <?php echo $torneo->nome ?> (ID: <?php echo $utente->torneo ?>)
