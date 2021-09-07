@@ -1,25 +1,9 @@
 <?php
-##################################################################################
-#    FANTACALCIOBAZAR EVOLUTION
-#    Copyright (C) 2003-2009 by Antonello Onida
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program; if not, write to the Free Software
-#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-##################################################################################
+
 ?>
 
 <?php
+
 use FCBE\Util\Utenti;
 
 $current_url = basename( $_SERVER[ "SCRIPT_FILENAME" ], '.php' );
@@ -57,12 +41,12 @@ $current_url = basename( $_SERVER[ "SCRIPT_FILENAME" ], '.php' );
             <li class="nav-item">
                 <a href="./a_upload.php" class="nav-link text-white">Upload voti</a>
             </li>
-            <li class="nav-item">
+            <!--<li class="nav-item">
                 <a href="./a_invia_voti.php" class="nav-link text-white">Invia formazioni</a>
             </li>
             <li class="nav-item">
                 <a href="./a_invia_risultati.php" class="nav-link text-white">Invia risultati</a>
-            </li>
+            </li>-->
 
             <li class="nav-item border-bottom mt-3">
                 <span class="fs-4 text-uppercase text-center menu-title text-white d-flex justify-content-end">contenuti</span>

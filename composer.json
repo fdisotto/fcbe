@@ -12,7 +12,9 @@
     "nette/caching": "^3.1",
     "ext-json": "*",
     "simplepie/simplepie": "^1.5",
-    "symfony/filesystem": "^5.3"
+    "symfony/filesystem": "^5.3",
+    "alchemy/zippy": "^1.0",
+    "ext-zip": "*"
   },
   "autoload": {
     "psr-4": {

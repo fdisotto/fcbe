@@ -9,22 +9,7 @@ class Logger
 {
     public static function info( $message, $context = [] )
     {
-        self::getLogger()->notice( $message, $context );
-    }
-
-    public static function debug( $message, $context = [] )
-    {
-        self::getLogger()->notice( $message, $context );
-    }
-
-    public static function error( $message, $context = [] )
-    {
-        self::getLogger()->error( $message, $context );
-    }
-
-    public static function warning( $message, $context = [] )
-    {
-        self::getLogger()->warning( $message, $context );
+        self::getLogger()->notice( $message, (array)$context );
     }
 
     private static function getLogger(): LoggerAlias
@@ -38,5 +23,20 @@ class Logger
         $logger->pushHandler( $logRotate );
 
         return $logger;
+    }
+
+    public static function debug( $message, $context = [] )
+    {
+        self::getLogger()->notice( $message, (array)$context );
+    }
+
+    public static function error( $message, $context = [] )
+    {
+        self::getLogger()->error( $message, (array)$context );
+    }
+
+    public static function warning( $message, $context = [] )
+    {
+        self::getLogger()->warning( $message, (array)$context );
     }
 }

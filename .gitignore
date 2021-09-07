@@ -21,3 +21,4 @@ inc/ajax-chat/php/data.txt
 cache/data/*
 cache/feed/*
 logs/*
+backup/*.zip

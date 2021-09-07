@@ -120,10 +120,6 @@ $tornei = Tornei::getTornei();
                                                         <th class="text-uppercase align-middle text-start">Sostituzioni per schema:</th>
                                                         <td class="text-start"><?php echo $torneo->sostituisci_per_schema ?></td>
                                                     </tr>
-                                                    <tr>
-                                                        <th class="text-uppercase align-middle text-start">Fantasisti per centrocampisti:</th>
-                                                        <td class="text-start"><?php echo $torneo->sostituisci_fantasisti_come_centrocampisti ?></td>
-                                                    </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
